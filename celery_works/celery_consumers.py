@@ -17,7 +17,7 @@ task_routes = {
 
 @app.task(name='book_generate',bind=True)
 def generate_book_content(self,data,**kwargs):
-
+    # TODO run process
     sleep(60)
     # if True:
     #     raise Http_error(400,Message.INVALID_ENUM)
