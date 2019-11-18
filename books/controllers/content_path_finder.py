@@ -12,10 +12,12 @@ def return_content_full_path(content):
 
     if content.get('body',None) is not None:
         # body is a list of json objects
-        replace_full_path(content.get('body',None))
+        replace_full_path(content.get('body'))
     if content.get('children',None) is not  None:
-        return_content_full_path(content.get('children'))
-    return True
+        children = content.get('children')
+        for child in children:
+            return_content_full_path(child)
+    return content
 
 
 

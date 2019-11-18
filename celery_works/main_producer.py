@@ -7,6 +7,7 @@ from check_permission import get_user_permissions, has_permission_or_not, \
 from enums import Permissions
 from helper import model_to_dict, Http_error, check_schema
 from books.controllers.book_content import get_internal as get_content
+from books.controllers.content_path_finder import return_content_full_path
 from log import logger, LogMsg
 from messages import Message
 from repository.book_repo import get as get_book
@@ -57,7 +58,9 @@ def generate_book( data,db_session,username):
             logger.error(LogMsg.CONTENT_ALREADY_GENERATED)
             raise Http_error(409,Message.ALREADY_EXISTS)
 
-    result = generate_book_content.apply_async(args=[data],
+    content = return_content_full_path(data)
+
+    result = generate_book_content.apply_async(args=[content],
                                   routing_key='book_generate')
     print(result.task_id)
     # result.get()
