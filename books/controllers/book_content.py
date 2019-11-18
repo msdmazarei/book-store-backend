@@ -145,6 +145,9 @@ def edit(id, data, db_session, username):
 
         edit_basic_data(content, username, data.get('tags'))
         content.book_press = book.press
+        if data.get('content') is not None:
+            content.celery_task_id = None
+            content.content_generated = False
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
         raise Http_error(409, Message.ALREADY_EXISTS)

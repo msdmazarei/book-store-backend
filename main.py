@@ -27,6 +27,7 @@ from messaging.urls import call_router as messaging_routes
 from payment.urls import call_router as payment_routes
 from db_migration.urls import call_router as db_routse
 from celery_works.urls import call_router as celery_routes
+from run_process.urls import call_router as process_routes
 
 
 app = Bottle()
@@ -57,7 +58,7 @@ messaging_routes(app)
 payment_routes(app)
 db_routse(app)
 celery_routes(app)
-
+process_routes(app)
 
 if __name__ == '__main__':
     print('hello world')

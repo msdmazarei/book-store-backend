@@ -7,5 +7,6 @@ def call_router(app):
     data_plus_wrappers = (wrappers[:])
     data_plus_wrappers.append(pass_data)
 
-    app.route('/generate-book', 'POST', generate_book, apply=[pass_data,jsonify])
+    app.route('/generate-book', 'POST', generate_book,
+              apply=[check_auth, pass_data, jsonify, inject_db])
     app.route('/generate-book/<id>', 'GET', check_status, apply=[jsonify])
