@@ -470,7 +470,8 @@ class LogMsg:
     DELETING_BOOK_CONTENT = 'deleteing contents of book by id : %s'
     BOOK_CONTENT_ALREADY_EXISTS = 'content entity by data already exists and its : %s'
     CONTENT_ALREADY_GENERATED = 'this content is generated already successfully ...'
-
+    CONTENT_GENERATING = 'content generation process is working -- plz wait'
+    BOOK_GENERATE_FAILED = 'generating book content failed: %s'
 
 
 

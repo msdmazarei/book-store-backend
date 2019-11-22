@@ -97,6 +97,11 @@ def get_internal(id, db_session):
     return db_session.query(BookContent).filter(BookContent.id == id).first()
 
 
+
+def get_by_celery_task(id, db_session):
+    return db_session.query(BookContent).filter(BookContent.celery_task_id == id).first()
+
+
 def get_be_data(book_id, type, db_session):
     return db_session.query(BookContent).filter(BookContent.book_id == book_id,
                                                 BookContent.type == type).first()

@@ -5,6 +5,7 @@ from messages import Message
 main_path = value('save_path',None)
 if main_path is None:
     logger.error(LogMsg.APP_CONFIG_INCORRECT,{'save_path':None})
+    raise Http_error(404,Message.APP_CONFIG_MISSING)
 
 
 def return_content_full_path(content):
