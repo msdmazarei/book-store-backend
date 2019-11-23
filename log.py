@@ -469,6 +469,14 @@ class LogMsg:
     CONTENT_EXIST = 'book content ba data exists : %s'
     DELETING_BOOK_CONTENT = 'deleteing contents of book by id : %s'
     BOOK_CONTENT_ALREADY_EXISTS = 'content entity by data already exists and its : %s'
+    CONTENT_ALREADY_GENERATED = 'this content is generated already successfully ...'
+    CONTENT_GENERATING = 'content generation process is working -- plz wait'
+    BOOK_GENERATE_FAILED = 'generating book content failed: %s'
+
+    #DEVICE CODE
+
+    MAXIMUM_ACTIVE_DEVICE = 'maximum device per user is already active : %s'
+
 
 
 
@@ -478,6 +486,7 @@ class LogMsg:
     FILE_EXISTS = 'this file exists by path : %s'
     FILE_NOT_EXISTS = 'file by this path not exists: %s'
     GET_FILE_FAILED = 'file can not be got'
+    APP_CONFIG_INCORRECT = 'APP Config is incomplete : %s'
 
     COMMIT_ERROR = 'commiting to db encountered problem'
     QUERY_OBJECT = 'query object is : %s'

@@ -97,6 +97,11 @@ def get_internal(id, db_session):
     return db_session.query(BookContent).filter(BookContent.id == id).first()
 
 
+
+def get_by_celery_task(id, db_session):
+    return db_session.query(BookContent).filter(BookContent.celery_task_id == id).first()
+
+
 def get_be_data(book_id, type, db_session):
     return db_session.query(BookContent).filter(BookContent.book_id == book_id,
                                                 BookContent.type == type).first()
@@ -145,6 +150,9 @@ def edit(id, data, db_session, username):
 
         edit_basic_data(content, username, data.get('tags'))
         content.book_press = book.press
+        if data.get('content') is not None:
+            content.celery_task_id = None
+            content.content_generated = False
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
         raise Http_error(409, Message.ALREADY_EXISTS)

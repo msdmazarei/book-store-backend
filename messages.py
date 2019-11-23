@@ -73,3 +73,6 @@ class Message:
     PAYMENT_ALREADY_CONSIDERED = 'payment_already_considered'
     PAYMENT_INQUIRY_NOT_VALID = 'payment_inquiry_invalid'
     PAYMENT_BANK_RESPONSE_INVALID = 'payment_bank_response_invalid'
+    APP_CONFIG_MISSING = 'app_config_required'
+    IN_PROCESS = 'in_process'
+    MAXIMUM_ACTIVE_DEVICE = 'maximum_active_device'
