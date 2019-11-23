@@ -27,3 +27,4 @@ export app_server_address ='http://localhost:7000'
 export kipo_merchant_key='09082001359'
 export book_saving_path=/home/nsm/book_sources
 export temprory_saving_path=/tmp
+export active_device_per_user=3

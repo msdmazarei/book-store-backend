@@ -473,6 +473,10 @@ class LogMsg:
     CONTENT_GENERATING = 'content generation process is working -- plz wait'
     BOOK_GENERATE_FAILED = 'generating book content failed: %s'
 
+    #DEVICE CODE
+
+    MAXIMUM_ACTIVE_DEVICE = 'maximum device per user is already active : %s'
+
 
 
 
