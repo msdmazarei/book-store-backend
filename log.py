@@ -472,6 +472,7 @@ class LogMsg:
     CONTENT_ALREADY_GENERATED = 'this content is generated already successfully ...'
     CONTENT_GENERATING = 'content generation process is working -- plz wait'
     BOOK_GENERATE_FAILED = 'generating book content failed: %s'
+    RUN_PROCESS_DATA = 'data for running process of book generation is : %s'
 
     #DEVICE CODE
 

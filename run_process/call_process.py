@@ -13,6 +13,8 @@ if book_generator_app_address is None:
 
 def execute_process(data, username=None):
     logger.info(LogMsg.START, username)
+    logger.debug(LogMsg.RUN_PROCESS_DATA,data)
+
     print("data={}".format(data))
     arr=[book_generator_app_address]
     arr.extend(data)

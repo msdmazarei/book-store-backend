@@ -29,6 +29,7 @@ def generate_book_content(self, data, **kwargs):
     print('json_file_name, out_file_name, final_file_name ', json_file_name,
           out_file_name, final_file_name)
 
+
     result = execute_process([json_file_name, out_file_name], username=None)
 
     os.remove(json_file_name)

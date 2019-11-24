@@ -10,6 +10,7 @@ if main_path is None:
 
 def return_content_full_path(content):
     logger.info(LogMsg.START,'')
+    logger.debug(LogMsg.CONTENT_GENERATING,content)
 
     if content.get('body',None) is not None:
         # body is a list of json objects
