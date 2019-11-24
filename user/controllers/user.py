@@ -200,6 +200,10 @@ def edit(id, db_session, data, username):
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if model_instance.username == username:
+        password = data.get('old_password')
+        if model_instance.password!=password:
+            logger.error(LogMsg.INVALID_USER,{'password':'incorrect password'})
+            raise Http_error(403,Message.INVALID_USER)
         per_data.update({Permissions.IS_OWNER.value: True})
     has_permission([Permissions.USER_EDIT_PREMIUM],
                    permissions, None, per_data)
