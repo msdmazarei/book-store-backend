@@ -476,6 +476,7 @@ class LogMsg:
     #DEVICE CODE
 
     MAXIMUM_ACTIVE_DEVICE = 'maximum device per user is already active : %s'
+    USER_DEVICE_COUNT = 'number of users active devices is : %s'
 
 
 

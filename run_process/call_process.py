@@ -1,13 +1,20 @@
 import os
 import subprocess
 
+from helper import value, Http_error
 from log import LogMsg, logger
+from messages import Message
 
+book_generator_app_address = value('book_generator_app_address',None)
+if book_generator_app_address is None:
+    logger.error(LogMsg.APP_CONFIG_INCORRECT,{'book_generator_app_address':None
+                                              })
+    raise Http_error(500,Message.APP_CONFIG_MISSING)
 
 def execute_process(data, username=None):
     logger.info(LogMsg.START, username)
     print("data={}".format(data))
-    arr=['/home/nsm/PycharmProjects/online_library/sample_runnable_code.py']
+    arr=[book_generator_app_address]
     arr.extend(data)
     results = subprocess.Popen(
         arr,
