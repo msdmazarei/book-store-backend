@@ -27,11 +27,11 @@ def replace_full_path(file_list):
     for item in file_list:
         key = item.get('type',None)
         if key is None:
-            logger.error(LogMsg.DATA_MISSING,{'body.type':None})
+            logger.error(LogMsg.DATA_MISSING,{'content.type':None})
             raise Http_error(404,Message.MISSING_REQUIERED_FIELD)
         file_name = item.get(key)
         if file_name is None:
-            logger.error(LogMsg.DATA_MISSING, {'body.file': None})
+            logger.error(LogMsg.DATA_MISSING, {'content.file': None})
             raise Http_error(404, Message.MISSING_REQUIERED_FIELD)
         full_path = '{}/{}'.format(main_path,file_name)
         item[key] = full_path
