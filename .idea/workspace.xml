@@ -55,7 +55,7 @@
         <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="122">
-              <caret line="214" column="33" lean-forward="true" selection-start-line="214" selection-start-column="33" selection-end-line="214" selection-end-column="33" />
+              <caret line="205" column="53" selection-start-line="205" selection-start-column="41" selection-end-line="205" selection-end-column="53" />
               <folding>
                 <element signature="e#784#1960#0" />
                 <element signature="e#989#1089#0" />
@@ -1485,7 +1485,7 @@
     <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
-          <caret line="214" column="33" lean-forward="true" selection-start-line="214" selection-start-column="33" selection-end-line="214" selection-end-column="33" />
+          <caret line="205" column="53" selection-start-line="205" selection-start-column="41" selection-end-line="205" selection-end-column="53" />
           <folding>
             <element signature="e#784#1960#0" />
             <element signature="e#989#1089#0" />

@@ -76,3 +76,4 @@ class Message:
     APP_CONFIG_MISSING = 'app_config_required'
     IN_PROCESS = 'in_process'
     MAXIMUM_ACTIVE_DEVICE = 'maximum_active_device'
+    INVALID_PASSWORD = 'invalid_password'
