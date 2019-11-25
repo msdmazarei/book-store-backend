@@ -482,8 +482,6 @@ class LogMsg:
 
 
 
-
-
     UPLOAD_FAILED = 'uploading files failed'
     FILE_EXISTS = 'this file exists by path : %s'
     FILE_NOT_EXISTS = 'file by this path not exists: %s'

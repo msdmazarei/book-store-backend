@@ -27,7 +27,6 @@ def execute_process(data, username=None):
         logger.error(LogMsg.BOOK_GENERATE_FAILED,error)
         os.remove(data[0])
         os.close()
-        raise Exception('process failed.')
-    print(results)
+        raise Exception('process failed...')
     logger.info(LogMsg.END)
     return results.__dict__

@@ -33,10 +33,10 @@ save_path = os.environ.get('save_path')
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    if username is not None and username!=SIGNUP_USER:
+    if username is not None and username != SIGNUP_USER:
         permissions, presses = get_user_permissions(username, db_session)
         has_permission([Permissions.PERSON_ADD_PREMIUM],
-                                           permissions)
+                       permissions)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     cell_no = data.get('cell_no')
@@ -58,14 +58,15 @@ def add(db_session, data, username):
     logger.debug(LogMsg.POPULATING_BASIC_DATA)
     model_instance.name = data.get('name')
     model_instance.last_name = data.get('last_name')
-    model_instance.full_name = '{} {}'.format(model_instance.last_name or '',model_instance.name or '')
+    model_instance.full_name = '{} {}'.format(model_instance.last_name or '',
+                                              model_instance.name or '')
     model_instance.address = data.get('address')
     model_instance.phone = data.get('phone')
     model_instance.email = data.get('email')
     model_instance.cell_no = data.get('cell_no')
     model_instance.bio = data.get('bio')
     model_instance.image = data.get('image')
-    model_instance.is_legal = data.get('is_legal',False)
+    model_instance.is_legal = data.get('is_legal', False)
 
     db_session.add(model_instance)
     db_session.flush()
@@ -94,13 +95,13 @@ def get(id, db_session, username=None):
         raise Http_error(404, Message.NOT_FOUND)
 
     if username is not None:
-        user = check_user(username,db_session)
+        user = check_user(username, db_session)
         per_data = {}
         permissions, presses = get_user_permissions(username, db_session)
         if user.person_id == id:
             per_data.update({Permissions.IS_OWNER.value: True})
         has_permission([Permissions.PERSON_GET_PREMIUM],
-                                           permissions, None, per_data)
+                       permissions, None, per_data)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
     logger.error(LogMsg.GET_FAILED, {"id": id})
     logger.info(LogMsg.END)
@@ -120,10 +121,10 @@ def edit(id, db_session, data, username):
 
     if "id" in data.keys():
         del data["id"]
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     if user.person_id is None:
-        logger.error(LogMsg.USER_HAS_NO_PERSON,username)
-        raise Http_error(404,Message.INVALID_USER)
+        logger.error(LogMsg.USER_HAS_NO_PERSON, username)
+        raise Http_error(404, Message.INVALID_USER)
 
     model_instance = db_session.query(Person).filter(Person.id == id).first()
     if model_instance:
@@ -147,17 +148,18 @@ def edit(id, db_session, data, username):
                          {'current_book_id': data.get('current_book')})
             raise Http_error(404, Message.BOOK_NOT_IN_LIB)
     if 'cell_no' in data.keys():
-        cell_person  = person_cell_exists(db_session,data.get('cell_no'))
+        cell_person = person_cell_exists(db_session, data.get('cell_no'))
         if cell_person is not None:
-            if cell_person.id !=model_instance.id:
+            if cell_person.id != model_instance.id:
                 logger.error(LogMsg.ANOTHER_PERSON_BY_CELL)
-                raise Http_error(403,Message.CELL_EXISTS)
+                raise Http_error(403, Message.CELL_EXISTS)
 
     try:
         for key, value in data.items():
             # TODO  if key is valid attribute of class
             setattr(model_instance, key, value)
-        model_instance.full_name ='{} {}'.format(model_instance.last_name or '',model_instance.name or '')
+        model_instance.full_name = '{} {}'.format(
+            model_instance.last_name or '', model_instance.name or '')
         edit_basic_data(model_instance, username, data.get('tags'))
         db_session.flush()
 
@@ -175,8 +177,8 @@ def edit(id, db_session, data, username):
             delete_connector(id, db_session)
             add_connector(id, code.UniqueCode, db_session)
     except:
-        logger.exception(LogMsg.EDIT_FAILED,exc_info=True)
-        raise Http_error(403,Message.DELETE_FAILED)
+        logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
+        raise Http_error(403, Message.DELETE_FAILED)
 
     logger.info(LogMsg.END)
     return model_instance
@@ -191,7 +193,7 @@ def delete(id, db_session, username):
     if model_instance is None:
         logger.error(LogMsg.NOT_FOUND, {'person_id': id})
         raise Http_error(404, Message.NOT_FOUND)
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if user.person_id == id:
@@ -241,7 +243,7 @@ def get_all(db_session, username):
     logger.info(LogMsg.START, username)
 
     permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.PERSON_GET_PREMIUM],permissions)
+    has_permission([Permissions.PERSON_GET_PREMIUM], permissions)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
     try:
         result = db_session.query(Person).all()
@@ -258,11 +260,10 @@ def search_person(data, db_session, username):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
     result = []
 
     try:
-        persons =  Person.mongoquery(
+        persons = Person.mongoquery(
             db_session.query(Person)).query(
             **data).end().all()
 
@@ -278,7 +279,7 @@ def search_person(data, db_session, username):
 
 def get_person_profile(id, db_session, username):
     logger.info(LogMsg.START, username)
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if user.person_id == id:
@@ -315,14 +316,14 @@ def person_to_dict(person, db_session):
         'image': person.image,
         'name': person.name,
         'last_name': person.last_name,
-        'full_name' : person.full_name,
+        'full_name': person.full_name,
         'phone': person.phone
         # 'library':library_to_dict(person.library,db_session)
 
     }
     if person.is_legal is None:
-       result['is_legal']= False
+        result['is_legal'] = False
     else:
-        result['is_legal'] =person.is_legal
+        result['is_legal'] = person.is_legal
     result.update(model_attrs)
     return result
