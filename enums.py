@@ -146,6 +146,8 @@ class Permissions(enum.Enum):
     DEVICE_KEY_GET_PREMIUM = 'DEVICE_KEY_GET_PREMIUM'
     DEVICE_KEY_DELETE_PREMIUM = 'DEVICE_KEY_DELETE_PREMIUM'
 
+    PREPARE_BOOK_PREMIUM = 'PREPARE_BOOK_PREMIUM'
+
 
 def check_enums(data, enum_class):
     for type in data:

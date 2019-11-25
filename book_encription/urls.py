@@ -1,4 +1,4 @@
-from .controllers import device_key
+from .controllers import device_key,prepare_book
 from helper import check_auth, inject_db, jsonify, pass_data
 
 
@@ -18,3 +18,5 @@ def call_router(app):
     app.route('/device-keys', 'POST', device_key.add,apply=data_plus_wrappers)
     app.route('/device-keys/user/<user_id>', 'GEt', device_key.get_user_devices,
           apply=wrappers)
+
+    app.route('/prepare-book/<library_id>', 'GET', prepare_book.prepare_book, apply=wrappers)
