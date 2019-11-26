@@ -252,6 +252,7 @@ def book_to_dict(db_session, book):
         'size': book.size,
         'isben': book.isben,
         'from_editor': book.from_editor,
+        'press':book.press,
         'price': get_book_price_internal(book.id, db_session)
 
     }
