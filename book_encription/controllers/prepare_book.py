@@ -32,6 +32,15 @@ def prepare_book(book_id, db_session, username):
     logger.error(LogMsg.LIBRARY_CHECK_BOOK_EXISTANCE,
                  {'person_id': user.person_id, 'book_id': book_id})
 
+
+    brief_content = get_be_data(book_id, 'Brief', db_session)
+    if brief_content is None:
+        logger.error(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
+        raise Http_error(404, Message.NOT_FOUND)
+    brief_path = copy_book_content_for_user(brief_content.id)
+    result['Brief'] = brief_content.id
+    logger.debug(LogMsg.PREPARE_BRIEF_ADDED, brief_path)
+
     if is_book_in_library(user.person_id, book_id, db_session):
         logger.debug(LogMsg.PREPARE_FULL_CONTENT,
                      {'person_id': user.person_id, 'book_id': book_id})
@@ -44,21 +53,15 @@ def prepare_book(book_id, db_session, username):
 
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-
-
         content = get_be_data(book_id, 'Original', db_session)
         if content is None:
             logger.error(LogMsg.NOT_FOUND, {'original_content_of_book': book_id})
             raise Http_error(404, Message.NOT_FOUND)
+        full_path = copy_book_content_for_user(content.id)
 
-        result['Original'] = copy_book_content_for_user(content.id)
+        logger.debug(LogMsg.PREPARE_ORIGINAL_ADDED,full_path)
 
-    brief_content = get_be_data(book_id, 'Brief', db_session)
-    if brief_content is None:
-        logger.error(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
-        raise Http_error(404, Message.NOT_FOUND)
-
-    result['Brief'] = copy_book_content_for_user(brief_content.id)
+        result['Original'] = content.id
 
     logger.info(LogMsg.END)
     return result

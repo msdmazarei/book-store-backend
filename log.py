@@ -482,7 +482,8 @@ class LogMsg:
 
     # BOOK PREPARE
     PREPARE_FULL_CONTENT = 'preparing full content for the owner of book: %s'
-
+    PREPARE_ORIGINAL_ADDED = 'books original file prepared for download in : %s'
+    PREPARE_BRIEF_ADDED = 'books brief file preparde for download in : %s'
 
 
 
