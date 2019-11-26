@@ -480,6 +480,11 @@ class LogMsg:
     USER_DEVICE_COUNT = 'number of users active devices is : %s'
 
 
+    # BOOK PREPARE
+    PREPARE_FULL_CONTENT = 'preparing full content for the owner of book: %s'
+
+
+
 
 
     UPLOAD_FAILED = 'uploading files failed'
