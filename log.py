@@ -325,7 +325,7 @@ class LogMsg:
     COLLECTION_GET_ALL = 'getting all collections %s'
     COLLECTION_DELETE_BOOK = 'deleting books from a collection : %s'
     COLLECTION_ADD_BOOK_TO_MULTIPLE_COLLECTIONS = 'adding book to multiple collections : %s'
-    COLLECTION_BOOK_IS_NOT_IN_LIBRARY = 'this book is not in users library and cant add to collection : %s'
+    COLLECTION_BOOK_IS_NOT_IN_LIBRARY = 'this book is not in users library : %s'
     COLLECTION_ADD_EMPTY_COLLECTION = 'adding an empty collection for user : %s '
     COLLECTION_ARRANGE_BY_TITLE = 'arranged collection contents by title'
     COLLECTION_EXISTS = 'collection by this title already exists : %s'

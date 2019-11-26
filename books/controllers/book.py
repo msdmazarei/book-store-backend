@@ -131,7 +131,6 @@ def edit(id, db_session, data, username):
         delete_files(model_instance.images)
 
     for key, value in data.items():
-        # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
     edit_basic_data(model_instance, username, data.get('tags'))
 
@@ -195,16 +194,17 @@ def delete(id, db_session, username):
     return Http_response(204, True)
 
 
-def get_all(db_session,data):
+def get_all(data,db_session,username):
     logger.info(LogMsg.START)
     logger.info(LogMsg.GETTING_ALL_BOOKS)
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
     try:
         final_res = []
-        result = Book.mongoquery(
-            db_session.query(Book)).query(
-            **data).end().all()
+        mq= Book.mongoquery(
+            db_session.query(Book))
+        # data=dict(filter=dict(title="hello"))
+        result = mq.query(**data).end().all()
 
         logger.debug(LogMsg.GET_SUCCESS)
 
