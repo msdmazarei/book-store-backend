@@ -31,6 +31,7 @@ def add(data, db_session, username):
     populate_basic_data(model_instance, username, data.get('tags'))
     logger.debug(LogMsg.POPULATING_BASIC_DATA)
     model_instance.title = data.get('title')
+    model_instance.person_id = data.get('person_id')
     db_session.add(model_instance)
 
     logger.info(LogMsg.END)
