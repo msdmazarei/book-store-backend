@@ -255,7 +255,7 @@ def head_user_library( db_session, username):
     result_dict = lib_to_dictlist(result,db_session)
     result_str = json.dumps(result_dict).encode()
     result_hash = hashlib.md5(result_str).hexdigest()
-    response.add_header('result_length',result_hash)
+
     response.add_header('content_type','application/json')
     response.add_header('etag',result_hash)
 

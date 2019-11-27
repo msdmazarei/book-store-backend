@@ -1,5 +1,9 @@
+import hashlib
 import json
 from uuid import uuid4
+
+from bottle import response
+
 from app_redis import app_redis as redis
 from check_permission import get_user_permissions, has_permission, \
     has_permission_or_not
@@ -327,3 +331,16 @@ def reset_pass(data, db_session):
 
     logger.error(LogMsg.NOT_FOUND, data)
     raise Http_error(404, Message.INVALID_USER)
+
+
+def head_profile(username, db_session):
+    logger.info(LogMsg.START,username)
+    profile = get_profile(username, db_session)
+    profile_str = json.dumps(profile).encode()
+    result_hash = hashlib.md5(profile_str).hexdigest()
+
+    response.add_header('content_type', 'application/json')
+    response.add_header('etag', result_hash)
+
+    logger.info(LogMsg.END)
+    return response

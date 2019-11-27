@@ -1,3 +1,7 @@
+import hashlib
+import json
+
+from bottle import response
 from sqlalchemy import and_, update
 
 from book_collections.models import Collection
@@ -467,3 +471,16 @@ def rename_collection(data, db_session, username):
         final_res.append(model_dict)
 
     return final_res
+
+
+
+def head_all_collections(db_session, username):
+    result =  get_all_collections({}, db_session, username)
+    result_str = json.dumps(result).encode()
+    result_hash = hashlib.md5(result_str).hexdigest()
+
+    response.add_header('content_type', 'application/json')
+    response.add_header('etag', result_hash)
+
+    logger.info(LogMsg.END)
+    return response
