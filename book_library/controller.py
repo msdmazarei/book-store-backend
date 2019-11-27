@@ -1,5 +1,8 @@
+import hashlib
+import json
 import logging
 
+from bottle import request, response
 from sqlalchemy import and_
 
 from book_library.models import Library
@@ -233,3 +236,28 @@ def lib_to_dict(item,db_session):
     }
     item_dict.update(res)
     return item_dict
+
+
+def head_user_library( db_session, username):
+    logger.info(LogMsg.START)
+    req = request
+    user  = check_user(username,db_session)
+    logger.debug(LogMsg.USER_XISTS)
+    person_id = user.person_id
+
+    headers = request.headers
+    if username is not None:
+        permissions,presses = get_user_permissions(username, db_session)
+        has_permission([Permissions.LIBRARY_GET_PREMIUM], permissions)
+
+    result = db_session.query(Library).filter(
+        Library.person_id == person_id).all()
+    result_dict = lib_to_dictlist(result,db_session)
+    result_str = json.dumps(result_dict).encode()
+    result_hash = hashlib.md5(result_str).hexdigest()
+    response.add_header('result_length',result_hash)
+    response.add_header('content_type','application/json')
+    response.add_header('etag',result_hash)
+
+    logger.info(LogMsg.END)
+    return response
