@@ -19,4 +19,4 @@ def call_router(app):
     app.route('/device-keys/user/<user_id>', 'GEt', device_key.get_user_devices,
           apply=wrappers)
 
-    app.route('/prepare-book/<book_id>', 'GET', prepare_book.prepare_book, apply=wrappers)
+    app.route('/prepare-book', 'POST', prepare_book.prepare_book, apply=data_plus_wrappers)
