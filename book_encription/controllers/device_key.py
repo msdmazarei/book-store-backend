@@ -107,7 +107,7 @@ def get_user_devices(user_id, db_session, username):
     permissions, presses = get_user_permissions(username, db_session)
     if user_id == user.id:
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DEVICE_KEY_GET],
+    has_permission([Permissions.DEVICE_KEY_GET_PREMIUM],
                    permissions, None, per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 

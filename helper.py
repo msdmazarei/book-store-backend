@@ -237,6 +237,13 @@ def Now():
     return int(now)
 
 
+def a_week_ago():
+    now = time.mktime(datetime.datetime.now().timetuple())
+    former_week = time.mktime(
+        (datetime.datetime.now() - datetime.timedelta(days=7)).timetuple())
+    return {'now':now,'week_ago':former_week}
+
+
 def Http_error(code, message):
     if isinstance(message, str):
         message = {'msg': message}
