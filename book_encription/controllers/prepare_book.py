@@ -1,10 +1,11 @@
 import shutil
 
+from book_encription.controllers.device_key import user_device_exist
 from book_library.controller import is_book_in_library
 from books.controllers.book_content import get_be_data
 from check_permission import get_user_permissions, has_permission
 from enums import Permissions
-from helper import Http_error, value
+from helper import Http_error, value, check_schema
 from log import LogMsg, logger
 from messages import Message
 from repository.content_repo import get_book_contents
@@ -24,14 +25,21 @@ if save_path is None:
     raise Http_error(500, Message.APP_CONFIG_MISSING)
 
 
-def prepare_book(book_id, db_session, username):
+def prepare_book(data, db_session, username):
     logger.info(LogMsg.START, username)
     result = {}
+    check_schema(['book_id', 'device_id'], data.keys())
+    book_id = data.get('book_id')
+    device_id = data.get('device_id')
 
     user = check_user(username, db_session)
     logger.error(LogMsg.LIBRARY_CHECK_BOOK_EXISTANCE,
                  {'person_id': user.person_id, 'book_id': book_id})
 
+    if not user_device_exist(user.id, device_id, db_session):
+        logger.error(LogMsg.NOT_FOUND,
+                     {'username': username, 'device_id': device_id})
+        raise Http_error(404, Message.NOT_FOUND)
 
     brief_content = get_be_data(book_id, 'Brief', db_session)
     if brief_content is None:
@@ -45,7 +53,6 @@ def prepare_book(book_id, db_session, username):
         logger.debug(LogMsg.PREPARE_FULL_CONTENT,
                      {'person_id': user.person_id, 'book_id': book_id})
 
-
         per_data = {Permissions.IS_OWNER.value: True}
         permissions, presses = get_user_permissions(username, db_session)
         has_permission([Permissions.PREPARE_BOOK_PREMIUM],
@@ -55,11 +62,12 @@ def prepare_book(book_id, db_session, username):
 
         content = get_be_data(book_id, 'Original', db_session)
         if content is None:
-            logger.error(LogMsg.NOT_FOUND, {'original_content_of_book': book_id})
+            logger.error(LogMsg.NOT_FOUND,
+                         {'original_content_of_book': book_id})
             raise Http_error(404, Message.NOT_FOUND)
         full_path = copy_book_content_for_user(content.id)
 
-        logger.debug(LogMsg.PREPARE_ORIGINAL_ADDED,full_path)
+        logger.debug(LogMsg.PREPARE_ORIGINAL_ADDED, full_path)
 
         result['Original'] = content.id
 

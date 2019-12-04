@@ -9,3 +9,4 @@ class DeviceCode(Base,PrimaryModel):
     __tablename__ = 'device_codes'
     code = Column(String,nullable=False,unique=True)
     user_id = Column(UUID,ForeignKey('users.id'),nullable=False)
+    name = Column(String)
