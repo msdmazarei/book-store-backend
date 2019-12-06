@@ -246,9 +246,7 @@ def head_user_library( db_session, username):
     person_id = user.person_id
 
     headers = request.headers
-    if username is not None:
-        permissions,presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.LIBRARY_GET_PREMIUM], permissions)
+
 
     result = db_session.query(Library).filter(
         Library.person_id == person_id).all()
