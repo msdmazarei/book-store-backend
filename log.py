@@ -484,6 +484,10 @@ class LogMsg:
     PREPARE_FULL_CONTENT = 'preparing full content for the owner of book: %s'
     PREPARE_ORIGINAL_ADDED = 'books original file prepared for download in : %s'
     PREPARE_BRIEF_ADDED = 'books brief file preparde for download in : %s'
+    ALREADY_PREPARED = 'book content already prepared: %s'
+    CHECK_FILE_EXISTANCE = 'checking for the existance of content for preparation : %s'
+
+
 
 
 

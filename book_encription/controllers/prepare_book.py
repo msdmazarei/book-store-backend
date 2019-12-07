@@ -42,12 +42,15 @@ def prepare_book(data, db_session, username):
         raise Http_error(404, Message.NOT_FOUND)
 
     brief_content = get_be_data(book_id, 'Brief', db_session)
-    if brief_content is None:
-        logger.error(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
-        raise Http_error(404, Message.NOT_FOUND)
-    brief_path = copy_book_content_for_user(brief_content.id)
-    result['Brief'] = brief_content.id
-    logger.debug(LogMsg.PREPARE_BRIEF_ADDED, brief_path)
+    if brief_content is not None:
+        logger.debug(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
+        if is_prepared(brief_content.id,user.id):
+            logger.debug(LogMsg.ALREADY_PREPARED,{'brief_content':brief_content.id})
+            result['Brief'] ='{}_{}'.format(user.id,brief_content.id)
+        else:
+            brief_path = copy_book_content_for_user(brief_content.id,user.id)
+            result['Brief'] = brief_path
+            logger.debug(LogMsg.PREPARE_BRIEF_ADDED, brief_path)
 
     if is_book_in_library(user.person_id, book_id, db_session):
         logger.debug(LogMsg.PREPARE_FULL_CONTENT,
@@ -60,25 +63,42 @@ def prepare_book(data, db_session, username):
 
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
+
+
         content = get_be_data(book_id, 'Original', db_session)
         if content is None:
             logger.error(LogMsg.NOT_FOUND,
                          {'original_content_of_book': book_id})
             raise Http_error(404, Message.NOT_FOUND)
-        full_path = copy_book_content_for_user(content.id)
 
-        logger.debug(LogMsg.PREPARE_ORIGINAL_ADDED, full_path)
+        if is_prepared(brief_content.id,user.id):
+            logger.debug(LogMsg.ALREADY_PREPARED,{'original_content':content.id})
+            result['Original'] ='{}_{}'.format(user.id,content.id)
+        else:
 
-        result['Original'] = content.id
+            full_path = copy_book_content_for_user(content.id,user.id)
+
+            logger.debug(LogMsg.PREPARE_ORIGINAL_ADDED, full_path)
+
+            result['Original'] = full_path
 
     logger.info(LogMsg.END)
     return result
 
 
-def copy_book_content_for_user(content_id):
+def copy_book_content_for_user(content_id,user_id):
     content_file_path = '{}/{}.msd'.format(book_saving_path, content_id)
-    final_path = '{}/{}.msd'.format(save_path, content_id)
+    file_name = '{}_{}'.format(user_id,content_id)
+    final_path = '{}/{}.msd'.format(save_path, file_name)
     shutil.copy(content_file_path, final_path, follow_symlinks=True)
     # os.rename(content_file_path,final_path)
     # os.close()
-    return final_path
+    return file_name
+
+
+def is_prepared(content_id,user_id):
+
+    file_name = '{}_{}'.format(user_id, content_id)
+    final_path = '{}/{}.msd'.format(save_path, file_name)
+    logger.debug(LogMsg.CHECK_FILE_EXISTANCE, final_path)
+    return os.path.exists(final_path)
