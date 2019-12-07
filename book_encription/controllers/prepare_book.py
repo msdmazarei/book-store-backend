@@ -44,11 +44,11 @@ def prepare_book(data, db_session, username):
     brief_content = get_be_data(book_id, 'Brief', db_session)
     if brief_content is not None:
         logger.debug(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
-        if is_prepared(brief_content.id,user.id):
+        if is_prepared(brief_content,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'brief_content':brief_content.id})
             result['Brief'] ='{}_{}_{}'.format(user.id,brief_content.id,brief_content.version)
         else:
-            brief_path = copy_book_content_for_user(brief_content.id,user.id)
+            brief_path = copy_book_content_for_user(brief_content,user.id)
             result['Brief'] = brief_path
             logger.debug(LogMsg.PREPARE_BRIEF_ADDED, brief_path)
 
@@ -71,12 +71,12 @@ def prepare_book(data, db_session, username):
                          {'original_content_of_book': book_id})
             raise Http_error(404, Message.NOT_FOUND)
 
-        if is_prepared(brief_content.id,user.id):
+        if is_prepared(content,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'original_content':content.id})
             result['Original'] ='{}_{}_{}'.format(user.id,content.id,content.version)
         else:
 
-            full_path = copy_book_content_for_user(content.id,user.id)
+            full_path = copy_book_content_for_user(content,user.id)
 
             logger.debug(LogMsg.PREPARE_ORIGINAL_ADDED, full_path)
 
