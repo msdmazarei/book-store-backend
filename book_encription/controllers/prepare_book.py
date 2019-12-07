@@ -46,7 +46,7 @@ def prepare_book(data, db_session, username):
         logger.debug(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
         if is_prepared(brief_content.id,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'brief_content':brief_content.id})
-            result['Brief'] ='{}_{}'.format(user.id,brief_content.id)
+            result['Brief'] ='{}_{}_{}'.format(user.id,brief_content.id,brief_content.version)
         else:
             brief_path = copy_book_content_for_user(brief_content.id,user.id)
             result['Brief'] = brief_path
@@ -73,7 +73,7 @@ def prepare_book(data, db_session, username):
 
         if is_prepared(brief_content.id,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'original_content':content.id})
-            result['Original'] ='{}_{}'.format(user.id,content.id)
+            result['Original'] ='{}_{}_{}'.format(user.id,content.id,content.version)
         else:
 
             full_path = copy_book_content_for_user(content.id,user.id)
@@ -86,9 +86,9 @@ def prepare_book(data, db_session, username):
     return result
 
 
-def copy_book_content_for_user(content_id,user_id):
-    content_file_path = '{}/{}.msd'.format(book_saving_path, content_id)
-    file_name = '{}_{}'.format(user_id,content_id)
+def copy_book_content_for_user(content,user_id):
+    content_file_path = '{}/{}.msd'.format(book_saving_path, content.id)
+    file_name = '{}_{}_{}'.format(user_id,content.id,content.version)
     final_path = '{}/{}.msd'.format(save_path, file_name)
     shutil.copy(content_file_path, final_path, follow_symlinks=True)
     # os.rename(content_file_path,final_path)
@@ -96,9 +96,9 @@ def copy_book_content_for_user(content_id,user_id):
     return file_name
 
 
-def is_prepared(content_id,user_id):
+def is_prepared(content,user_id):
 
-    file_name = '{}_{}'.format(user_id, content_id)
+    file_name = '{}_{}_{}'.format(user_id, content.id,content.version)
     final_path = '{}/{}.msd'.format(save_path, file_name)
     logger.debug(LogMsg.CHECK_FILE_EXISTANCE, final_path)
     return os.path.exists(final_path)
