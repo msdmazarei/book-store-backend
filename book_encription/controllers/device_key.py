@@ -116,7 +116,7 @@ def get_user_devices(user_id, db_session, username):
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     result = db_session.query(DeviceCode).filter(
-        DeviceCode.user_id == user_id).all()
+        DeviceCode.user_id == user_id).all().order_by(DeviceCode.creation_date.desc())
     final_res = []
     for item in result:
         final_res.append(model_to_dict(item))

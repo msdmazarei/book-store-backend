@@ -33,13 +33,54 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="123">
-              <caret line="95" column="20" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="20" />
+            <state relative-caret-position="108">
+              <caret line="43" column="26" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/books/controllers/book_content.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="104" column="4" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="4" />
+              <folding>
+                <element signature="e#540#2209#0" />
+                <element signature="e#913#1014#0" />
+                <element signature="e#1159#1253#0" />
+                <element signature="e#1531#1748#0" />
+                <element signature="e#1653#1748#0" />
+                <element signature="e#2251#3402#0" />
+                <element signature="e#2401#2505#0" />
+                <element signature="e#2585#2694#0" />
+                <element signature="e#3073#3298#0" />
+                <element signature="e#3203#3298#0" />
+                <element signature="e#3564#3649#0" />
+                <element signature="e#3906#6093#0" />
+                <element signature="e#4018#4117#0" />
+                <element signature="e#4209#4412#0" />
+                <element signature="e#4295#4412#0" />
+                <element signature="e#4837#5062#0" />
+                <element signature="e#4967#5062#0" />
+                <element signature="e#5135#5829#0" />
+                <element signature="e#5179#5262#0" />
+                <element signature="e#5422#5595#0" />
+                <element signature="e#5754#5829#0" />
+                <element signature="e#5850#5955#0" />
+                <element signature="e#6138#7357#0" />
+                <element signature="e#6250#6349#0" />
+                <element signature="e#6776#7004#0" />
+                <element signature="e#6909#7004#0" />
+                <element signature="e#7124#7228#0" />
+                <element signature="e#8130#8275#0" />
+                <element signature="e#8347#8755#0" />
+                <element signature="e#8391#8568#0" />
               </folding>
             </state>
           </provider>
@@ -1271,45 +1312,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/books/controllers/book_content.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="104" column="42" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="42" />
-          <folding>
-            <element signature="e#540#2209#0" />
-            <element signature="e#913#1014#0" />
-            <element signature="e#1159#1253#0" />
-            <element signature="e#1531#1748#0" />
-            <element signature="e#1653#1748#0" />
-            <element signature="e#2251#3402#0" />
-            <element signature="e#2401#2505#0" />
-            <element signature="e#2585#2694#0" />
-            <element signature="e#3073#3298#0" />
-            <element signature="e#3203#3298#0" />
-            <element signature="e#3564#3649#0" />
-            <element signature="e#3906#6093#0" />
-            <element signature="e#4018#4117#0" />
-            <element signature="e#4209#4412#0" />
-            <element signature="e#4295#4412#0" />
-            <element signature="e#4837#5062#0" />
-            <element signature="e#4967#5062#0" />
-            <element signature="e#5135#5829#0" />
-            <element signature="e#5179#5262#0" />
-            <element signature="e#5422#5595#0" />
-            <element signature="e#5754#5829#0" />
-            <element signature="e#5850#5955#0" />
-            <element signature="e#6138#7357#0" />
-            <element signature="e#6250#6349#0" />
-            <element signature="e#6776#7004#0" />
-            <element signature="e#6909#7004#0" />
-            <element signature="e#7124#7228#0" />
-            <element signature="e#8130#8275#0" />
-            <element signature="e#8347#8755#0" />
-            <element signature="e#8391#8568#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/books/controllers/book.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
@@ -1605,10 +1607,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="95" column="20" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="20" />
+        <state relative-caret-position="108">
+          <caret line="43" column="26" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/books/controllers/book_content.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="104" column="4" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="4" />
+          <folding>
+            <element signature="e#540#2209#0" />
+            <element signature="e#913#1014#0" />
+            <element signature="e#1159#1253#0" />
+            <element signature="e#1531#1748#0" />
+            <element signature="e#1653#1748#0" />
+            <element signature="e#2251#3402#0" />
+            <element signature="e#2401#2505#0" />
+            <element signature="e#2585#2694#0" />
+            <element signature="e#3073#3298#0" />
+            <element signature="e#3203#3298#0" />
+            <element signature="e#3564#3649#0" />
+            <element signature="e#3906#6093#0" />
+            <element signature="e#4018#4117#0" />
+            <element signature="e#4209#4412#0" />
+            <element signature="e#4295#4412#0" />
+            <element signature="e#4837#5062#0" />
+            <element signature="e#4967#5062#0" />
+            <element signature="e#5135#5829#0" />
+            <element signature="e#5179#5262#0" />
+            <element signature="e#5422#5595#0" />
+            <element signature="e#5754#5829#0" />
+            <element signature="e#5850#5955#0" />
+            <element signature="e#6138#7357#0" />
+            <element signature="e#6250#6349#0" />
+            <element signature="e#6776#7004#0" />
+            <element signature="e#6909#7004#0" />
+            <element signature="e#7124#7228#0" />
+            <element signature="e#8130#8275#0" />
+            <element signature="e#8347#8755#0" />
+            <element signature="e#8391#8568#0" />
           </folding>
         </state>
       </provider>
