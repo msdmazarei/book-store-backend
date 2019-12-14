@@ -5,7 +5,8 @@ from check_permission import get_user_permissions, has_permission, \
 from repository.price_repo import delete_book_price
 from repository.rate_repo import book_average_rate
 from repository.comment_repo import delete_book_comments
-from elastic.book_index import index_book, delete_book_index, search_phrase
+from elastic.book_index import index_book, delete_book_index, search_phrase, \
+    is_book_already_indexed
 from file_handler.handle_file import delete_files
 from helper import Now, Http_error, populate_basic_data, edit_basic_data, \
     Http_response
@@ -715,3 +716,24 @@ def books_in_admin(db_session, username):
     books = book_by_press(presses, db_session)
     logger.info(LogMsg.END)
     return books
+
+
+
+def book_bulk_index(db_session,username):
+    logger.info(LogMsg.START,username)
+    books = get_all({},db_session,username)
+    for book in books:
+        if is_book_already_indexed(book.get('id')):
+            logger.debug(LogMsg.BOOK_INDEX_EXISTS,book)
+        else:
+            roles = persons_of_book(book.get('id'), db_session)
+            book['book_id'] = book.get('id')
+            del book['roles']
+            book.update(roles)
+            index_book(book, db_session)
+            logger.debug(LogMsg.BOOK_INDEXED,book)
+    logger.info(LogMsg.END)
+    return {'result':'successful'}
+
+
+

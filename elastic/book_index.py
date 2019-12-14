@@ -1,5 +1,6 @@
 from elastic.elastic_engine import es
 from enums import str_genre, str_type
+from log import logger, LogMsg
 from repository.person_repo import fullname_persons, full_name_by_id
 
 mapping = {
@@ -124,3 +125,13 @@ def query_string(search_phrase):
         'query': '*{}*'.format(search_phrase), 'fields': ['title^5', 'persons^5', 'genre']}}})
 
     return res
+
+
+def is_book_already_indexed(book_id):
+    try:
+        index = es.get(index='online_library',id=book_id)
+    except:
+        logger.exception(LogMsg.NOT_FOUND,exc_info=True)
+        return False
+    return True
+

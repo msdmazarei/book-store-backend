@@ -220,7 +220,8 @@ class LogMsg:
     BOOK_CHECKING_IF_EXISTS = 'checking for uniqueness of book : %s'
     BOOK_NOT_UNIQUE = 'book is not unique and already exists : %s'
     BOOK_ONLINE_TYPE_COUNT_LIMITATION = 'online book types can not have count greater than one'
-
+    BOOK_INDEX_EXISTS = 'book index in elastic already exists :%s'
+    BOOK_INDEXED = 'book is indexed in elastic by data : %s'
 
     # BOOK_ROLE
     ADDING_ROLES_OF_BOOK = 'adding roles of a book to DB by list : %s'

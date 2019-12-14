@@ -28,7 +28,7 @@ def call_router(app):
 
     app.route('/books/admin', 'GET', book.book_by_press, apply=wrappers)
 
-
+    app.route('/books/bulk-index', 'GET', book.book_bulk_index, apply=wrappers)
 
     app.route('/book-roles/<id>', 'GET', book_roles.get,
               apply=readonly_wrappers)

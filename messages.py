@@ -78,3 +78,4 @@ class Message:
     MAXIMUM_ACTIVE_DEVICE = 'maximum_active_device'
     INVALID_PASSWORD = 'invalid_password'
     CONTENT_FORMAT_INVALID = 'content_format_invalid'
+    BOOK_NOT_GENERATED = 'book_not_generated'

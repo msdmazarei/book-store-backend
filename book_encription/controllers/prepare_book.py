@@ -43,6 +43,9 @@ def prepare_book(data, db_session, username):
 
     brief_content = get_be_data(book_id, 'Brief', db_session)
     if brief_content is not None:
+        if not is_generated(brief_content.id):
+            logger.error(LogMsg.CONTENT_NOT_GENERATED,{'content_id':brief_content.id})
+            raise Http_error(404,Message.BOOK_NOT_GENERATED)
         logger.debug(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
         if is_prepared(brief_content,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'brief_content':brief_content.id})
@@ -102,3 +105,9 @@ def is_prepared(content,user_id):
     final_path = '{}/{}.msd'.format(save_path, file_name)
     logger.debug(LogMsg.CHECK_FILE_EXISTANCE, final_path)
     return os.path.exists(final_path)
+
+
+def is_generated(content_id):
+    content_file_path = '{}/{}.msd'.format(book_saving_path, content_id)
+    return os.path.exists(content_file_path)
+
