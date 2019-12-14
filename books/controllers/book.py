@@ -195,14 +195,14 @@ def delete(id, db_session, username):
     return Http_response(204, True)
 
 
-def get_all(data,db_session,username):
+def get_all(data, db_session, username):
     logger.info(LogMsg.START)
     logger.info(LogMsg.GETTING_ALL_BOOKS)
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
     try:
         final_res = []
-        mq= Book.mongoquery(
+        mq = Book.mongoquery(
             db_session.query(Book))
         # data=dict(filter=dict(title="hello"))
         result = mq.query(**data).end().all()
@@ -253,7 +253,7 @@ def book_to_dict(db_session, book):
         'size': book.size,
         'isben': book.isben,
         'from_editor': book.from_editor,
-        'press':book.press,
+        'press': book.press,
         'price': get_book_price_internal(book.id, db_session)
 
     }
@@ -581,7 +581,6 @@ def search_book(data, db_session):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
     logger.debug(LogMsg.SEARCH_BOOKS, filter)
     result = []
 
@@ -592,7 +591,7 @@ def search_book(data, db_session):
     search_phrase = filter.get(search_key)
 
     search_data = {'limit': limit, 'skip': skip,
-                   'search_phrase': search_phrase,'sort': data.get('sort')}
+                   'search_phrase': search_phrase, 'sort': data.get('sort')}
     if search_key == 'genre':
         result = search_by_genre(search_data, db_session)
     elif search_key == 'title':
@@ -654,10 +653,9 @@ def newest_books(data, db_session):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
     try:
         logger.debug(LogMsg.GETTING_NEWEST_BOOKS)
-        news =  Book.mongoquery(
+        news = Book.mongoquery(
             db_session.query(Book)).query(
             **data).end().all()
         res = []
@@ -718,22 +716,18 @@ def books_in_admin(db_session, username):
     return books
 
 
-
-def book_bulk_index(db_session,username):
-    logger.info(LogMsg.START,username)
-    books = get_all({},db_session,username)
+def book_bulk_index(db_session, username):
+    logger.info(LogMsg.START, username)
+    books = get_all({}, db_session, username)
     for book in books:
         if is_book_already_indexed(book.get('id')):
-            logger.debug(LogMsg.BOOK_INDEX_EXISTS,book)
+            logger.debug(LogMsg.BOOK_INDEX_EXISTS, book)
         else:
             roles = persons_of_book(book.get('id'), db_session)
             book['book_id'] = book.get('id')
             del book['roles']
             book.update(roles)
             index_book(book, db_session)
-            logger.debug(LogMsg.BOOK_INDEXED,book)
+            logger.debug(LogMsg.BOOK_INDEXED, book)
     logger.info(LogMsg.END)
-    return {'result':'successful'}
-
-
-
+    return {'result': 'successful'}

@@ -19,6 +19,7 @@ class BookTypes(enum.Enum):
     Hard_Copy = 'Hard_Copy'
     Pdf = 'Pdf'
     Epub = 'Epub'
+    Msd = 'Msd'
 
 
 class BookContentType(enum.Enum):
