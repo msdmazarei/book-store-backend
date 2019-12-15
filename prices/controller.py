@@ -176,10 +176,12 @@ def internal_edit(book_id, price, db_session):
 
     if model_instance is None:
         logger.error(LogMsg.NOT_FOUND, {'book_price_id':book_id })
-        raise Http_error(404, Message.NOT_FOUND)
+        model_instance = add_internal(price, book_id, db_session, 'INTERNAL')
+        logger.debug(LogMsg.ADDING_PRICE,model_instance)
+    else:
 
-    model_instance.price = price
-    logger.debug(LogMsg.MODEL_ALTERED, model_to_dict(model_instance))
+        model_instance.price = price
+        logger.debug(LogMsg.MODEL_ALTERED, model_to_dict(model_instance))
 
     logger.info(LogMsg.END)
 
