@@ -72,7 +72,7 @@ def prepare_book(data, db_session, username):
         if content is None:
             logger.error(LogMsg.NOT_FOUND,
                          {'original_content_of_book': book_id})
-            raise Http_error(404, Message.NOT_FOUND)
+            return result
 
         if is_prepared(content,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'original_content':content.id})
