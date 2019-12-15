@@ -181,10 +181,12 @@ def delete(id, db_session, username):
     if book.files:
         logger.debug(LogMsg.DELETE_BOOK_FILES)
         delete_files(book.files)
-
-    db_session.query(Book).filter(Book.id == id).delete()
-    logger.debug(LogMsg.ENTITY_DELETED, {"Book.id": id})
-
+    try:
+        db_session.query(Book).filter(Book.id == id).delete()
+        logger.debug(LogMsg.ENTITY_DELETED, {"Book.id": id})
+    except:
+        logger.exception(LogMsg.DELETE_FAILED,exc_info=True)
+        raise Http_error(403,Message.USED_SOMEWHERE)
     unique_connector = get_connector(id, db_session)
     if unique_connector:
         logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)

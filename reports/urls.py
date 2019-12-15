@@ -7,3 +7,4 @@ def call_router(app):
     data_plus_wrappers.append(pass_data)
 
     app.route('/reports/book-of-month', 'GET', report.book_of_month, apply=wrappers)
+    app.route('/reports/book-of-week', 'GET', report.book_of_week, apply=wrappers)
