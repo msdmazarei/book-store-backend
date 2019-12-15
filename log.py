@@ -474,6 +474,7 @@ class LogMsg:
     CONTENT_GENERATING = 'content generation process is working -- plz wait'
     BOOK_GENERATE_FAILED = 'generating book content failed: %s'
     RUN_PROCESS_DATA = 'data for running process of book generation is : %s'
+    CONTENT_NOT_GENERATED = 'content of book not generated yet : %s'
 
     #DEVICE CODE
 

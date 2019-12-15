@@ -1,5 +1,4 @@
-from sqlalchemy import text
-
+from decimal import Decimal
 from log import logger, LogMsg
 
 
@@ -25,9 +24,11 @@ def book_of_week(db_session, username):
             'pages', 'size', 'from_editor', 'press']
     final_res = []
     for item in result:
+
         item_dict = dict(zip(keys, item))
-        for value in item_dict.values():
-            print(value)
+        for key,value in item_dict.items():
+            if isinstance(value,Decimal):
+                value = float(value)
         final_res.append(item_dict)
     return final_res
 

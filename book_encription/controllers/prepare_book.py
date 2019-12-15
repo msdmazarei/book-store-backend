@@ -46,7 +46,7 @@ def prepare_book(data, db_session, username):
         if not is_generated(brief_content.id):
             logger.error(LogMsg.CONTENT_NOT_GENERATED,{'content_id':brief_content.id})
             raise Http_error(404,Message.BOOK_NOT_GENERATED)
-        logger.debug(LogMsg.NOT_FOUND, {'brief_content_of_book': book_id})
+
         if is_prepared(brief_content,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'brief_content':brief_content.id})
             result['Brief'] ='{}_{}_{}'.format(user.id,brief_content.id,brief_content.version)
@@ -66,13 +66,15 @@ def prepare_book(data, db_session, username):
 
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-
-
         content = get_be_data(book_id, 'Original', db_session)
         if content is None:
             logger.error(LogMsg.NOT_FOUND,
                          {'original_content_of_book': book_id})
             return result
+
+        if not is_generated(content.id):
+            logger.error(LogMsg.CONTENT_NOT_GENERATED,{'content_id':content.id})
+            raise Http_error(404,Message.BOOK_NOT_GENERATED)
 
         if is_prepared(content,user.id):
             logger.debug(LogMsg.ALREADY_PREPARED,{'original_content':content.id})
