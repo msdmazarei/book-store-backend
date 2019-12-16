@@ -29,3 +29,5 @@ def call_router(app):
     app.route('/reports/annual-book-sale-by-press', 'POST', report.book_by_press,
               apply=data_plus_wrappers)
 
+    app.route('/reports/wish-book', 'GET',
+              report.wish_book, apply=wrappers)

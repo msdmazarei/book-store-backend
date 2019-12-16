@@ -37,7 +37,19 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="365">
+              <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/reports/controllers/report_models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="205">
@@ -58,6 +70,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="139">
               <caret line="495" column="22" selection-start-line="495" selection-start-column="22" selection-end-line="495" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/messages.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="211">
+              <caret line="83" column="18" selection-start-line="83" selection-start-column="4" selection-end-line="83" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -225,9 +246,7 @@
         <option value="$PROJECT_DIR$/configs.py" />
         <option value="$PROJECT_DIR$/prices/controller.py" />
         <option value="$PROJECT_DIR$/books/controllers/book.py" />
-        <option value="$PROJECT_DIR$/book_encription/controllers/prepare_book.py" />
         <option value="$PROJECT_DIR$/books/controllers/book_content.py" />
-        <option value="$PROJECT_DIR$/messages.py" />
         <option value="$PROJECT_DIR$/order/controllers/order_items.py" />
         <option value="$PROJECT_DIR$/reports/models.py" />
         <option value="$PROJECT_DIR$/repository/user_repo.py" />
@@ -236,6 +255,8 @@
         <option value="$PROJECT_DIR$/reports/urls.py" />
         <option value="$PROJECT_DIR$/reports/controllers/report.py" />
         <option value="$PROJECT_DIR$/reports/controllers/report_models.py" />
+        <option value="$PROJECT_DIR$/book_encription/controllers/prepare_book.py" />
+        <option value="$PROJECT_DIR$/messages.py" />
       </list>
     </option>
   </component>
@@ -1428,23 +1449,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/messages.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="689">
-          <caret line="82" column="46" selection-start-line="82" selection-start-column="46" selection-end-line="82" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="77" selection-start-line="74" selection-start-column="8" selection-end-line="77" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/order/controllers/order_items.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
@@ -1643,6 +1647,23 @@
             <element signature="e#5500#6102#0" />
             <element signature="e#6136#6738#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/messages.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="83" column="18" selection-start-line="83" selection-start-column="4" selection-end-line="83" selection-end-column="18" />
         </state>
       </provider>
     </entry>

@@ -9,7 +9,7 @@ from reports.controllers.report_models import BestsellerBookOfMonth, \
     BestsellerBookOfWeek, LowsellerBookOfMonth, LowsellerBookOfWeek, \
     TotalAnnualSale, LastAudioBooks, LastDVDBooks, LastEpubBooks, \
     LastHardCopyBooks, LastMsdBooks, LastPdfBooks, BestYearBook, \
-    AnnualSaleByPress
+    AnnualSaleByPress, WishBook
 from repository.order_repo import order_count, invoice_count
 from repository.user_repo import user_count
 
@@ -107,6 +107,19 @@ def best_book_of_year(db_session, username):
     logger.info(LogMsg.START, username)
 
     result = db_session.query(BestYearBook).all()
+    final_res = list()
+    for item in result:
+        final_res.append(model_to_dict(item))
+    logger.debug(LogMsg.REPORT_BOOK_OF_MONTH, final_res)
+    logger.info(LogMsg.END)
+
+    return final_res
+
+
+def wish_book(db_session, username):
+    logger.info(LogMsg.START, username)
+
+    result = db_session.query(WishBook).all()
     final_res = list()
     for item in result:
         final_res.append(model_to_dict(item))
