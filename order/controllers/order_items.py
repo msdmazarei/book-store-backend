@@ -1,4 +1,6 @@
+from book_encription.controllers.prepare_book import is_generated
 from book_library.controller import is_book_in_library
+from books.controllers.book_content import book_has_content
 from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from prices.controller import get_book_price_internal, calc_net_price
@@ -60,6 +62,15 @@ def add(data, db_session, username):
     if book.type.name in ONLINE_BOOK_TYPES and data.get('count') > 1:
         logger.error(LogMsg.BOOK_ONLINE_TYPE_COUNT_LIMITATION)
         raise Http_error(400, Message.ONLINE_BOOK_COUNT_LIMITATION)
+
+    content_id = book_has_content(book_id,'Original',db_session)
+    if not content_id:
+        logger.error(LogMsg.CONTENT_NOT_FOUND,{'book_id':book_id})
+        raise Http_error(404,Message.BOOK_HAS_NO_CONTENT)
+
+    if not is_generated(content_id):
+        logger.error(LogMsg.CONTENT_NOT_GENERATED, {'content_id': content_id})
+        raise Http_error(404, Message.BOOK_NOT_GENERATED)
 
     model_instance = OrderItem()
 

@@ -80,3 +80,4 @@ class Message:
     CONTENT_FORMAT_INVALID = 'content_format_invalid'
     BOOK_NOT_GENERATED = 'book_not_generated'
     USED_SOMEWHERE = 'used_somewhere'
+    BOOK_HAS_NO_CONTENT = 'book_has_no_content'

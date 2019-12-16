@@ -238,3 +238,13 @@ def content_to_dict(content, db_session):
         attrs.update({'type': content.type.value})
     result.update(attrs)
     return result
+
+
+def book_has_content(book_id,type,db_session):
+    content =  db_session.query(BookContent).filter(BookContent.book_id == book_id,
+                                                BookContent.type == type).first()
+    if content is None:
+        logger.debug(LogMsg.NOT_FOUND,{'content_of_book':book_id,'type':type})
+        return False
+    return content.id
+
