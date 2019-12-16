@@ -491,7 +491,9 @@ class LogMsg:
     CHECK_FILE_EXISTANCE = 'checking for the existance of content for preparation : %s'
 
 
-
+    # REPORTS
+    REPORT_BOOK_OF_WEEK = 'book of week report : %s'
+    REPORT_BOOK_OF_MONTH = 'book of month report : %s'
 
 
 
