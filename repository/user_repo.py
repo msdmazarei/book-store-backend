@@ -35,3 +35,6 @@ def validate_users(user_list, db_session):
         return result
     else:
         raise Http_error(404, Message.INVALID_USER)
+
+def user_count(db_session):
+    return db_session.query(User).count()

@@ -19,3 +19,13 @@ def call_router(app):
               apply=wrappers)
     app.route('/reports/book-by-type', 'POST', report.book_by_type,
               apply=data_plus_wrappers)
+
+    app.route('/reports/user-performance', 'GET',
+              report.user_performance, apply=wrappers)
+
+    app.route('/reports/best-book-of-year', 'GET',
+              report.best_book_of_year, apply=wrappers)
+
+    app.route('/reports/annual-book-sale-by-press', 'POST', report.book_by_press,
+              apply=data_plus_wrappers)
+

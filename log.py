@@ -494,6 +494,7 @@ class LogMsg:
     # REPORTS
     REPORT_BOOK_OF_WEEK = 'book of week report : %s'
     REPORT_BOOK_OF_MONTH = 'book of month report : %s'
+    USER_PERFORMANCE_REPORT = 'user performance report data : %s'
 
 
 
