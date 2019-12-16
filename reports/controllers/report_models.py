@@ -182,10 +182,8 @@ class LastPdfBooks(Base,PrimaryModel):
     press = Column(UUID)
 
 class WishBook(Base,PrimaryModel):
-    __tablename__ = 'lowseller_book_of_week'
+    __tablename__ = 'wish_book'
 
-    total_income = Column(String)
-    total_sale = Column(String)
     count = Column(String)
     title = Column(String)
     edition = Column(String)
