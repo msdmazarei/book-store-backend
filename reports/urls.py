@@ -17,3 +17,5 @@ def call_router(app):
               apply=wrappers)
     app.route('/reports/total-income-by-month', 'GET', report.total_annual_sale_by_month,
               apply=wrappers)
+    app.route('/reports/book-by-type', 'POST', report.book_by_type,
+              apply=data_plus_wrappers)
