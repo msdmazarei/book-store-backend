@@ -4,8 +4,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from db_session import PrimaryModel, Base
 
 
-class BookOfMonth(Base,PrimaryModel):
-    __tablename__ = 'book_of_month'
+class BestsellerBookOfMonth(Base,PrimaryModel):
+    __tablename__ = 'bestseller_book_of_month'
 
     total_income = Column(String)
     total_sale = Column(String)
@@ -28,8 +28,8 @@ class BookOfMonth(Base,PrimaryModel):
     press = Column(UUID)
 
 
-class BookOfWeek(Base,PrimaryModel):
-    __tablename__ = 'book_of_week'
+class BestsellerBookOfWeek(Base,PrimaryModel):
+    __tablename__ = 'bestseller_book_of_week'
 
     total_income = Column(String)
     total_sale = Column(String)
