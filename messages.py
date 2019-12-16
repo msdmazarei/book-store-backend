@@ -81,3 +81,4 @@ class Message:
     BOOK_NOT_GENERATED = 'book_not_generated'
     USED_SOMEWHERE = 'used_somewhere'
     BOOK_HAS_NO_CONTENT = 'book_has_no_content'
+    INVALID_DEVICE = 'invalid_device'

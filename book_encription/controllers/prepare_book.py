@@ -39,7 +39,7 @@ def prepare_book(data, db_session, username):
     if not user_device_exist(user.id, device_id, db_session):
         logger.error(LogMsg.NOT_FOUND,
                      {'username': username, 'device_id': device_id})
-        raise Http_error(404, Message.NOT_FOUND)
+        raise Http_error(404, Message.INVALID_DEVICE)
 
     brief_content = get_be_data(book_id, 'Brief', db_session)
     if brief_content is not None:
