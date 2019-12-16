@@ -101,7 +101,7 @@ class LowsellerBookOfWeek(Base,PrimaryModel):
     press = Column(UUID)
 
 
-class TotalAnnualSale(Base):
+class TotalAnnualSale(Base,PrimaryModel):
     __tablename__ = 'total_annual_sales_by_month'
     sale_month = Column(String)
     total_income = Column(String)
