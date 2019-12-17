@@ -24,7 +24,6 @@ def model_to_dict(obj):
 
     if "metadata" in object_dict:
         del object_dict['metadata']
-    print(object_dict)
     return object_dict
 
 
@@ -73,7 +72,6 @@ def check_login():
         return {'username': None}
 
     username, password = decode(auth)
-    print(username, password)
 
     if password is None:
         return model_to_dict(validate_token(username, db_session))
@@ -94,7 +92,6 @@ def check_Authorization():
         raise Http_error(401, Message.NO_AUTH)
 
     username, password = decode(auth)
-    print(username, password)
 
     if password is None:
         return model_to_dict(validate_token(username, db_session))
@@ -147,8 +144,6 @@ def decode(encoded_str):
 
         elif split[0].strip().lower() == 'bearer':
             logging.debug("auth is bearer")
-            print(split[0].strip())
-            print(split[1].strip())
             username, password = split[1].strip(), None
             logging.debug(
                 "token is {} and pass is {}".format(username, password))
@@ -198,7 +193,6 @@ def jsonify(func):
         if isinstance(rtn, list):
             result = []
             for item in rtn:
-                print("list is here: ", rtn)
                 if isinstance(item, str):
                     result.append(item)
                 else:
@@ -206,7 +200,6 @@ def jsonify(func):
             result = {"result": result}
         else:
             result = model_to_dict(rtn)
-            print("json result is : ", result)
         return result
 
     return wrapper
