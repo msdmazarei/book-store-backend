@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="" />
+    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/log.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +18,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/reports/controllers/report.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
+            <state relative-caret-position="2916">
               <caret line="121" column="34" selection-start-line="121" selection-start-column="34" selection-end-line="121" selection-end-column="34" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
@@ -28,7 +30,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/enums.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1102">
+            <state relative-caret-position="5130">
               <caret line="192" column="14" selection-start-line="192" selection-start-column="4" selection-end-line="192" selection-end-column="14" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -40,7 +42,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
+            <state relative-caret-position="729">
               <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
@@ -49,27 +51,75 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/reports/controllers/report_models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14">
+            <state relative-caret-position="27">
               <caret line="186" selection-start-line="186" selection-end-line="186" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
-                <element signature="e#4226#4828#0" />
-                <element signature="e#4864#5466#0" />
-                <element signature="e#5500#6102#0" />
-                <element signature="e#6136#6738#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helper.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="146" selection-start-line="146" selection-end-line="146" />
+              <folding>
+                <element signature="e#373#839#0" />
+                <element signature="e#392#621#0" />
+                <element signature="e#881#997#0" />
+                <element signature="e#927#979#0" />
+                <element signature="e#1026#1346#0" />
+                <element signature="e#1064#1326#0" />
+                <element signature="e#1373#1685#0" />
+                <element signature="e#1411#1665#0" />
+                <element signature="e#1711#2266#0" />
+                <element signature="e#2024#2266#0" />
+                <element signature="e#2300#2890#0" />
+                <element signature="e#2626#2890#0" />
+                <element signature="e#2929#3256#0" />
+                <element signature="e#2929#3034#1" />
+                <element signature="e#3288#3474#1" />
+                <element signature="e#3523#3594#0" />
+                <element signature="e#3643#3803#0" />
+                <element signature="e#3809#3877#0" />
+                <element signature="e#4057#4272#0" />
+                <element signature="e#4680#4751#0" />
+                <element signature="e#4968#5119#0" />
+                <element signature="e#5055#5119#0" />
+                <element signature="e#5147#5526#0" />
+                <element signature="e#5185#5506#0" />
+                <element signature="e#5377#5487#0" />
+                <element signature="e#6141#6701#0" />
+                <element signature="e#6179#6681#0" />
+                <element signature="e#6302#6625#0" />
+                <element signature="e#6719#6793#0" />
+                <element signature="e#6818#7025#0" />
+                <element signature="e#7063#7281#0" />
+                <element signature="e#7322#7540#0" />
+                <element signature="e#7573#7608#0" />
+                <element signature="e#7651#7850#0" />
+                <element signature="e#7901#8101#0" />
+                <element signature="e#8175#8348#0" />
+                <element signature="e#8413#8685#0" />
+                <element signature="e#8547#8658#0" />
+                <element signature="e#8576#8658#0" />
+                <element signature="e#8730#9083#0" />
+                <element signature="e#8739#9065#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/log.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="495" column="22" selection-start-line="495" selection-start-column="22" selection-end-line="495" selection-end-column="22" />
+            <state relative-caret-position="162">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
             </state>
           </provider>
         </entry>
@@ -77,7 +127,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/messages.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
+            <state relative-caret-position="2241">
               <caret line="83" column="18" selection-start-line="83" selection-start-column="4" selection-end-line="83" selection-end-column="18" />
             </state>
           </provider>
@@ -86,7 +136,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/reports/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
+            <state relative-caret-position="837">
               <caret line="32" column="30" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
               <folding>
                 <element signature="e#0#60#0" expanded="true" />
@@ -98,7 +148,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/repository/user_repo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
+            <state relative-caret-position="945">
               <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -110,11 +160,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/repository/order_repo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
+            <state relative-caret-position="378">
               <caret line="21" column="67" selection-start-line="21" selection-start-column="67" selection-end-line="21" selection-end-column="67" />
               <folding>
                 <element signature="e#326#473#0" />
-                <element signature="e#536#1004#0" />
               </folding>
             </state>
           </provider>
@@ -132,7 +181,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_book</find>
       <find>item_to_dict</find>
       <find>order_to_dict</find>
       <find>model_to_dict(</find>
@@ -162,6 +210,7 @@
       <find>inde</find>
       <find>index</find>
       <find>CONTENT_NOT_GENERATED</find>
+      <find>print</find>
     </findStrings>
     <replaceStrings>
       <replace>INVALID_SIGNUP_TOKEN</replace>
@@ -230,7 +279,6 @@
         <option value="$PROJECT_DIR$/user/controllers/user.py" />
         <option value="$PROJECT_DIR$/book_collections/controller.py" />
         <option value="$PROJECT_DIR$/book_collections/urls.py" />
-        <option value="$PROJECT_DIR$/helper.py" />
         <option value="$PROJECT_DIR$/reports/views.html" />
         <option value="$PROJECT_DIR$/reports/book_of_month.py" />
         <option value="$PROJECT_DIR$/reports/book_of_month_view.html" />
@@ -251,12 +299,13 @@
         <option value="$PROJECT_DIR$/reports/models.py" />
         <option value="$PROJECT_DIR$/repository/user_repo.py" />
         <option value="$PROJECT_DIR$/repository/order_repo.py" />
-        <option value="$PROJECT_DIR$/log.py" />
         <option value="$PROJECT_DIR$/book_encription/controllers/prepare_book.py" />
         <option value="$PROJECT_DIR$/messages.py" />
         <option value="$PROJECT_DIR$/reports/controllers/report.py" />
         <option value="$PROJECT_DIR$/reports/urls.py" />
         <option value="$PROJECT_DIR$/reports/controllers/report_models.py" />
+        <option value="$PROJECT_DIR$/helper.py" />
+        <option value="$PROJECT_DIR$/log.py" />
       </list>
     </option>
   </component>
@@ -274,6 +323,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -339,7 +389,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -541,19 +590,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.20133854" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.20468488" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5005574" side_tool="true" weight="0.18181819" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32998884" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.44927537" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.44927537" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.483835" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998884" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" visible="true" weight="0.50278705" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" weight="0.50167227" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5008366" side_tool="true" weight="0.522854" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.43366778" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -1466,65 +1516,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/reports/controllers/models.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="195" selection-start-line="195" selection-end-line="195" />
-          <folding>
-            <element signature="e#373#839#0" />
-            <element signature="e#392#621#0" />
-            <element signature="e#881#997#0" />
-            <element signature="e#927#979#0" />
-            <element signature="e#1026#1346#0" />
-            <element signature="e#1064#1326#0" />
-            <element signature="e#1373#1685#0" />
-            <element signature="e#1411#1665#0" />
-            <element signature="e#1711#2266#0" />
-            <element signature="e#2024#2266#0" />
-            <element signature="e#2300#2890#0" />
-            <element signature="e#2626#2890#0" />
-            <element signature="e#2929#3256#0" />
-            <element signature="e#2929#3034#1" />
-            <element signature="e#3288#4939#0" />
-            <element signature="e#3288#3474#1" />
-            <element signature="e#3523#3594#0" />
-            <element signature="e#3643#3803#0" />
-            <element signature="e#3809#3877#0" />
-            <element signature="e#4005#4674#0" />
-            <element signature="e#4057#4272#0" />
-            <element signature="e#4337#4596#0" />
-            <element signature="e#4680#4751#0" />
-            <element signature="e#4968#5119#0" />
-            <element signature="e#5055#5119#0" />
-            <element signature="e#5147#5526#0" />
-            <element signature="e#5185#5506#0" />
-            <element signature="e#5377#5487#0" />
-            <element signature="e#5686#5970#0" />
-            <element signature="e#5743#5930#0" />
-            <element signature="e#5997#6071#0" />
-            <element signature="e#6141#6701#0" />
-            <element signature="e#6179#6681#0" />
-            <element signature="e#6302#6625#0" />
-            <element signature="e#6719#6793#0" />
-            <element signature="e#6818#7025#0" />
-            <element signature="e#7063#7281#0" />
-            <element signature="e#7322#7540#0" />
-            <element signature="e#7573#7608#0" />
-            <element signature="e#7651#7850#0" />
-            <element signature="e#7901#8101#0" />
-            <element signature="e#8175#8348#0" />
-            <element signature="e#8413#8685#0" />
-            <element signature="e#8547#8658#0" />
-            <element signature="e#8576#8658#0" />
-            <element signature="e#8730#9083#0" />
-            <element signature="e#8739#9065#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/reports/controllers/models.py" />
     <entry file="file://$PROJECT_DIR$/books/controllers/book_content.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
@@ -1578,9 +1570,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/reports/controllers/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2916">
+          <caret line="121" column="34" selection-start-line="121" selection-start-column="34" selection-end-line="121" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/enums.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1102">
+        <state relative-caret-position="5130">
           <caret line="192" column="14" selection-start-line="192" selection-start-column="4" selection-end-line="192" selection-end-column="14" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
@@ -1588,9 +1590,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/messages.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2241">
+          <caret line="83" column="18" selection-start-line="83" selection-start-column="4" selection-end-line="83" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reports/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="837">
+          <caret line="32" column="30" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/repository/user_repo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
+        <state relative-caret-position="945">
           <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
@@ -1600,70 +1629,78 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/repository/order_repo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
+        <state relative-caret-position="378">
           <caret line="21" column="67" selection-start-line="21" selection-start-column="67" selection-end-line="21" selection-end-column="67" />
           <folding>
             <element signature="e#326#473#0" />
-            <element signature="e#536#1004#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/log.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="495" column="22" selection-start-line="495" selection-start-column="22" selection-end-line="495" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/messages.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="83" column="18" selection-start-line="83" selection-start-column="4" selection-end-line="83" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/reports/controllers/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="121" column="34" selection-start-line="121" selection-start-column="34" selection-end-line="121" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/reports/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="32" column="30" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#60#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/reports/controllers/report_models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
+        <state relative-caret-position="27">
           <caret line="186" selection-start-line="186" selection-end-line="186" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
-            <element signature="e#4226#4828#0" />
-            <element signature="e#4864#5466#0" />
-            <element signature="e#5500#6102#0" />
-            <element signature="e#6136#6738#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="146" selection-start-line="146" selection-end-line="146" />
+          <folding>
+            <element signature="e#373#839#0" />
+            <element signature="e#392#621#0" />
+            <element signature="e#881#997#0" />
+            <element signature="e#927#979#0" />
+            <element signature="e#1026#1346#0" />
+            <element signature="e#1064#1326#0" />
+            <element signature="e#1373#1685#0" />
+            <element signature="e#1411#1665#0" />
+            <element signature="e#1711#2266#0" />
+            <element signature="e#2024#2266#0" />
+            <element signature="e#2300#2890#0" />
+            <element signature="e#2626#2890#0" />
+            <element signature="e#2929#3256#0" />
+            <element signature="e#2929#3034#1" />
+            <element signature="e#3288#3474#1" />
+            <element signature="e#3523#3594#0" />
+            <element signature="e#3643#3803#0" />
+            <element signature="e#3809#3877#0" />
+            <element signature="e#4057#4272#0" />
+            <element signature="e#4680#4751#0" />
+            <element signature="e#4968#5119#0" />
+            <element signature="e#5055#5119#0" />
+            <element signature="e#5147#5526#0" />
+            <element signature="e#5185#5506#0" />
+            <element signature="e#5377#5487#0" />
+            <element signature="e#6141#6701#0" />
+            <element signature="e#6179#6681#0" />
+            <element signature="e#6302#6625#0" />
+            <element signature="e#6719#6793#0" />
+            <element signature="e#6818#7025#0" />
+            <element signature="e#7063#7281#0" />
+            <element signature="e#7322#7540#0" />
+            <element signature="e#7573#7608#0" />
+            <element signature="e#7651#7850#0" />
+            <element signature="e#7901#8101#0" />
+            <element signature="e#8175#8348#0" />
+            <element signature="e#8413#8685#0" />
+            <element signature="e#8547#8658#0" />
+            <element signature="e#8576#8658#0" />
+            <element signature="e#8730#9083#0" />
+            <element signature="e#8739#9065#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>

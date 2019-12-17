@@ -28,82 +28,9 @@ logging.basicConfig(
             format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()] %(message)s ',
             datefmt='%Y-%m-%d:%H:%M:%S',
             level=logging.DEBUG)
-c_handler = logging.StreamHandler()
 
 
 logger = logging.getLogger(__name__)
-logger.addHandler(c_handler)
-
-
-# logging_example.py
-#
-# import logging
-#
-# # Create a custom logger
-#
-# # Create handlers
-# c_handler = logging.StreamHandler()
-# f_handler = logging.FileHandler(log_file)
-# c_handler.setLevel(logging.DEBUG)
-# f_handler.setLevel(logging.DEBUG)
-#
-# # Create formatters and add it to handlers
-# c_format = logging.Formatter('%(asctime)s — %(levelname) — %(username)s — (pathname)s :%(lineno)d - %(funcName)s — %(message)s ')
-# f_format = logging.Formatter('%(asctime)s — %(levelname) — %(username)s — (pathname)s :%(lineno)d - %(funcName)s — %(message)s ')
-# c_handler.setFormatter(c_format)
-# f_handler.setFormatter(f_format)
-#
-# logger = logging.getLogger(__name__)
-#
-# # Add handlers to the logger
-# logger.addHandler(c_handler)
-# logger.addHandler(f_handler)
-#
-#
-#
-#
-#
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
-# import logging
-# import sys
-# from logging.handlers import TimedRotatingFileHandler
-#
-#
-# FORMATTER = logging.Formatter("%(asctime)s — %(levelname) — %(username)s — (pathname)s :%(lineno)d - %(funcName)s — %(message)s - %(extra)s ")
-# def get_console_handler():
-#    console_handler = logging.StreamHandler(sys.stdout)
-#    console_handler.setFormatter(FORMATTER)
-#    return console_handler
-# def get_file_handler():
-#    print("log file: {}".format(log_file))
-#    file_handler = TimedRotatingFileHandler(log_file, when='midnight')
-#    file_handler.setFormatter(FORMATTER)
-#    return file_handler
-# def get_logger(logger_name):
-
-#
-#     logger = logging.getLogger(logger_name)
-#     # logger.setLevel(logging.DEBUG)
-#     logger.addHandler(get_console_handler())
-#     # logger.addHandler(get_file_handler())
-#    # with this pattern, it's rarely necessary to propagate the error up to parent
-#     logger.propagate = False
-#     return logger
-#
-# logger  = get_logger(__name__)
 
 
 class LogMsg:
