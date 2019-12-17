@@ -32,7 +32,6 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-
 class LogMsg:
     START = "function is called -- user is : %s "
     END = "function finished successfully "

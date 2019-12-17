@@ -149,7 +149,7 @@ def delete(id, db_session, username):
 
     try:
         db_session.delete(model_instance)
-        logger.debug(LogMsg.DELETE_SUCCESS, {'device_key_id'})
+        logger.debug(LogMsg.DELETE_SUCCESS, {'device_key_id':id})
     except:
         logger.exception(LogMsg.DELETE_FAILED, exc_info=True)
         raise Http_error(500, Message.DELETE_FAILED)
