@@ -2,7 +2,8 @@ from decimal import Decimal
 
 from sqlalchemy.dialects.postgresql import UUID
 
-from enums import check_enum, BookTypes
+from check_permission import has_permission, get_user_permissions
+from enums import check_enum, BookTypes, Permissions
 from helper import model_to_dict
 from log import logger, LogMsg
 from reports.controllers.report_models import BestsellerBookOfMonth, \
@@ -118,6 +119,11 @@ def best_book_of_year(db_session, username):
 
 def wish_book(db_session, username):
     logger.info(LogMsg.START, username)
+
+    permissions, presses = get_user_permissions(username, db_session)
+    has_permission([Permissions.REPORT_GET_PREMIUM],permissions)
+
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     result = db_session.query(WishBook).all()
     final_res = list()

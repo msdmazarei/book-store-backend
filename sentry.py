@@ -12,7 +12,7 @@ sentry_logging = LoggingIntegration(
 )
 
 
-sentry_client = init(dsn='https://d8e7b626ed4c46b388351e3b62ce4ced@sentry.io/1816701',
+sentry_client = init(dsn='http://501e3ca35149498f803316b86a05bbe6@sentry.mazarei.id.ir/2',
     integrations=[BottleIntegration(),sentry_logging])
 
 
