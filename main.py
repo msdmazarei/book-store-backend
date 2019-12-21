@@ -1,22 +1,14 @@
-from bottle import Bottle, run, request
-from raven.contrib.bottle import Sentry
-import bottle
-from sentry_sdk import init, capture_message, capture_exception
-from sentry_sdk.integrations.bottle import BottleIntegration
+from uuid import uuid4
+
+from bottle import Bottle, run, hook, request
 
 import logging
-from sentry_sdk.integrations.logging import LoggingIntegration
-
-
 import sentry
-import sentry_sdk
-from sentry_sdk.integrations.bottle import \
-BottleIntegration
+from helper import Http_error
+from log import logger, LogMsg
+from messages import Message
 
-sentry_sdk.init(
-'http://501e3ca35149498f803316b86a05bbe6@sentry.mazarei.id.ir/2',
-integrations=[BottleIntegration()]
-)
+
 
 
 from register.urls import call_router as register_routes
@@ -82,6 +74,17 @@ reports_routes(app)
 if __name__ == '__main__':
     print('hello world')
 
+
+    @hook('before_request')
+    def generate_RID():
+        try:
+
+            request.JJP_RID = 'JJP_{}'.format(uuid4())
+            logger.debug('JJP_RID:{}'.format(request.JJP_RID))
+
+        except:
+            logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
+            raise Http_error(409, Message.RID_OPERATION_FAILED)
 
 
     run(host='0.0.0.0', port=7000, debug=True, app=app)

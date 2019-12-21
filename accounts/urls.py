@@ -1,10 +1,9 @@
-from helper import check_auth, inject_db, jsonify, pass_data
+from helper import check_auth, inject_db, jsonify, pass_data,wrappers
 from .controller import add, delete, delete_all, get_by_id, get_all, \
     get_user_accounts, get_person_accounts, edit, edit_by_person
 
 
 def call_router(app):
-    wrappers = [check_auth, inject_db, jsonify]
     data_plus_wrappers = (wrappers[:])
     data_plus_wrappers.append(pass_data)
 

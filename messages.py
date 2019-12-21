@@ -82,3 +82,4 @@ class Message:
     USED_SOMEWHERE = 'used_somewhere'
     BOOK_HAS_NO_CONTENT = 'book_has_no_content'
     INVALID_DEVICE = 'invalid_device'
+    RID_OPERATION_FAILED = 'RID_opration_failed'

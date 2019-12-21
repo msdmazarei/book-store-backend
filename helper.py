@@ -1,11 +1,13 @@
 import datetime
+import functools
 import logging
+import random
 from os import environ
 import time
 from base64 import b64encode, b64decode
 from uuid import uuid4
 
-from bottle import request, HTTPResponse
+from bottle import request, HTTPResponse, hook
 
 from log import LogMsg, logger
 from app_token.models import APP_Token
@@ -15,39 +17,13 @@ from db_session import Session
 import json
 
 
-def model_to_dict(obj):
-    object_dict = dict((name, getattr(obj, name)) for name in dir(obj) if
-                       (not name.startswith('_')) and not name.startswith(
-                           'mongo') and not name.startswith(
-                           'create_query')) if not isinstance(obj,
-                                                              dict) else obj
+# AUTHORIZATION ACTIONS
 
-    if "metadata" in object_dict:
-        del object_dict['metadata']
-    return object_dict
-
-
-def multi_model_to_dict(obj_list):
-    result = []
-    for item in obj_list:
-        obj = model_to_dict(item)
-        result.append(obj)
+def validate_token(id, db_session):
+    result = db_session.query(APP_Token).filter(APP_Token.id == id).first()
+    if result is None or result.expiration_date < Now():
+        raise Http_error(401, Message.TOKEN_INVALID)
     return result
-
-
-def check_auth(func):
-    def wrapper(*args, **kwargs):
-        logging.debug(LogMsg.AUTH_CHECKING)
-
-        kwargs['username'] = check_Authorization()['username']
-
-        logging.debug(LogMsg.AUTH_SUCCEED)
-        logging.debug("user is {}".format(kwargs['username']))
-
-        rtn = func(*args, **kwargs)
-        return rtn
-
-    return wrapper
 
 
 def if_login(func):
@@ -161,6 +137,23 @@ def decode(encoded_str):
     return str(username), str(password)
 
 
+# DECORATORS
+
+def check_auth(func):
+    def wrapper(*args, **kwargs):
+        logging.debug(LogMsg.AUTH_CHECKING)
+
+        kwargs['username'] = check_Authorization()['username']
+
+        logging.debug(LogMsg.AUTH_SUCCEED)
+        logging.debug("user is {}".format(kwargs['username']))
+
+        rtn = func(*args, **kwargs)
+        return rtn
+
+    return wrapper
+
+
 def get_db_session():
     if hasattr(request, 'db_session'):
         return request.db_session
@@ -225,6 +218,38 @@ def pass_data(func):
     return wrapper
 
 
+def timeit(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        # kwargs['start_time'] = start_time
+        result = func(*args, **kwargs)
+        finish_time = time.time()
+
+        logger.info(str({'duration': finish_time - start_time}))
+
+        if finish_time - start_time > 1:
+            logger.warning(
+                'request lasted long for {}'.format(finish_time - start_time))
+
+        return result
+
+    return wrapper
+
+
+# HOOKS BEFORE REQUEST
+@hook('before_request')
+def generate_RID():
+    try:
+
+        request.JJP_RID = 'JJP_{}'.format(uuid4())
+        logger.debug('JJP_RID:{}'.format(request.JJP_RID))
+
+    except:
+        logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
+        raise Http_error(409, Message.RID_OPERATION_FAILED)
+
+
+# TIME FUNCS
 def Now():
     now = time.mktime(datetime.datetime.now().timetuple())
     return int(now)
@@ -234,9 +259,10 @@ def a_week_ago():
     now = time.mktime(datetime.datetime.now().timetuple())
     former_week = time.mktime(
         (datetime.datetime.now() - datetime.timedelta(days=7)).timetuple())
-    return {'now':now,'week_ago':former_week}
+    return {'now': now, 'week_ago': former_week}
 
 
+# HTTP RESPONSE HANDLERS
 def Http_error(code, message):
     if isinstance(message, str):
         message = {'msg': message}
@@ -257,13 +283,7 @@ def value(name, default):
     return environ.get(name) or default
 
 
-def validate_token(id, db_session):
-    result = db_session.query(APP_Token).filter(APP_Token.id == id).first()
-    if result is None or result.expiration_date < Now():
-        raise Http_error(401, Message.TOKEN_INVALID)
-    return result
-
-
+# MODEL DATA HANDLING FUNCS
 def check_schema(required_list, data_keys):
     required = set(required_list)
     keys = set(data_keys)
@@ -309,3 +329,26 @@ def model_basic_dict(model_instance):
         'tags': model_instance.tags
     }
     return result
+
+
+def model_to_dict(obj):
+    object_dict = dict((name, getattr(obj, name)) for name in dir(obj) if
+                       (not name.startswith('_')) and not name.startswith(
+                           'mongo') and not name.startswith(
+                           'create_query')) if not isinstance(obj,
+                                                              dict) else obj
+
+    if "metadata" in object_dict:
+        del object_dict['metadata']
+    return object_dict
+
+
+def multi_model_to_dict(obj_list):
+    result = []
+    for item in obj_list:
+        obj = model_to_dict(item)
+        result.append(obj)
+    return result
+
+
+wrappers = [check_auth, inject_db, jsonify, timeit]

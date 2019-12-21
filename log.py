@@ -1,36 +1,124 @@
-# import logging
-#
-# formatter = logging.Formatter(
-#     '[%(asctime)s] p%(process)s {%(pathname)s %(filename)s:%(lineno)d} %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-#
-# logging.basicConfig(
-#     filename='debug.log',
-#     format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()] %(message)s',
-#     datefmt='%Y-%m-%d:%H:%M:%S',
-#     level=logging.DEBUG)
-#
-# logger = logging.getLogger(__name__)
-#
-
 
 
 
 import os
-import logging
+import gzip
+import logging.handlers
+import logging.config
+from datetime import datetime
+
+from bottle import request
+
 
 log_file = os.environ.get('log_path')
 print('log_file : {}'.format(log_file))
 
 
 
+def create_version_conflict_details(obj_version, request_version):
+    return {'object version': obj_version, 'request version': request_version}
+
+
+def create_security_details(obj_domain_id, obj_security_tags):
+    return {'object domain id': obj_domain_id,
+            'object security tags': obj_security_tags}
+
+
+def create_can_not_be_deleted_details(obj_id, error_msg):
+    return {'id': obj_id, 'sql error': error_msg}
+
+
+def __get_request_id():
+    try:
+        if hasattr(request, 'RID'):
+            return request.RID
+    except RuntimeError:
+        pass
+
+
+
+#
+# def info(msg, func_name=None, func_path=None, user=None, rcvd_data=None,
+#          returned_data=None, extra_details=None):
+#
+#     request_id = __get_request_id()
+#
+#     logger.info('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
+#                   request_id, func_name, func_path, _dump_json(user),
+#                   _dump_json(rcvd_data), _dump_json(returned_data),
+#                   _dump_json(extra_details))
+#
+#
+# def debug(msg, func_name=None, func_path=None, user=None, rcvd_data=None,
+#           returned_data=None, extra_details=None):
+#
+#     request_id = __get_request_id()
+#
+#     logger.debug('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
+#                    request_id, func_name, func_path, _dump_json(user),
+#                    _dump_json(rcvd_data), _dump_json(returned_data),
+#                    _dump_json(extra_details))
+#
+#
+# def warning(msg, func_name=None, func_path=None, user=None, rcvd_data=None,
+#             returned_data=None, extra_details=None):
+#
+#     request_id = __get_request_id()
+#
+#     logger.warning('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
+#                      request_id, func_name, func_path, _dump_json(user),
+#                      _dump_json(rcvd_data), _dump_json(returned_data),
+#                      _dump_json(extra_details))
+#
+#
+# def error(msg=None, func_name=None, func_path=None, user=None, rcvd_data=None,
+#           returned_data=None, extra_details=None):
+#
+#     request_id = __get_request_id()
+#
+#     logger.error('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
+#                    request_id, func_name, func_path, _dump_json(user),
+#                    _dump_json(rcvd_data), _dump_json(returned_data),
+#                    _dump_json(extra_details))
+#
+#
+# def critical(msg=None, func_name=None, func_path=None, user=None, rcvd_data=None,
+#              returned_data=None, extra_details=None):
+#
+#     request_id = __get_request_id()
+#
+#     logger.critical('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
+#                       request_id, func_name, func_path, _dump_json(user),
+#                       _dump_json(rcvd_data), _dump_json(returned_data),
+#                       _dump_json(extra_details))
+#
+
+class GZipRotator:
+    def __call__(self, source, dest):
+        os.rename(source, dest)
+        f_in = open(dest, 'rb')
+        f_out = gzip.open("%s.gz" % dest, 'wb')
+        f_out.writelines(f_in)
+        f_out.close()
+        f_in.close()
+        os.remove(dest)
+
+
+handler = logging.handlers.TimedRotatingFileHandler(log_file,
+                                                    encoding='utf8',
+                                                    when='Midnight',
+                                                    interval=1,
+                                                    backupCount=1)
+logger = logging.getLogger(__name__)
+logger.addHandler(handler)
+
+
 logging.basicConfig(
             filename=log_file,
-            format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()] %(message)s ',
+            format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()] %(message)s',
             datefmt='%Y-%m-%d:%H:%M:%S',
             level=logging.DEBUG)
 
-
-logger = logging.getLogger(__name__)
 
 class LogMsg:
     START = "function is called -- user is : %s "
@@ -421,6 +509,10 @@ class LogMsg:
     REPORT_BOOK_OF_WEEK = 'book of week report : %s'
     REPORT_BOOK_OF_MONTH = 'book of month report : %s'
     USER_PERFORMANCE_REPORT = 'user performance report data : %s'
+
+
+    #RID
+    RID_OPERATION_FAILED = 'attaching request ID to request failed : %s'
 
 
 

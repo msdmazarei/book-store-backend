@@ -1,12 +1,12 @@
-from helper import check_auth, inject_db, jsonify, pass_data
+from helper import check_auth, inject_db, jsonify, pass_data,timeit
 from .book import book_press_settling
 from .permissions import permissions_to_db
 from .person import full_name_settling
 
 
 def call_router(app):
-    readonly_wrappers = [inject_db, jsonify]
-    wrappers = [check_auth, inject_db, jsonify]
+    readonly_wrappers = [inject_db, jsonify,timeit]
+    wrappers = [check_auth, inject_db, jsonify,timeit]
     data_plus_wrappers = (wrappers[:])
     data_plus_wrappers.append(pass_data)
 

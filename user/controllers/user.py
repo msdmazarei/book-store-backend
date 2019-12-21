@@ -73,7 +73,6 @@ def get(id, db_session, username):
         logger.debug(LogMsg.NOT_FOUND, {'user_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    logger.error(LogMsg.GET_FAILED, {'user_id': id})
     logger.info(LogMsg.END)
 
     return result
@@ -336,7 +335,7 @@ def reset_pass(data, db_session):
 def head_profile(username, db_session):
     logger.info(LogMsg.START,username)
     profile = get_profile(username, db_session)
-    profile_str = json.dumps(profile).encode()
+    profile_str = json.dumps(dict(profile)).encode()
     result_hash = hashlib.md5(profile_str).hexdigest()
 
     response.add_header('content_type', 'application/json')
