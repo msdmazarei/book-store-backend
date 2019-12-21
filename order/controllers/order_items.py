@@ -59,18 +59,19 @@ def add(data, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'book_id': book_id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    if book.type.name in ONLINE_BOOK_TYPES and data.get('count') > 1:
-        logger.error(LogMsg.BOOK_ONLINE_TYPE_COUNT_LIMITATION)
-        raise Http_error(400, Message.ONLINE_BOOK_COUNT_LIMITATION)
+    if book.type.name in ONLINE_BOOK_TYPES :
+        if data.get('count') > 1:
+            logger.error(LogMsg.BOOK_ONLINE_TYPE_COUNT_LIMITATION)
+            raise Http_error(400, Message.ONLINE_BOOK_COUNT_LIMITATION)
 
-    content_id = book_has_content(book_id,'Original',db_session)
-    if not content_id:
-        logger.error(LogMsg.CONTENT_NOT_FOUND,{'book_id':book_id})
-        raise Http_error(404,Message.BOOK_HAS_NO_CONTENT)
+        content_id = book_has_content(book_id,'Original',db_session)
+        if not content_id:
+            logger.error(LogMsg.CONTENT_NOT_FOUND,{'book_id':book_id})
+            raise Http_error(404,Message.BOOK_HAS_NO_CONTENT)
 
-    if not is_generated(content_id):
-        logger.error(LogMsg.CONTENT_NOT_GENERATED, {'content_id': content_id})
-        raise Http_error(404, Message.BOOK_NOT_GENERATED)
+        if not is_generated(content_id):
+            logger.error(LogMsg.CONTENT_NOT_GENERATED, {'content_id': content_id})
+            raise Http_error(404, Message.BOOK_NOT_GENERATED)
 
     model_instance = OrderItem()
 
