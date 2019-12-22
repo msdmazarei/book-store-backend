@@ -103,7 +103,7 @@ def get(id, db_session):
         raise Http_error(404, Message.NOT_FOUND)
 
     logger.info(LogMsg.END)
-    return model_instance
+    return book_role_to_dict(model_instance)
 
 
 def edit(id,db_session, data, username):
@@ -147,7 +147,7 @@ def edit(id,db_session, data, username):
 
     logger.info(LogMsg.END)
 
-    return model_instance
+    return book_role_to_dict(model_instance)
 
 
 def delete(id, db_session, username):
@@ -192,13 +192,16 @@ def get_all(db_session,data,**kwargs):
                 **data).end().all()
 
         logger.debug(LogMsg.GET_SUCCESS)
+        res = []
+        for item in result:
+            res.append(book_role_to_dict(item))
 
     except:
         logger.exception(LogMsg.GET_FAILED, exc_info=True)
         raise Http_error(500, Message.GET_FAILED)
 
     logger.debug(LogMsg.END)
-    return result
+    return res
 
 
 def get_book_roles(book_id, db_session):
@@ -267,7 +270,8 @@ def book_role_to_dict(obj):
         'modifier': obj.modifier,
         'person': model_to_dict(obj.person),
         'tags': obj.tags,
-        'version': obj.version
+        'version': obj.version,
+
     }
 
     if isinstance(obj.role, str):

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="" />
+    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/books/controllers/book_roles.py" beforeDir="false" afterPath="$PROJECT_DIR$/books/controllers/book_roles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/books/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/books/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/log.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="361" lean-forward="true" selection-start-line="361" selection-end-line="361" />
+            <state relative-caret-position="130">
+              <caret line="347" selection-start-line="347" selection-end-line="347" />
               <folding>
                 <element signature="e#447#646#0" />
                 <element signature="e#673#985#0" />
@@ -76,10 +80,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/logs/app.log">
+          <provider selected="true" editor-type-id="LogFileEditorProvider">
+            <state relative-caret-position="247">
+              <caret line="816" lean-forward="true" selection-start-line="816" selection-end-line="816" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/payment/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="309">
+              <caret line="16" column="27" lean-forward="true" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+              <folding>
+                <element signature="e#0#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/books/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="37" column="34" selection-start-line="37" selection-start-column="30" selection-end-line="37" selection-end-column="34" />
+            <state relative-caret-position="189">
+              <caret line="37" column="8" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -91,16 +116,16 @@
         <entry file="file://$PROJECT_DIR$/log.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="130">
-              <caret line="114" selection-start-line="114" selection-end-line="114" />
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/books/controllers/book_roles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="182" column="36" selection-start-line="182" selection-start-column="36" selection-end-line="182" selection-end-column="36" />
+            <state relative-caret-position="319">
+              <caret line="203" column="14" lean-forward="true" selection-start-line="203" selection-start-column="14" selection-end-line="203" selection-end-column="14" />
               <folding>
                 <element signature="e#658#1546#0" />
                 <element signature="e#1360#1489#0" />
@@ -108,8 +133,6 @@
                 <element signature="e#1886#2106#0" />
                 <element signature="e#2397#2880#0" />
                 <element signature="e#2440#2539#0" />
-                <element signature="e#2974#3386#0" />
-                <element signature="e#3252#3331#0" />
                 <element signature="e#3434#4781#0" />
                 <element signature="e#3816#3900#0" />
                 <element signature="e#3946#4032#0" />
@@ -119,7 +142,6 @@
                 <element signature="e#5182#5524#0" />
                 <element signature="e#5314#5475#0" />
                 <element signature="e#5546#5652#0" />
-                <element signature="e#6054#6154#0" />
                 <element signature="e#6250#6596#0" />
                 <element signature="e#6294#6425#0" />
                 <element signature="e#6448#6548#0" />
@@ -129,8 +151,6 @@
                 <element signature="e#6963#7177#0" />
                 <element signature="e#7245#7351#0" />
                 <element signature="e#7473#7650#0" />
-                <element signature="e#7685#8244#0" />
-                <element signature="e#7814#8107#0" />
                 <element signature="e#8295#8663#0" />
                 <element signature="e#8712#9299#0" />
                 <element signature="e#8936#9136#0" />
@@ -142,8 +162,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/books/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="34" column="34" lean-forward="true" selection-start-line="34" selection-start-column="15" selection-end-line="34" selection-end-column="35" />
+            <state relative-caret-position="105">
+              <caret line="32" column="27" lean-forward="true" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="27" />
               <folding>
                 <element signature="e#0#60#0" expanded="true" />
               </folding>
@@ -261,7 +281,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/book_library/controller.py" />
         <option value="$PROJECT_DIR$/elastic/book_index.py" />
         <option value="$PROJECT_DIR$/prices/controller.py" />
         <option value="$PROJECT_DIR$/books/controllers/book.py" />
@@ -304,14 +323,15 @@
         <option value="$PROJECT_DIR$/wish_list/urls.py" />
         <option value="$PROJECT_DIR$/permission/urls.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/log.py" />
         <option value="$PROJECT_DIR$/app_token/controller.py" />
         <option value="$PROJECT_DIR$/user/controllers/user.py" />
         <option value="$PROJECT_DIR$/db_migration/urls.py" />
         <option value="$PROJECT_DIR$/db_migration/person.py" />
         <option value="$PROJECT_DIR$/user/controllers/person.py" />
-        <option value="$PROJECT_DIR$/books/controllers/book_roles.py" />
         <option value="$PROJECT_DIR$/helper.py" />
+        <option value="$PROJECT_DIR$/log.py" />
+        <option value="$PROJECT_DIR$/books/models.py" />
+        <option value="$PROJECT_DIR$/books/controllers/book_roles.py" />
       </list>
     </option>
   </component>
@@ -340,18 +360,7 @@
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="books" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="books" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="db_migration" type="462c0819:PsiDirectoryNode" />
+              <item name="payment" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
@@ -569,6 +578,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.22141662" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -576,12 +586,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32998884" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.44927537" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.483835" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.483835" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998884" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" visible="true" weight="0.50167227" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" weight="0.50167227" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5008366" side_tool="true" weight="0.522854" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.43366778" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -928,19 +938,24 @@
           <option name="timeStamp" value="286" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/log.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="291" />
+          <url>file://$PROJECT_DIR$/books/controllers/book_roles.py</url>
+          <line>185</line>
+          <option name="timeStamp" value="295" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/log.py</url>
-          <line>114</line>
-          <option name="timeStamp" value="292" />
+          <url>file://$PROJECT_DIR$/books/controllers/book_roles.py</url>
+          <line>193</line>
+          <option name="timeStamp" value="297" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/helper.py</url>
-          <line>347</line>
-          <option name="timeStamp" value="294" />
+          <url>file://$PROJECT_DIR$/books/controllers/book_roles.py</url>
+          <line>189</line>
+          <option name="timeStamp" value="298" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/books/controllers/book_roles.py</url>
+          <line>95</line>
+          <option name="timeStamp" value="299" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -968,6 +983,11 @@
       </expression>
     </expressions>
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>fmt.format(record)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>request.JJP_RID</expression-string>
         <language-id>Python</language-id>
@@ -1008,24 +1028,9 @@
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>request.get_header()</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/book_encription/controllers/prepare_book.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/enums.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -1310,13 +1315,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logs/app.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="745200">
-          <caret line="27600" selection-start-line="27570" selection-end-line="27611" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/order/controllers/checkout_order.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -1476,85 +1474,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/books/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="37" column="34" selection-start-line="37" selection-start-column="30" selection-end-line="37" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/books/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="34" column="34" lean-forward="true" selection-start-line="34" selection-start-column="15" selection-end-line="34" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/books/controllers/book_roles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="182" column="36" selection-start-line="182" selection-start-column="36" selection-end-line="182" selection-end-column="36" />
-          <folding>
-            <element signature="e#658#1546#0" />
-            <element signature="e#1360#1489#0" />
-            <element signature="e#1621#2942#0" />
-            <element signature="e#1886#2106#0" />
-            <element signature="e#2397#2880#0" />
-            <element signature="e#2440#2539#0" />
-            <element signature="e#2974#3386#0" />
-            <element signature="e#3252#3331#0" />
-            <element signature="e#3434#4781#0" />
-            <element signature="e#3816#3900#0" />
-            <element signature="e#3946#4032#0" />
-            <element signature="e#4333#4651#0" />
-            <element signature="e#4826#5717#0" />
-            <element signature="e#5080#5163#0" />
-            <element signature="e#5182#5524#0" />
-            <element signature="e#5314#5475#0" />
-            <element signature="e#5546#5652#0" />
-            <element signature="e#6054#6154#0" />
-            <element signature="e#6250#6596#0" />
-            <element signature="e#6294#6425#0" />
-            <element signature="e#6448#6548#0" />
-            <element signature="e#6647#7417#0" />
-            <element signature="e#6744#7222#0" />
-            <element signature="e#6860#7177#0" />
-            <element signature="e#6963#7177#0" />
-            <element signature="e#7245#7351#0" />
-            <element signature="e#7473#7650#0" />
-            <element signature="e#7685#8244#0" />
-            <element signature="e#7814#8107#0" />
-            <element signature="e#8295#8663#0" />
-            <element signature="e#8712#9299#0" />
-            <element signature="e#8936#9136#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/python3.6/logging/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="994" selection-start-line="994" selection-end-line="994" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/log.py">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
-          <caret line="114" selection-start-line="114" selection-end-line="114" />
+          <caret line="1511" selection-start-line="1511" selection-end-line="1511" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="361" lean-forward="true" selection-start-line="361" selection-end-line="361" />
+        <state relative-caret-position="130">
+          <caret line="347" selection-start-line="347" selection-end-line="347" />
           <folding>
             <element signature="e#447#646#0" />
             <element signature="e#673#985#0" />
@@ -1607,6 +1537,86 @@
             <element signature="e#8889#9118#0" />
             <element signature="e#9355#9471#0" />
             <element signature="e#9401#9453#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/books/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="37" column="8" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/app.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="247">
+          <caret line="816" lean-forward="true" selection-start-line="816" selection-end-line="816" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="16" column="27" lean-forward="true" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/books/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="32" column="27" lean-forward="true" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/books/controllers/book_roles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="203" column="14" lean-forward="true" selection-start-line="203" selection-start-column="14" selection-end-line="203" selection-end-column="14" />
+          <folding>
+            <element signature="e#658#1546#0" />
+            <element signature="e#1360#1489#0" />
+            <element signature="e#1621#2942#0" />
+            <element signature="e#1886#2106#0" />
+            <element signature="e#2397#2880#0" />
+            <element signature="e#2440#2539#0" />
+            <element signature="e#3434#4781#0" />
+            <element signature="e#3816#3900#0" />
+            <element signature="e#3946#4032#0" />
+            <element signature="e#4333#4651#0" />
+            <element signature="e#4826#5717#0" />
+            <element signature="e#5080#5163#0" />
+            <element signature="e#5182#5524#0" />
+            <element signature="e#5314#5475#0" />
+            <element signature="e#5546#5652#0" />
+            <element signature="e#6250#6596#0" />
+            <element signature="e#6294#6425#0" />
+            <element signature="e#6448#6548#0" />
+            <element signature="e#6647#7417#0" />
+            <element signature="e#6744#7222#0" />
+            <element signature="e#6860#7177#0" />
+            <element signature="e#6963#7177#0" />
+            <element signature="e#7245#7351#0" />
+            <element signature="e#7473#7650#0" />
+            <element signature="e#8295#8663#0" />
+            <element signature="e#8712#9299#0" />
+            <element signature="e#8936#9136#0" />
           </folding>
         </state>
       </provider>

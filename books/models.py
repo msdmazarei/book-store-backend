@@ -35,7 +35,7 @@ class BookRole(Base,PrimaryModel):
     person_id = Column(UUID,ForeignKey(Person.id),nullable=False)
     role = Column(Enum(Roles),nullable=False)
 
-    book_roles = relationship(Book, primaryjoin=book_id == Book.id )
+    book = relationship(Book, primaryjoin=book_id == Book.id )
     person = relationship(Person, primaryjoin=person_id == Person.id )
 
 
