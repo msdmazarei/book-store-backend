@@ -1,6 +1,5 @@
 import datetime
 import functools
-import logger
 import random
 from os import environ
 import time
