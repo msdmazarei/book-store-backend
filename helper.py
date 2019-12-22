@@ -347,15 +347,14 @@ def generate_RID():
         rid = request.get_header('X_JJP_RID')
         if rid is not None:
             request.JJP_RID = rid
-            print(request.JJP_RID)
             return request.JJP_RID
-        request.JJP_RID = 'JJP_{}'.format(uuid4())
+        else:
+            request.JJP_RID = 'JJP_{}'.format(uuid4())
         logger.debug('JJP_RID:{}'.format(request.JJP_RID))
 
     except:
         logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
         raise Http_error(409, Message.RID_OPERATION_FAILED)
-    return request.JJP_RID
 
 
 wrappers = [check_auth, inject_db, jsonify, timeit]
