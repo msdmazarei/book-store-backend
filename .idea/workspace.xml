@@ -78,16 +78,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="112" column="6" selection-start-line="112" selection-start-column="6" selection-end-line="112" selection-end-column="6" />
+            <state relative-caret-position="213">
+              <caret line="160" selection-start-line="160" selection-end-line="160" />
               <folding>
                 <element signature="e#1466#1673#0" />
                 <element signature="e#1777#1887#0" />
                 <element signature="e#1984#2090#0" />
-                <element signature="e#4569#7657#0" />
                 <element signature="e#7702#9759#0" />
                 <element signature="e#9801#10265#0" />
                 <element signature="e#10319#10826#0" />
@@ -97,7 +96,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db_migration/person.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
@@ -250,11 +249,11 @@
         <option value="$PROJECT_DIR$/permission/urls.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/log.py" />
-        <option value="$PROJECT_DIR$/user/controllers/person.py" />
         <option value="$PROJECT_DIR$/app_token/controller.py" />
         <option value="$PROJECT_DIR$/helper.py" />
         <option value="$PROJECT_DIR$/user/controllers/user.py" />
         <option value="$PROJECT_DIR$/db_migration/person.py" />
+        <option value="$PROJECT_DIR$/user/controllers/person.py" />
       </list>
     </option>
   </component>
@@ -1477,23 +1476,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="112" column="6" selection-start-line="112" selection-start-column="6" selection-end-line="112" selection-end-column="6" />
-          <folding>
-            <element signature="e#1466#1673#0" />
-            <element signature="e#1777#1887#0" />
-            <element signature="e#1984#2090#0" />
-            <element signature="e#4569#7657#0" />
-            <element signature="e#7702#9759#0" />
-            <element signature="e#9801#10265#0" />
-            <element signature="e#10319#10826#0" />
-            <element signature="e#10883#11952#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/db_migration/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
@@ -1507,6 +1489,22 @@
           <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="160" selection-start-line="160" selection-end-line="160" />
+          <folding>
+            <element signature="e#1466#1673#0" />
+            <element signature="e#1777#1887#0" />
+            <element signature="e#1984#2090#0" />
+            <element signature="e#7702#9759#0" />
+            <element signature="e#9801#10265#0" />
+            <element signature="e#10319#10826#0" />
+            <element signature="e#10883#11952#0" />
           </folding>
         </state>
       </provider>

@@ -8,9 +8,9 @@ def full_name_settling(db_session,username):
     persons = db_session.query(Person).filter(Person.full_name==None).all()
     res = list()
     for person in persons:
-        if person.last_name is None:
+        if person.last_name is None or '':
             person.full_name = person.name
-        elif person.name is None:
+        elif person.name is None or '':
             person.full_name = person.last_name
         else:
             person.full_name = '{} {}'.format(person.last_name ,person.name)
