@@ -131,7 +131,8 @@ logger.addHandler(handler)
 logger.addHandler(fh)
 logging.basicConfig(
             filename=log_file,
-            datefmt='%Y-%m-%d:%H:%M:%S')
+            datefmt='%Y-%m-%d:%H:%M:%S',
+            level=logging.DEBUG)
 
 
 class LogMsg:

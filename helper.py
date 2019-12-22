@@ -1,12 +1,12 @@
 import datetime
 import functools
-import random
+import logging
 from os import environ
 import time
 from base64 import b64encode, b64decode
 from uuid import uuid4
 
-from bottle import request, HTTPResponse, hook
+from bottle import request, HTTPResponse
 
 from log import LogMsg, logger
 from app_token.models import APP_Token
@@ -235,8 +235,6 @@ def timeit(func):
         return result
 
     return wrapper
-
-
 
 
 # TIME FUNCS
