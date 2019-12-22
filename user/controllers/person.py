@@ -334,5 +334,5 @@ def full_name(name,last_name):
     elif last_name is None or '':
         full_name = name
     else:
-        full_name = '{} {}'.format(last_name,name)
+        full_name = '{} {}'.format(name,last_name)
     return full_name

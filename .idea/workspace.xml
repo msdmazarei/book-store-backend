@@ -78,7 +78,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="104">
@@ -99,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db_migration/person.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+            <state relative-caret-position="212">
+              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -108,11 +108,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/db_migration/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="14" column="32" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="32" />
+            <state relative-caret-position="212">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+              <folding>
+                <element signature="e#0#67#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -231,7 +234,6 @@
         <option value="$PROJECT_DIR$/books/urls.py" />
         <option value="$PROJECT_DIR$/celery_works/urls.py" />
         <option value="$PROJECT_DIR$/comment/urls.py" />
-        <option value="$PROJECT_DIR$/db_migration/urls.py" />
         <option value="$PROJECT_DIR$/discussion_group/urls.py" />
         <option value="$PROJECT_DIR$/file_handler/urls.py" />
         <option value="$PROJECT_DIR$/financial_transactions/urls.py" />
@@ -252,8 +254,9 @@
         <option value="$PROJECT_DIR$/app_token/controller.py" />
         <option value="$PROJECT_DIR$/helper.py" />
         <option value="$PROJECT_DIR$/user/controllers/user.py" />
-        <option value="$PROJECT_DIR$/db_migration/person.py" />
         <option value="$PROJECT_DIR$/user/controllers/person.py" />
+        <option value="$PROJECT_DIR$/db_migration/person.py" />
+        <option value="$PROJECT_DIR$/db_migration/urls.py" />
       </list>
     </option>
   </component>
@@ -500,6 +503,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.22141662" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -1476,23 +1480,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/db_migration/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="14" column="32" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/db_migration/person.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
@@ -1505,6 +1492,26 @@
             <element signature="e#9801#10265#0" />
             <element signature="e#10319#10826#0" />
             <element signature="e#10883#11952#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_migration/person.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_migration/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#67#0" expanded="true" />
           </folding>
         </state>
       </provider>

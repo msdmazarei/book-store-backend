@@ -13,7 +13,7 @@ def full_name_settling(db_session,username):
         elif person.name is None or '':
             person.full_name = person.last_name
         else:
-            person.full_name = '{} {}'.format(person.last_name ,person.name)
+            person.full_name = '{} {}'.format(person.name ,person.last_name)
         res.append(person.full_name)
     return {'result':res}
 
