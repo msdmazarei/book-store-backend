@@ -329,9 +329,9 @@ def person_to_dict(person, db_session):
 
 
 def full_name(name,last_name):
-    if name is None or '':
+    if name is None or (name==''):
         full_name = last_name
-    elif last_name is None or '':
+    elif last_name is None or(last_name==''):
         full_name = name
     else:
         full_name = '{} {}'.format(name,last_name)
