@@ -58,9 +58,7 @@ def add(db_session, data, username):
     logger.debug(LogMsg.POPULATING_BASIC_DATA)
     model_instance.name = data.get('name')
     model_instance.last_name = data.get('last_name')
-    model_instance.full_name = '{} {}'.format(model_instance.name or '',
-                                              model_instance.last_name or ''
-                                              )
+    model_instance.full_name = full_name(model_instance.name,model_instance.last_name)
     model_instance.address = data.get('address')
     model_instance.phone = data.get('phone')
     model_instance.email = data.get('email')
@@ -159,8 +157,8 @@ def edit(id, db_session, data, username):
         for key, value in data.items():
             # TODO  if key is valid attribute of class
             setattr(model_instance, key, value)
-        model_instance.full_name = '{} {}'.format(
-            model_instance.last_name or '', model_instance.name or '')
+        model_instance.full_name = full_name(model_instance.name,model_instance.last_name)
+
         edit_basic_data(model_instance, username, data.get('tags'))
         db_session.flush()
 
@@ -328,3 +326,13 @@ def person_to_dict(person, db_session):
         result['is_legal'] = person.is_legal
     result.update(model_attrs)
     return result
+
+
+def full_name(name,last_name):
+    if name is None:
+        full_name = last_name
+    elif last_name is None:
+        full_name = name
+    else:
+        full_name = '{} {}'.format(last_name,name)
+    return full_name
