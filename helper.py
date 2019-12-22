@@ -346,7 +346,6 @@ def generate_RID():
     try:
         rid = request.get_header('X_JJP_RID')
         if rid is not None:
-            logger.debug('JJP_RID:{}'.format(rid))
             request.JJP_RID = rid
             return request.JJP_RID
         request.JJP_RID = 'JJP_{}'.format(uuid4())
