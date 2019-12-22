@@ -342,7 +342,6 @@ def multi_model_to_dict(obj_list):
     return result
 
 
-
 def generate_RID():
     try:
 

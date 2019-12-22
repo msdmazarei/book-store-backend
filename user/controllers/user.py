@@ -1,18 +1,14 @@
 import hashlib
 import json
-from uuid import uuid4
-
 from bottle import response
 
 from app_redis import app_redis as redis
 from check_permission import get_user_permissions, has_permission, \
     has_permission_or_not
-from configs import ADMINISTRATORS
 from enums import Permissions
-
 from log import LogMsg, logger
-from helper import Now, model_to_dict, Http_error, edit_basic_data, \
-    populate_basic_data, Http_response
+from helper import model_to_dict, Http_error, edit_basic_data, \
+    populate_basic_data
 from messages import Message
 from repository.group_user_repo import delete_user_from_groups
 from repository.person_repo import validate_person

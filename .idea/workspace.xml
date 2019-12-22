@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app_token/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/app_token/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/controllers/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/controllers/user.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,29 +20,64 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="342" lean-forward="true" selection-start-line="342" selection-end-line="342" />
+            <state relative-caret-position="473">
+              <caret line="343" selection-start-line="343" selection-end-line="343" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#447#646#0" />
+                <element signature="e#673#985#0" />
+                <element signature="e#711#965#0" />
+                <element signature="e#1011#1536#0" />
+                <element signature="e#1294#1536#0" />
+                <element signature="e#1570#2130#0" />
+                <element signature="e#1866#2130#0" />
+                <element signature="e#2169#2496#0" />
+                <element signature="e#2169#2274#1" />
+                <element signature="e#2528#4107#0" />
+                <element signature="e#2528#2714#1" />
+                <element signature="e#2763#2834#0" />
+                <element signature="e#2883#3043#0" />
+                <element signature="e#3049#3117#0" />
+                <element signature="e#3245#3842#0" />
+                <element signature="e#3297#3512#0" />
+                <element signature="e#3577#3764#0" />
+                <element signature="e#3848#3919#0" />
+                <element signature="e#4150#4470#0" />
+                <element signature="e#4188#4450#0" />
+                <element signature="e#4499#4650#0" />
+                <element signature="e#4586#4650#0" />
+                <element signature="e#4678#5083#0" />
+                <element signature="e#4716#5063#0" />
+                <element signature="e#4934#5044#0" />
+                <element signature="e#5109#5578#0" />
+                <element signature="e#5147#5558#0" />
+                <element signature="e#5243#5482#0" />
+                <element signature="e#5300#5442#0" />
+                <element signature="e#5606#6166#0" />
+                <element signature="e#5644#6146#0" />
+                <element signature="e#5767#6090#0" />
+                <element signature="e#6191#6628#0" />
+                <element signature="e#6229#6608#0" />
+                <element signature="e#6491#6585#0" />
+                <element signature="e#6661#6735#0" />
+                <element signature="e#6760#6970#0" />
+                <element signature="e#7033#7251#0" />
+                <element signature="e#7292#7510#0" />
+                <element signature="e#7543#7578#0" />
+                <element signature="e#7657#7857#0" />
+                <element signature="e#7931#8104#0" />
+                <element signature="e#8169#8441#0" />
+                <element signature="e#8303#8414#0" />
+                <element signature="e#8332#8414#0" />
+                <element signature="e#8486#8839#0" />
+                <element signature="e#8495#8821#0" />
+                <element signature="e#8870#9313#0" />
+                <element signature="e#8889#9118#0" />
+                <element signature="e#9355#9471#0" />
+                <element signature="e#9401#9453#0" />
+                <element signature="e#9499#9756#0" />
+                <element signature="e#9513#9614#0" />
+                <element signature="e#9636#9756#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/bottle.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23139">
-              <caret line="857" selection-start-line="857" selection-end-line="857" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app_token/controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="4" selection-end-line="1" />
             </state>
           </provider>
         </entry>
@@ -131,8 +168,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/reports/book_of_month.py" />
-        <option value="$PROJECT_DIR$/reports/book_of_month_view.html" />
         <option value="$PROJECT_DIR$/reports/book_of_year_view.html" />
         <option value="$PROJECT_DIR$/book_encription/models.py" />
         <option value="$PROJECT_DIR$/book_library/controller.py" />
@@ -178,10 +213,12 @@
         <option value="$PROJECT_DIR$/sign_up/urls.py" />
         <option value="$PROJECT_DIR$/wish_list/urls.py" />
         <option value="$PROJECT_DIR$/permission/urls.py" />
-        <option value="$PROJECT_DIR$/user/controllers/user.py" />
-        <option value="$PROJECT_DIR$/helper.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/log.py" />
+        <option value="$PROJECT_DIR$/user/controllers/person.py" />
+        <option value="$PROJECT_DIR$/app_token/controller.py" />
+        <option value="$PROJECT_DIR$/helper.py" />
+        <option value="$PROJECT_DIR$/user/controllers/user.py" />
       </list>
     </option>
   </component>
@@ -210,166 +247,7 @@
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="app_token" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="book_collections" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="book_encription" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="book_encription" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="book_rate" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="comment" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="comment" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="constraint_handler" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="db_migration" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="discussion_group" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="elastic" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="file_handler" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="financial_transactions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="follow" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="group" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="infrastructure" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="logs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="messaging" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="order" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="order" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="payment" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="permission" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="prices" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
               <item name="register" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="run_process" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="send_message" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="sign_up" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="user" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="user" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="wish_list" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -578,7 +456,7 @@
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.22141662" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.22141662" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5005574" side_tool="true" weight="0.18181819" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1019,49 +897,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/books/controllers/book_content.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="242" column="45" selection-start-line="242" selection-start-column="4" selection-end-line="242" selection-end-column="45" />
-          <folding>
-            <element signature="e#540#2209#0" />
-            <element signature="e#913#1014#0" />
-            <element signature="e#1159#1253#0" />
-            <element signature="e#1531#1748#0" />
-            <element signature="e#1653#1748#0" />
-            <element signature="e#2251#3402#0" />
-            <element signature="e#2401#2505#0" />
-            <element signature="e#2585#2694#0" />
-            <element signature="e#3073#3298#0" />
-            <element signature="e#3203#3298#0" />
-            <element signature="e#3443#3516#0" />
-            <element signature="e#3564#3649#0" />
-            <element signature="e#3906#6093#0" />
-            <element signature="e#4018#4117#0" />
-            <element signature="e#4209#4412#0" />
-            <element signature="e#4295#4412#0" />
-            <element signature="e#4837#5062#0" />
-            <element signature="e#4967#5062#0" />
-            <element signature="e#5135#5829#0" />
-            <element signature="e#5179#5262#0" />
-            <element signature="e#5422#5595#0" />
-            <element signature="e#5754#5829#0" />
-            <element signature="e#5850#5955#0" />
-            <element signature="e#6138#7357#0" />
-            <element signature="e#6250#6349#0" />
-            <element signature="e#6776#7004#0" />
-            <element signature="e#6909#7004#0" />
-            <element signature="e#7124#7228#0" />
-            <element signature="e#7410#8298#0" />
-            <element signature="e#7665#7778#0" />
-            <element signature="e#7973#8074#0" />
-            <element signature="e#8130#8275#0" />
-            <element signature="e#8347#8755#0" />
-            <element signature="e#8391#8568#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/db_session.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -1233,16 +1068,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="26" column="91" selection-start-line="26" selection-start-column="91" selection-end-line="26" selection-end-column="91" />
-          <folding>
-            <element signature="e#0#142#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/books/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1242">
@@ -1359,16 +1184,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sign_up/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="85" selection-start-line="9" selection-start-column="85" selection-end-line="9" selection-end-column="85" />
-          <folding>
-            <element signature="e#0#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/run_process/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -1385,16 +1200,6 @@
           <caret line="5" column="53" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="53" />
           <folding>
             <element signature="e#0#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/register/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="16" column="57" selection-start-line="16" selection-start-column="57" selection-end-line="16" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#72#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1480,27 +1285,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="70">
-          <caret line="72" column="37" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/bottle.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23139">
           <caret line="857" selection-start-line="857" selection-end-line="857" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app_token/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="4" selection-end-line="1" />
         </state>
       </provider>
     </entry>
@@ -1518,12 +1306,198 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app_token/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-769">
+          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+          <folding>
+            <element signature="e#829#2005#0" />
+            <element signature="e#1034#1134#0" />
+            <element signature="e#1505#1850#0" />
+            <element signature="e#1735#1850#0" />
+            <element signature="e#2047#2494#0" />
+            <element signature="e#2245#2331#0" />
+            <element signature="e#2350#2446#0" />
+            <element signature="e#2540#3415#0" />
+            <element signature="e#2772#3007#0" />
+            <element signature="e#3027#3135#0" />
+            <element signature="e#3460#4452#0" />
+            <element signature="e#3589#3682#0" />
+            <element signature="e#4030#4282#0" />
+            <element signature="e#4304#4409#0" />
+            <element signature="e#4494#5048#0" />
+            <element signature="e#5100#5705#0" />
+            <element signature="e#5754#7669#0" />
+            <element signature="e#5883#5980#0" />
+            <element signature="e#6201#6297#0" />
+            <element signature="e#6439#6719#0" />
+            <element signature="e#6533#6659#0" />
+            <element signature="e#6973#7030#0" />
+            <element signature="e#7035#7060#0" />
+            <element signature="e#7374#7460#0" />
+            <element signature="e#7700#8214#0" />
+            <element signature="e#7822#8195#0" />
+            <element signature="e#8271#9932#0" />
+            <element signature="e#8481#8589#0" />
+            <element signature="e#8697#9679#0" />
+            <element signature="e#8788#9528#0" />
+            <element signature="e#9415#9528#0" />
+            <element signature="e#9556#9679#0" />
+            <element signature="e#9699#9795#0" />
+            <element signature="e#9973#10751#0" />
+            <element signature="e#10143#10241#0" />
+            <element signature="e#10336#10429#0" />
+            <element signature="e#10502#10661#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="648">
+          <caret line="26" column="91" selection-start-line="26" selection-start-column="91" selection-end-line="26" selection-end-column="91" />
+          <folding>
+            <element signature="e#0#142#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sign_up/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="9" column="85" selection-start-line="9" selection-start-column="85" selection-end-line="9" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="112" column="6" lean-forward="true" selection-start-line="112" selection-start-column="6" selection-end-line="112" selection-end-column="6" />
+          <folding>
+            <element signature="e#1364#3459#0" />
+            <element signature="e#1466#1673#0" />
+            <element signature="e#1777#1887#0" />
+            <element signature="e#1984#2090#0" />
+            <element signature="e#3278#3404#0" />
+            <element signature="e#3506#4473#0" />
+            <element signature="e#3691#3835#0" />
+            <element signature="e#3854#3944#0" />
+            <element signature="e#3983#4373#0" />
+            <element signature="e#4522#7610#0" />
+            <element signature="e#4563#4641#0" />
+            <element signature="e#5047#5148#0" />
+            <element signature="e#5312#5421#0" />
+            <element signature="e#5794#6109#0" />
+            <element signature="e#5924#6109#0" />
+            <element signature="e#6151#6423#0" />
+            <element signature="e#6265#6423#0" />
+            <element signature="e#6321#6423#0" />
+            <element signature="e#6442#7430#0" />
+            <element signature="e#6486#6576#0" />
+            <element signature="e#7061#7430#0" />
+            <element signature="e#7451#7555#0" />
+            <element signature="e#7655#9712#0" />
+            <element signature="e#7868#7966#0" />
+            <element signature="e#8386#8498#0" />
+            <element signature="e#8517#9519#0" />
+            <element signature="e#8900#9136#0" />
+            <element signature="e#8935#9136#0" />
+            <element signature="e#9163#9258#0" />
+            <element signature="e#9358#9519#0" />
+            <element signature="e#9541#9646#0" />
+            <element signature="e#9754#10218#0" />
+            <element signature="e#9989#10069#0" />
+            <element signature="e#10090#10170#0" />
+            <element signature="e#10272#10779#0" />
+            <element signature="e#10378#10613#0" />
+            <element signature="e#10634#10733#0" />
+            <element signature="e#10836#11905#0" />
+            <element signature="e#11387#11741#0" />
+            <element signature="e#11760#11858#0" />
+            <element signature="e#11952#12593#0" />
+            <element signature="e#12004#12422#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/register/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="342" lean-forward="true" selection-start-line="342" selection-end-line="342" />
+        <state relative-caret-position="473">
+          <caret line="343" selection-start-line="343" selection-end-line="343" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#447#646#0" />
+            <element signature="e#673#985#0" />
+            <element signature="e#711#965#0" />
+            <element signature="e#1011#1536#0" />
+            <element signature="e#1294#1536#0" />
+            <element signature="e#1570#2130#0" />
+            <element signature="e#1866#2130#0" />
+            <element signature="e#2169#2496#0" />
+            <element signature="e#2169#2274#1" />
+            <element signature="e#2528#4107#0" />
+            <element signature="e#2528#2714#1" />
+            <element signature="e#2763#2834#0" />
+            <element signature="e#2883#3043#0" />
+            <element signature="e#3049#3117#0" />
+            <element signature="e#3245#3842#0" />
+            <element signature="e#3297#3512#0" />
+            <element signature="e#3577#3764#0" />
+            <element signature="e#3848#3919#0" />
+            <element signature="e#4150#4470#0" />
+            <element signature="e#4188#4450#0" />
+            <element signature="e#4499#4650#0" />
+            <element signature="e#4586#4650#0" />
+            <element signature="e#4678#5083#0" />
+            <element signature="e#4716#5063#0" />
+            <element signature="e#4934#5044#0" />
+            <element signature="e#5109#5578#0" />
+            <element signature="e#5147#5558#0" />
+            <element signature="e#5243#5482#0" />
+            <element signature="e#5300#5442#0" />
+            <element signature="e#5606#6166#0" />
+            <element signature="e#5644#6146#0" />
+            <element signature="e#5767#6090#0" />
+            <element signature="e#6191#6628#0" />
+            <element signature="e#6229#6608#0" />
+            <element signature="e#6491#6585#0" />
+            <element signature="e#6661#6735#0" />
+            <element signature="e#6760#6970#0" />
+            <element signature="e#7033#7251#0" />
+            <element signature="e#7292#7510#0" />
+            <element signature="e#7543#7578#0" />
+            <element signature="e#7657#7857#0" />
+            <element signature="e#7931#8104#0" />
+            <element signature="e#8169#8441#0" />
+            <element signature="e#8303#8414#0" />
+            <element signature="e#8332#8414#0" />
+            <element signature="e#8486#8839#0" />
+            <element signature="e#8495#8821#0" />
+            <element signature="e#8870#9313#0" />
+            <element signature="e#8889#9118#0" />
+            <element signature="e#9355#9471#0" />
+            <element signature="e#9401#9453#0" />
+            <element signature="e#9499#9756#0" />
+            <element signature="e#9513#9614#0" />
+            <element signature="e#9636#9756#0" />
           </folding>
         </state>
       </provider>
