@@ -28,12 +28,12 @@ def create_can_not_be_deleted_details(obj_id, error_msg):
     return {'id': obj_id, 'sql error': error_msg}
 
 
-def __get_request_id():
+def get_request_id():
     try:
-        if hasattr(request, 'RID'):
-            return request.RID
+        if hasattr(request, 'JJP_RID'):
+            return request.JJP_RID
     except RuntimeError:
-        pass
+        return 'NO_RID'
 
 
 
@@ -103,6 +103,20 @@ class GZipRotator:
         f_in.close()
         os.remove(dest)
 
+class JJPFormatter(logging.Formatter):
+    def formatException(self, exc_info):
+        """
+        Format an exception so that it prints on a single line.
+        """
+        result = super(JJPFormatter, self).formatException(exc_info)
+        return repr(result)  # or format into one line however you want to
+
+    def format(self, record):
+        s = super(JJPFormatter, self).format(record)
+        s="{} - {}".format(get_request_id(),s)
+        if record.exc_text:
+            s = s.replace('\n', '') + '|'
+        return s
 
 handler = logging.handlers.TimedRotatingFileHandler(log_file,
                                                     encoding='utf8',
@@ -110,12 +124,14 @@ handler = logging.handlers.TimedRotatingFileHandler(log_file,
                                                     interval=1,
                                                     backupCount=1)
 logger = logging.getLogger(__name__)
+fmtr = JJPFormatter('%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()- ] %(message)s')
+fh = logging.FileHandler(log_file)
+fh.setFormatter(fmtr)
 logger.addHandler(handler)
-
-
+logger.addHandler(fh)
 logging.basicConfig(
             filename=log_file,
-            format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()] %(message)s',
+            format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()- ] %(message)s',
             datefmt='%Y-%m-%d:%H:%M:%S',
             level=logging.DEBUG)
 

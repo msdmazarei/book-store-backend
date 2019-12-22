@@ -165,6 +165,8 @@ def get_db_session():
 def inject_db(func):
     def wrapper(*args, **kwargs):
         kwargs['db_session'] = get_db_session()
+
+        # generate_RID()
         rtn = func(*args, **kwargs)
         db_session = kwargs['db_session']
         try:
@@ -236,17 +238,6 @@ def timeit(func):
     return wrapper
 
 
-# HOOKS BEFORE REQUEST
-@hook('before_request')
-def generate_RID():
-    try:
-
-        request.JJP_RID = 'JJP_{}'.format(uuid4())
-        logger.debug('JJP_RID:{}'.format(request.JJP_RID))
-
-    except:
-        logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
-        raise Http_error(409, Message.RID_OPERATION_FAILED)
 
 
 # TIME FUNCS
@@ -351,4 +342,18 @@ def multi_model_to_dict(obj_list):
     return result
 
 
+
+def generate_RID():
+    try:
+
+        request.JJP_RID = 'JJP_{}'.format(uuid4())
+        logger.debug('JJP_RID:{}'.format(request.JJP_RID))
+
+    except:
+        logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
+        raise Http_error(409, Message.RID_OPERATION_FAILED)
+
+
 wrappers = [check_auth, inject_db, jsonify, timeit]
+
+

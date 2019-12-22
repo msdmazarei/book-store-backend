@@ -2,13 +2,7 @@ from uuid import uuid4
 
 from bottle import Bottle, run, hook, request
 
-import logging
-import sentry
-from helper import Http_error
-from log import logger, LogMsg
-from messages import Message
-
-
+from helper import generate_RID
 
 
 from register.urls import call_router as register_routes
@@ -37,7 +31,6 @@ from celery_works.urls import call_router as celery_routes
 from run_process.urls import call_router as process_routes
 from book_encription.urls import call_router as encription_routes
 from reports.urls import call_router as reports_routes
-
 
 app = Bottle()
 
@@ -71,22 +64,15 @@ process_routes(app)
 encription_routes(app)
 reports_routes(app)
 
+
+app.add_hook('before_request',generate_RID)
+
 if __name__ == '__main__':
     print('hello world')
 
-
-    @hook('before_request')
-    def generate_RID():
-        try:
-
-            request.JJP_RID = 'JJP_{}'.format(uuid4())
-            logger.debug('JJP_RID:{}'.format(request.JJP_RID))
-
-        except:
-            logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
-            raise Http_error(409, Message.RID_OPERATION_FAILED)
-
-
     run(host='0.0.0.0', port=7000, debug=True, app=app)
+
+
+
 
 
