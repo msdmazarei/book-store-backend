@@ -16,3 +16,13 @@ def full_name_settling(db_session,username):
             person.full_name = '{} {}'.format(person.last_name ,person.name)
         res.append(person.full_name)
     return {'result':res}
+
+
+
+
+def full_name_erasing(db_session,username):
+    logger.info(LogMsg.START,username)
+    persons = db_session.query(Person).all()
+    for person in persons:
+        person.full_name = None
+    return {'result':True}
