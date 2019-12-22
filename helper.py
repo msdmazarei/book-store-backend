@@ -344,9 +344,10 @@ def multi_model_to_dict(obj_list):
 
 def generate_RID():
     try:
-        if hasattr(request,'JJP_RID'):
-            logger.debug('JJP_RID:{}'.format(request.JJP_RID))
-
+        rid = request.get_header('X_JJP_RID')
+        if rid is not None:
+            logger.debug('JJP_RID:{}'.format(rid))
+            request.JJP_RID = rid
             return request.JJP_RID
         request.JJP_RID = 'JJP_{}'.format(uuid4())
         logger.debug('JJP_RID:{}'.format(request.JJP_RID))
@@ -354,6 +355,7 @@ def generate_RID():
     except:
         logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
         raise Http_error(409, Message.RID_OPERATION_FAILED)
+    return request.JJP_RID
 
 
 wrappers = [check_auth, inject_db, jsonify, timeit]
