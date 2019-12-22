@@ -17,7 +17,7 @@
         <entry file="file://$PROJECT_DIR$/helper.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="257">
-              <caret line="351" column="21" lean-forward="true" selection-start-line="351" selection-start-column="21" selection-end-line="351" selection-end-column="21" />
+              <caret line="347" selection-start-line="347" selection-end-line="347" />
               <folding>
                 <element signature="e#447#646#0" />
                 <element signature="e#673#985#0" />
@@ -90,8 +90,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/log.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="33" column="34" lean-forward="true" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="34" />
+            <state relative-caret-position="130">
+              <caret line="114" selection-start-line="114" selection-end-line="114" />
             </state>
           </provider>
         </entry>
@@ -569,7 +569,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.22141662" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -577,12 +576,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32998884" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.44927537" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.483835" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.483835" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998884" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" weight="0.50167227" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" visible="true" weight="0.50167227" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5008366" side_tool="true" weight="0.522854" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.43366778" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -970,12 +969,12 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
-        <expression-string>request</expression-string>
+        <expression-string>request.JJP_RID</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>request.JJP_RID</expression-string>
+        <expression-string>request</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1538,13 +1537,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/log.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="33" column="34" lean-forward="true" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/python3.6/logging/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
@@ -1552,10 +1544,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/log.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="257">
-          <caret line="351" column="21" lean-forward="true" selection-start-line="351" selection-start-column="21" selection-end-line="351" selection-end-column="21" />
+          <caret line="347" selection-start-line="347" selection-end-line="347" />
           <folding>
             <element signature="e#447#646#0" />
             <element signature="e#673#985#0" />
