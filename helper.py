@@ -344,7 +344,10 @@ def multi_model_to_dict(obj_list):
 
 def generate_RID():
     try:
+        if hasattr(request,'JJP_RID'):
+            logger.debug('JJP_RID:{}'.format(request.JJP_RID))
 
+            return request.JJP_RID
         request.JJP_RID = 'JJP_{}'.format(uuid4())
         logger.debug('JJP_RID:{}'.format(request.JJP_RID))
 
