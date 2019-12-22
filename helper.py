@@ -344,7 +344,7 @@ def multi_model_to_dict(obj_list):
 
 def generate_RID():
     try:
-        rid = request.get_header('JJP_RID')
+        rid = request.get_header('X_JJP_RID')
         if rid is not None:
             request.JJP_RID = rid
         else:
