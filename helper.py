@@ -1,6 +1,6 @@
 import datetime
 import functools
-import logging
+import logger
 import random
 from os import environ
 import time
@@ -28,12 +28,12 @@ def validate_token(id, db_session):
 
 def if_login(func):
     def wrapper(*args, **kwargs):
-        logging.debug(LogMsg.AUTH_CHECKING)
+        logger.debug(LogMsg.AUTH_CHECKING)
 
         kwargs['username'] = check_login()['username']
 
-        logging.debug(LogMsg.AUTH_SUCCEED)
-        logging.debug("user is {}".format(kwargs['username']))
+        logger.debug(LogMsg.AUTH_SUCCEED)
+        logger.debug("user is {}".format(kwargs['username']))
 
         rtn = func(*args, **kwargs)
         return rtn
@@ -112,16 +112,16 @@ def decode(encoded_str):
     # bail out.
     elif len(split) == 2:
         if split[0].strip().lower() == 'basic':
-            logging.debug("auth is basic")
+            logger.debug("auth is basic")
             try:
                 username, password = b64decode(split[1]).decode().split(':', 1)
             except:
                 raise Http_error(400, Message.AUTH_DECODING_FAILED)
 
         elif split[0].strip().lower() == 'bearer':
-            logging.debug("auth is bearer")
+            logger.debug("auth is bearer")
             username, password = split[1].strip(), None
-            logging.debug(
+            logger.debug(
                 "token is {} and pass is {}".format(username, password))
         else:
             raise Http_error(400, Message.AUTH_DECODING_FAILED)
@@ -141,12 +141,12 @@ def decode(encoded_str):
 
 def check_auth(func):
     def wrapper(*args, **kwargs):
-        logging.debug(LogMsg.AUTH_CHECKING)
+        logger.debug(LogMsg.AUTH_CHECKING)
 
         kwargs['username'] = check_Authorization()['username']
 
-        logging.debug(LogMsg.AUTH_SUCCEED)
-        logging.debug("user is {}".format(kwargs['username']))
+        logger.debug(LogMsg.AUTH_SUCCEED)
+        logger.debug("user is {}".format(kwargs['username']))
 
         rtn = func(*args, **kwargs)
         return rtn

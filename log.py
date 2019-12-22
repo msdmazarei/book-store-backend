@@ -124,7 +124,7 @@ handler = logging.handlers.TimedRotatingFileHandler(log_file,
                                                     interval=1,
                                                     backupCount=1)
 logger = logging.getLogger(__name__)
-fmtr = JJPFormatter('%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s :%(lineno)d - %(funcName)5s()- ] %(message)s')
+fmtr = JJPFormatter('%(asctime)s,%(msecs)d %(levelname)-2s[%(pathname)s :%(lineno)d - %(funcName)s] %(message)s')
 fh = logging.FileHandler(log_file)
 fh.setFormatter(fmtr)
 logger.addHandler(handler)
