@@ -180,7 +180,7 @@ def delete(id, db_session, username):
     return Http_response(204, True)
 
 
-def get_all(db_session,data):
+def get_all(db_session,data,**kwargs):
     logger.info(LogMsg.START)
 
     if data.get('sort') is None:
