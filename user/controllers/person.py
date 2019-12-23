@@ -293,7 +293,7 @@ def get_person_profile(id, db_session, username):
         result['current_book'] = get_current_book(
             model_instance.current_book_id, db_session) or None
         result['following_list'] = get_following_list_internal(id, db_session)
-        result['wish_list'] = internal_wish_list(db_session, Person.id)
+        result['wish_list'] = internal_wish_list(db_session, id)
 
         logger.debug(LogMsg.GET_SUCCESS, result)
     else:
