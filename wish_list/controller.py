@@ -1,4 +1,4 @@
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 
 from helper import Http_error, Now, Http_response, populate_basic_data
 from log import LogMsg,logger
@@ -155,7 +155,7 @@ def internal_wish_list( db_session, person_id):
     result = []
 
     book_ids = db_session.query(WishList).filter(
-        WishList.person_id == person_id).all()
+        WishList.person_id == person_id).order_by(desc(WishList.creation_date)).all()
     for item in book_ids:
         logger.debug(LogMsg.BOOK_CHECKING_IF_EXISTS,item)
         book = get_book(item.book_id, db_session)
