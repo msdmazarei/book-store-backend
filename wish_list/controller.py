@@ -68,7 +68,7 @@ def get_wish_list(data, db_session, username):
     logger.debug(LogMsg.PERSON_EXISTS,username)
     result = []
 
-    if data['filter'] is None:
+    if data.get('filter') is None:
         data.update({'filter':{'person_id':user.person_id}})
     else:
         data['filter'].update({'person_id':user.person_id})
