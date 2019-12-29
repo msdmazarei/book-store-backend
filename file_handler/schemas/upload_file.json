@@ -3,10 +3,7 @@
     "properties": {
 
         "files": {
-            "type": "array",
-            "items": {
-                "type": "object"
-            }
+            "type": "array"
         }
     },
     "required": [
