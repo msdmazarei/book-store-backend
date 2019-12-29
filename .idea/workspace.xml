@@ -14,34 +14,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="158" column="50" selection-start-line="158" selection-start-column="50" selection-end-line="158" selection-end-column="50" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/user/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="17" column="19" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#58#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/books/controllers/book.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="86" lean-forward="true" selection-start-line="86" selection-end-line="86" />
+            <state relative-caret-position="490">
+              <caret line="690" column="25" selection-start-line="690" selection-start-column="25" selection-end-line="690" selection-end-column="25" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -79,9 +55,33 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/file_handler/schemas/delete_files.json">
           <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-239">
+              <caret line="107" column="46" selection-start-line="107" selection-start-column="46" selection-end-line="107" selection-end-column="46" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="297" column="56" selection-start-line="297" selection-start-column="56" selection-end-line="297" selection-end-column="56" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -242,7 +242,6 @@
         <option value="$PROJECT_DIR$/enums.py" />
         <option value="$PROJECT_DIR$/user/schemas/user_edit.json" />
         <option value="$PROJECT_DIR$/user/schemas/reset_pass.json" />
-        <option value="$PROJECT_DIR$/user/controllers/user.py" />
         <option value="$PROJECT_DIR$/user/constants.py" />
         <option value="$PROJECT_DIR$/user/schemas/person_add.json" />
         <option value="$PROJECT_DIR$/wish_list/schemas/add.json" />
@@ -251,11 +250,12 @@
         <option value="$PROJECT_DIR$/requirements" />
         <option value="$PROJECT_DIR$/app_configs.sh" />
         <option value="$PROJECT_DIR$/group/controllers/group.py" />
-        <option value="$PROJECT_DIR$/user/controllers/person.py" />
         <option value="$PROJECT_DIR$/user/schemas/person_edit.json" />
         <option value="$PROJECT_DIR$/book_library/schemas/add.json" />
         <option value="$PROJECT_DIR$/book_library/schemas/edit.json" />
         <option value="$PROJECT_DIR$/file_handler/schemas/upload_file.json" />
+        <option value="$PROJECT_DIR$/user/controllers/person.py" />
+        <option value="$PROJECT_DIR$/user/controllers/user.py" />
       </list>
     </option>
   </component>
@@ -313,6 +313,17 @@
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
               <item name="file_handler" type="462c0819:PsiDirectoryNode" />
               <item name="schemas" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_library" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_library" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -1190,21 +1201,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="200" column="38" selection-start-line="200" selection-start-column="38" selection-end-line="200" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-            <element signature="e#749#1925#0" />
-            <element signature="e#2460#3335#0" />
-            <element signature="e#7620#8134#0" />
-            <element signature="e#8191#9852#0" />
-            <element signature="e#9893#10671#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/user/constants.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -1302,32 +1298,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="158" column="50" selection-start-line="158" selection-start-column="50" selection-end-line="158" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/user/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
           <caret line="17" column="19" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="19" />
           <folding>
             <element signature="e#0#58#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/books/controllers/book.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="86" lean-forward="true" selection-start-line="86" selection-end-line="86" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1387,6 +1363,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/file_handler/schemas/delete_files.json">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/books/controllers/book.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="690" column="25" selection-start-line="690" selection-start-column="25" selection-end-line="690" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="297" column="56" selection-start-line="297" selection-start-column="56" selection-end-line="297" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-239">
+          <caret line="107" column="46" selection-start-line="107" selection-start-column="46" selection-end-line="107" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
