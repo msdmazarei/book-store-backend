@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "properties": {
+
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
+        },
+        "person_id": {
+            "type": "string",
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+        },
+        "description": {
+            "type": "string"
+        },
+        "price_detail": {
+            "type": "object"
+        }
+    },
+    "additionalProperties": false
+}

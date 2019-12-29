@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "properties": {
+
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "count": {
+            "type": "number"
+        },
+        "discount": {
+            "type": "number"
+        },
+        "unit_price": {
+            "type": "number"
+        },
+        "net_price": {
+            "type": "number"
+        },
+        "book_id": {
+            "type": "string",
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+        },
+        "order_id": {
+            "type": "string",
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+        },
+        "person_id": {
+            "type": "string",
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+        },
+        "description": {
+            "type": "string"
+        },
+        "price_detail": {
+            "type": "object"
+        }
+    },
+    "additionalProperties": false
+}

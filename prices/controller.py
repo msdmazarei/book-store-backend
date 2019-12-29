@@ -8,11 +8,14 @@ from log import LogMsg, logger
 from messages import Message
 from repository.book_repo import get as get_book
 from configs import ADMINISTRATORS, ONLINE_BOOK_TYPES
+from infrastructure.schema_validator import schema_validate
+from .constants import ADD_SCHEMA_PATH,EDIT_SCHEMA_PATH
 
 
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
-    check_schema(['price', 'book_id'], data.keys())
+
+    schema_validate(data,ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     book_id = data.get('book_id')
@@ -131,7 +134,7 @@ def delete(id, db_session, username=None):
 def edit(id, data, db_session, username=None):
     logger.info(LogMsg.START, username)
 
-    check_schema(['price'], data.keys())
+    schema_validate(data,EDIT_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     model_instance = get_by_id(id, db_session)

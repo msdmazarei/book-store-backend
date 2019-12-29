@@ -7,11 +7,14 @@ from repository.person_repo import validate_person
 from repository.user_repo import check_user
 from books.controllers.book import get as get_book, book_to_dict
 from wish_list.models import WishList
+from infrastructure.schema_validator import schema_validate
+from .constants import ADD_SCHEMA_PATH
 
 
 def add(data, db_session, username):
     logger.info(LogMsg.START,username)
-
+    schema_validate(data,ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)
@@ -115,6 +118,7 @@ def delete_wish_list(db_session, username):
 
 def delete_books_from_wish_list(data, db_session, username):
     logger.info(LogMsg.START,username)
+    schema_validate(data,ADD_SCHEMA_PATH)
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)

@@ -5,15 +5,17 @@ from check_permission import get_user_permissions, has_permission_or_not, \
 from enums import Permissions, BookContentType, check_enums, check_enum
 from helper import populate_basic_data, check_schema, Http_error, model_to_dict, \
     edit_basic_data, Http_response, model_basic_dict
+from infrastructure.schema_validator import schema_validate
 from log import logger, LogMsg
 from messages import Message
 from repository.book_repo import get as get_book
+from ..constants import CONTENT_ADD_SCHEMA_PATH,CONTENT_EDIT_SCHEMA_PATH
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data, CONTENT_ADD_SCHEMA_PATH)
 
-    check_schema(['book_id', 'type', 'content'], data.keys())
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     book_id = data.get('book_id')
@@ -109,6 +111,9 @@ def get_be_data(book_id, type, db_session):
 
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START, username)
+
+    schema_validate(data, CONTENT_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     content = get_internal(id, db_session)
     if content is None:

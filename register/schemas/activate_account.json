@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "properties": {
+        "activation_code": {
+            "type": "string",
+            "pattern": "[0-9]{4}"
+        },
+        "cell_no": {
+            "type": "string",
+            "pattern": "0[0-9]{10}"
+        }},
+    "required": [
+        "activation_code",
+        "cell_no"
+    ],
+    "additionalProperties": false
+}

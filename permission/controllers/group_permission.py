@@ -6,7 +6,9 @@ from messages import Message
 from permission.controllers.permission import validate_permissions, \
     permission_list
 from repository.group_repo import validate_groups, validate_group
+from infrastructure.schema_validator import schema_validate
 from ..models import GroupPermission
+from ..constants import GROUP_ADD_SCHEMA_PATH, A_GROUP_ADD_SCHEMA_PATH
 
 
 def add(permission_id, group_id, db_session, username):
@@ -115,6 +117,9 @@ def add_permissions_to_groups(data, db_session, username):
         logger.error(LogMsg.NOT_ACCESSED, {'username': username})
         raise Http_error(403, Message.ACCESS_DENIED)
 
+    schema_validate(data,GROUP_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     permissions = set(data.get('permissions'))
     groups = set(data.get('groups'))
 
@@ -144,6 +149,9 @@ def delete_permissions_of_groups(data, db_session, username):
         logger.error(LogMsg.NOT_ACCESSED, {'username': username})
         raise Http_error(403, Message.ACCESS_DENIED)
 
+    schema_validate(data, GROUP_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     permissions = set(data.get('permissions'))
     groups = set(data.get('groups'))
 
@@ -169,6 +177,9 @@ def add_group_permissions(data, db_session, username):
         logger.error(LogMsg.NOT_ACCESSED, {'username': username})
         raise Http_error(403, Message.ACCESS_DENIED)
 
+    schema_validate(data,A_GROUP_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     group_id = data.get('group_id')
     permissions = data.get('permissions')
 
@@ -192,6 +203,9 @@ def delete_group_permissions(data, db_session, username):
     if username not in ADMINISTRATORS:
         logger.error(LogMsg.NOT_ACCESSED, {'username': username})
         raise Http_error(403, Message.ACCESS_DENIED)
+
+    schema_validate(data, A_GROUP_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     group_id = data.get('group_id')
     permissions = data.get('permissions')

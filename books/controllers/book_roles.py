@@ -1,10 +1,12 @@
 from enums import Roles, check_enums
 from helper import Http_error, model_to_dict, populate_basic_data, \
     edit_basic_data, Http_response
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_persons
 from ..models import BookRole
+from ..constants import ROLE_ADD_SCHEMA_PATH
 from constraint_handler.controllers.unique_entity_connector import \
     get_by_entity as get_connector, add as add_connector, delete as delete_connector
 from constraint_handler.controllers.book_role_constraint import add as add_uniquecode
@@ -14,6 +16,7 @@ from constraint_handler.controllers.common_methods import \
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data,ROLE_ADD_SCHEMA_PATH)
 
     logger.debug(LogMsg.CHECK_UNIQUE_EXISTANCE,data)
     unique_code = add_uniquecode(data, db_session)

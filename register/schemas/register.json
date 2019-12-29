@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+
+        "cell_no": {
+            "type": "string",
+            "pattern": "0[0-9]{10}"
+        }
+    },
+    "required": [
+        "cell_no"
+    ],
+    "additionalProperties": false
+}

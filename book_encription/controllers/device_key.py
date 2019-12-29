@@ -2,10 +2,12 @@ from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from helper import Http_error, value, populate_basic_data, edit_basic_data, \
     model_to_dict, Http_response, check_schema
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.user_repo import check_user
 from ..models import DeviceCode
+from ..constants import DEVICE_KEY_SCHEMA_PATH
 from random import randint
 from base64 import b64encode
 
@@ -17,8 +19,7 @@ if active_device_per_user is None:
 
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
-
-    check_schema(['name'], data.keys())
+    schema_validate(data, DEVICE_KEY_SCHEMA_PATH)
 
     user = check_user(username, db_session)
     if user is None:

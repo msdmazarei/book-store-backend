@@ -538,3 +538,4 @@ class LogMsg:
 
     COMMIT_ERROR = 'commiting to db encountered problem'
     QUERY_OBJECT = 'query object is : %s'
+    SCHEMA_NOT_VALID = 'data schema is not valid --- %s'

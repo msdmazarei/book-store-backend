@@ -5,13 +5,16 @@ import magic
 from bottle import response, static_file
 
 from helper import value, Http_error, Http_response
+from infrastructure.schema_validator import schema_validate
 from log import logger, LogMsg
 from messages import Message
+from .constants import UPLOAD_SCHEMA_PATH,DELETE_SCHEMA_PATH
 
 save_path = value('save_path',None)
 
 
 def upload_files(data, **kwargs):
+    schema_validate(data,UPLOAD_SCHEMA_PATH)
     try:
         files_list = data.get('files')
         model_files  =[]
@@ -72,6 +75,8 @@ def file_mime_type(file_path):
 
 
 def delete_multiple_files(data,**kwargs):
+    schema_validate(data,DELETE_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     files  = data.get('files')
     delete_files(files)
     return Http_response(204,True)

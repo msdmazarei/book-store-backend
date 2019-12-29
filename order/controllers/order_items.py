@@ -16,6 +16,8 @@ from messages import Message
 from configs import ONLINE_BOOK_TYPES, ADMINISTRATORS
 from repository.order_repo import order_to_dict, get_order_dict
 from repository.user_repo import check_user
+from ..constants import ITEM_ADD_SCHEMA_PATH,ITEM_EDIT_SCHEMA_PATH
+from infrastructure.schema_validator import schema_validate
 
 administrator_users = ADMINISTRATORS
 
@@ -42,8 +44,9 @@ def add_orders_items(order_id, data, db_session, username):
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['book_id', 'count', 'order_id', 'person_id'], data.keys())
+    schema_validate(data,ITEM_ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
+
     book_id = data.get('book_id')
 
     person_id = data.get('person_id')
@@ -251,8 +254,6 @@ def edit(id, data, db_session, username=None):
                        per_data)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-    if 'id' in data:
-        del data['id']
 
     if Permissions.ORDER_ITEM_EDIT_PREMIUM not in permissions:
         if 'unit_price' in data:

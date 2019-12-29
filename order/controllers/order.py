@@ -10,6 +10,8 @@ from helper import Http_error, populate_basic_data, Http_response, \
 from log import LogMsg, logger
 from messages import Message
 from user.controllers.person import get as get_person
+from ..constants import ORDER_ADD_SCHEMA_PATH,ORDER_EDIT_SCHEMA_PATH
+from infrastructure.schema_validator import schema_validate
 
 administrator_users = value('administrator_users', ['admin'])
 
@@ -17,8 +19,7 @@ administrator_users = value('administrator_users', ['admin'])
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['items'], data.keys())
-
+    schema_validate(data,ORDER_ADD_SCHEMA_PATH)
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)
@@ -185,6 +186,10 @@ def delete(id, db_session, username=None):
 
 def edit(id, data, db_session, username=None):
     logger.info(LogMsg.START, username)
+
+    schema_validate(data,ORDER_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     model_instance = internal_get(id, db_session)
     logger.debug(LogMsg.ORDER_CHECK, {'order_id': id})
     if model_instance is None:
@@ -208,10 +213,6 @@ def edit(id, data, db_session, username=None):
         logger.error(LogMsg.USER_HAS_NO_PERSON,username)
         raise Http_error(404,Message.INVALID_USER)
 
-    if 'id' in data:
-        del data['id']
-    if 'status' in data:
-        del data['status']
 
     for key, value in data.items():
         # TODO  if key is valid attribute of class

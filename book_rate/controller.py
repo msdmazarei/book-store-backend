@@ -2,11 +2,13 @@ from uuid import uuid4
 
 from sqlalchemy import and_
 
+from book_rate.constants import ADD_SCHEMA_PATH, EDIT_SCHEMA_PATH
 from book_rate.models import Rate
 from books.controllers.book import get as get_book
 from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from helper import Http_error, populate_basic_data, model_to_dict,edit_basic_data
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg,logger
 from messages import Message
 from repository.person_repo import validate_person
@@ -15,6 +17,7 @@ from repository.user_repo import check_user
 
 def add(db_session, data, username):
     logger.info(LogMsg.START,username)
+    schema_validate(data,ADD_SCHEMA_PATH)
 
     user = check_user(username, db_session)
     if user is None:
@@ -66,6 +69,7 @@ def get(book_id, person_id, db_session):
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START)
     permission_data = {}
+    schema_validate(data,EDIT_SCHEMA_PATH)
 
     user = check_user(username, db_session)
     if user is None:

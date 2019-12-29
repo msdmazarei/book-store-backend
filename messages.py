@@ -83,3 +83,4 @@ class Message:
     BOOK_HAS_NO_CONTENT = 'book_has_no_content'
     INVALID_DEVICE = 'invalid_device'
     RID_OPERATION_FAILED = 'RID_opration_failed'
+    SCHEMA_NOT_VALID = 'schema_not_valid'

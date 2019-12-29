@@ -26,12 +26,15 @@ from constraint_handler.controllers.unique_entity_connector import \
     delete as delete_connector
 from constraint_handler.controllers.common_methods import \
     delete as delete_uniquecode
+from infrastructure.schema_validator import schema_validate
+from ..constants import PERSON_ADD_SCHEMA_PATH,PERSON_EDIT_SCHEMA_PATH
 
 save_path = os.environ.get('save_path')
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data,PERSON_ADD_SCHEMA_PATH)
 
     if username is not None and username != SIGNUP_USER:
         permissions, presses = get_user_permissions(username, db_session)
@@ -102,7 +105,6 @@ def get(id, db_session, username=None):
         has_permission([Permissions.PERSON_GET_PREMIUM],
                        permissions, None, per_data)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
-    logger.error(LogMsg.GET_FAILED, {"id": id})
     logger.info(LogMsg.END)
 
     return person_dict
@@ -111,15 +113,12 @@ def get(id, db_session, username=None):
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    # TODO: you never checked version of passed data, we have version field in our
-    #      records, to prevent conflict when we received two different edit request
-    #      concurrently. check KAVEH codes (edit functions) to better understanding
-    #      version field usage
+    schema_validate(data,PERSON_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     logger.debug(LogMsg.EDIT_REQUST, {'person_id': id, 'data': data})
 
-    if "id" in data.keys():
-        del data["id"]
+
     user = check_user(username, db_session)
     if user.person_id is None:
         logger.error(LogMsg.USER_HAS_NO_PERSON, username)
@@ -231,7 +230,7 @@ def delete(id, db_session, username):
 
     except:
         logger.exception(LogMsg.DELETE_FAILED, exc_info=True)
-        raise Http_error(500, LogMsg.DELETE_FAILED)
+        raise Http_error(500, Message.DELETE_FAILED)
 
     logger.info(LogMsg.END)
 
@@ -260,6 +259,11 @@ def search_person(data, db_session, username):
         data['sort'] = ['creation_date-']
 
     result = []
+
+    permissions, presses = get_user_permissions(username, db_session)
+    has_permission([Permissions.PERSON_GET_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
 
     try:
         persons = Person.mongoquery(

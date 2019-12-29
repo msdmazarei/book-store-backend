@@ -2,6 +2,7 @@ from sqlalchemy import desc
 
 from check_permission import get_user_permissions, has_permission, \
     has_permission_or_not
+from infrastructure.schema_validator import schema_validate
 from repository.price_repo import delete_book_price
 from repository.rate_repo import book_average_rate
 from repository.comment_repo import delete_book_comments
@@ -29,6 +30,8 @@ from constraint_handler.controllers.common_methods import \
 from constraint_handler.controllers.unique_entity_connector import \
     get_by_entity as get_connector, add as add_connector, \
     delete as delete_connector
+
+from ..constants import BOOK_ADD_SCHEMA_PATH,BOOK_EDIT_SCHEMA_PATH
 
 
 def add(db_session, data, username, **kwargs):
@@ -273,6 +276,7 @@ def book_to_dict(db_session, book):
 
 def add_multiple_type_books(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data, BOOK_ADD_SCHEMA_PATH)
 
     logger.debug(LogMsg.BOOK_CHECKING_IF_EXISTS, data)
     types = data.get('types')
@@ -346,6 +350,7 @@ def edit_book(id, db_session, data, username):
     logger.info(LogMsg.START, username)
 
     logger.info(LogMsg.EDITING_BOOK, id)
+    schema_validate(data, BOOK_EDIT_SCHEMA_PATH)
 
     model_instance = db_session.query(Book).filter(Book.id == id).first()
     if model_instance is None:

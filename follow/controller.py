@@ -9,13 +9,16 @@ from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
+from .constants import ADD_SCHEMA_PATH
+from infrastructure.schema_validator import schema_validate
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['following_id'], data.keys())
+    schema_validate(data,ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
+
     following_id = data.get('following_id')
 
     user = check_user(username, db_session)

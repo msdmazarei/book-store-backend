@@ -7,9 +7,9 @@ from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from helper import Http_error, value, check_schema
 from log import LogMsg, logger
+from infrastructure.schema_validator import schema_validate
 from messages import Message
-from repository.content_repo import get_book_contents
-from repository.library_repo import get as get_library
+from ..constants import PREPARE_BOOK_SCHEMA_PATH
 import os
 
 from repository.user_repo import check_user
@@ -28,7 +28,7 @@ if save_path is None:
 def prepare_book(data, db_session, username):
     logger.info(LogMsg.START, username)
     result = {}
-    check_schema(['book_id', 'device_id'], data.keys())
+    schema_validate(data, PREPARE_BOOK_SCHEMA_PATH)
     book_id = data.get('book_id')
     device_id = data.get('device_id')
 

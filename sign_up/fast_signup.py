@@ -10,11 +10,14 @@ from send_message.send_message import send_message
 
 from user.controllers.user import add as add_user, user_to_dict
 from user.controllers.person import add as add_person
+from infrastructure.schema_validator import schema_validate
+from .constants import SIGN_UP_SCHEMA_PATH
 
 
 def signup(data, db_session, *args, **kwargs):
     logger.info(LogMsg.START, data)
-    check_schema(['cell_no','signup_token','username','password'],data.keys())
+
+    schema_validate(data,SIGN_UP_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     cell_no = data.get('cell_no')

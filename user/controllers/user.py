@@ -13,17 +13,22 @@ from messages import Message
 from repository.group_user_repo import delete_user_from_groups
 from repository.person_repo import validate_person
 from repository.user_repo import check_by_username, check_by_cell_no, \
-    check_by_id
+    check_by_id, check_user
 from user.models import User
 from .person import get as get_person, add as add_person, edit as edit_person, \
     get_person_profile
+from infrastructure.schema_validator import schema_validate
+from ..constants import USER_ADD_SCHEMA_PATH, RESET_PASS_SCHEMA_PATH, \
+    USER_EDIT_SCHEMA_PATH
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START)
-    cell_no = data.get('cell_no')
-    name = data.get('name')
+    schema_validate(data,USER_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     new_username = data.get('username')
+
+    # adder = check_user(username,db_session)
 
     user = check_by_username(new_username, db_session)
     if user:
@@ -35,7 +40,6 @@ def add(db_session, data, username):
     model_instance = User()
     model_instance.username = new_username
     model_instance.password = data.get('password')
-    model_instance.name = name
     populate_basic_data(model_instance, username, data.get('tags'))
     logger.debug(LogMsg.POPULATING_BASIC_DATA)
     person_id = data.get('person_id')
@@ -59,6 +63,13 @@ def add(db_session, data, username):
 
 def get(id, db_session, username):
     logger.info(LogMsg.START, username)
+
+
+    permissions, presses = get_user_permissions(username, db_session)
+
+    has_permission([Permissions.USER_GET_PREMIUM,Permissions.USER_GET_PRESS],
+                                   permissions)
+
 
     logger.debug(LogMsg.MODEL_GETTING, {'user_id': id})
     model_instance = db_session.query(User).filter(User.id == id).first()
@@ -140,6 +151,11 @@ def get_all(db_session, username):
 
     permissions, presses = get_user_permissions(username, db_session)
 
+    user = check_user(username,db_session)
+    # per_data = {}
+    # if user.person_id in presses:
+    #     per_data.update({Permissions.IS_OWNER.value:True})
+
     has_permission([Permissions.USER_GET_PREMIUM],
                    permissions)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
@@ -181,11 +197,8 @@ def serach_user(data, db_session, username):
 
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
-    if "id" in data.keys():
-        del data["id"]
-    if 'username' in data.keys():
-        logger.error(LogMsg.NOT_EDITABLE, 'username')
-        raise Http_error(400, Message.NOT_EDITABLE)
+    schema_validate(data,USER_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     logger.debug(LogMsg.EDIT_REQUST, {'user_id': id, 'data': data})
 
@@ -301,6 +314,8 @@ def edit_profile(id, db_session, data, username):
 
 def reset_pass(data, db_session):
     logger.info(LogMsg.START, data)
+    schema_validate(data,RESET_PASS_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     cell_no = data.get('cell_no')
     redis_key = 'PASS_{}'.format(cell_no)

@@ -4,10 +4,14 @@ import json
 from bottle import response
 from sqlalchemy import and_, update
 
+from book_collections.constants import ADD_SCHEMA_PATH, \
+    BOOK_COLLECTION_SCHEMA_PATH, DELETE_BOOK_COLLECTION_SCHEMA_PATH, \
+    RENAME_SCHEMA_PATH, COLLECTION_SCHEMA_PATH
 from book_collections.models import Collection
 from book_library.controller import is_book_in_library, books_are_in_lib
 from helper import Http_error, populate_basic_data, Http_response, check_schema, \
     model_basic_dict
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_person
@@ -27,8 +31,6 @@ from constraint_handler.controllers.common_methods import \
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['title'], data.keys())
-    logger.debug(LogMsg.SCHEMA_CHECKED)
     title = data.get('title')
 
     if 'person_id' in data:
@@ -45,16 +47,17 @@ def add(data, db_session, username):
         data['person_id'] = person_id
 
     validate_person(person_id, db_session)
-    logger.debug(LogMsg.PERSON_EXISTS,person_id)
+    logger.debug(LogMsg.PERSON_EXISTS, person_id)
 
     logger.debug(LogMsg.CHECK_UNIQUE_EXISTANCE, data)
     unique_code = unique_code_exists(data, db_session)
-    if unique_code is not None and username!='internal':
-        logger.error(LogMsg.COLLECTION_EXISTS,{'collection_tilte': data.get('title'),
-                          'person_id': person_id})
-        raise Http_error(409,Message.ALREADY_EXISTS)
+    if unique_code is not None and username != 'internal':
+        logger.error(LogMsg.COLLECTION_EXISTS,
+                     {'collection_tilte': data.get('title'),
+                      'person_id': person_id})
+        raise Http_error(409, Message.ALREADY_EXISTS)
 
-    if unique_code is None :
+    if unique_code is None:
         unique_code = add_uniquecode(data, db_session)
         db_session.flush()
     logger.debug(LogMsg.COLLECTION_ADD_NEW_COLLECTION,
@@ -120,7 +123,8 @@ def add(data, db_session, username):
 def add_book_to_collections(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['book_ids', 'collections'], data.keys())
+    schema_validate(data, BOOK_COLLECTION_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     if 'person_id' in data:
         person_id = data.get('person_id')
     else:
@@ -133,7 +137,7 @@ def add_book_to_collections(data, db_session, username):
         person_id = user.person_id
 
     books_ids = data.get('book_ids')
-    logger.debug(LogMsg.LIBRARY_CHECK_BOOK_EXISTANCE,books_ids)
+    logger.debug(LogMsg.LIBRARY_CHECK_BOOK_EXISTANCE, books_ids)
     if not books_are_in_lib(person_id, books_ids, db_session):
         raise Http_error(404, Message.BOOK_NOT_IN_LIB)
 
@@ -151,7 +155,7 @@ def add_book_to_collections(data, db_session, username):
     return data
 
 
-def get_all_collections(data,db_session, username):
+def get_all_collections(data, db_session, username):
     logger.info(LogMsg.START, username)
     if data.get('sort') is None:
         data['sort'] = ['title+']
@@ -168,14 +172,13 @@ def get_all_collections(data,db_session, username):
     logger.debug(LogMsg.PERSON_EXISTS)
 
     if data.get('filter') is None:
-        data.update({'filter':{'person_id':user.person_id}})
+        data.update({'filter': {'person_id': user.person_id}})
     else:
-        data['filter'].update({'person_id':user.person_id})
+        data['filter'].update({'person_id': user.person_id})
 
-    logger.debug(LogMsg.QUERY_OBJECT,data)
+    logger.debug(LogMsg.QUERY_OBJECT, data)
 
-
-    collection_items =Collection.mongoquery(
+    collection_items = Collection.mongoquery(
         db_session.query(Collection)).query(
         **data).end().all()
     collections, titles = arrange_collections(collection_items)
@@ -196,6 +199,10 @@ def get_all_collections(data,db_session, username):
 
 
 def get_collection(data, db_session, username):
+    logger.info(LogMsg.START, username)
+
+    schema_validate(data,COLLECTION_SCHEMA_PATH )
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     title = data.get('title')
 
     logger.info(LogMsg.START, username)
@@ -235,6 +242,10 @@ def get_collection(data, db_session, username):
 
 
 def delete_collection(data, db_session, username):
+    logger.info(LogMsg.START, username)
+
+    schema_validate(data, COLLECTION_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     title = data.get('title')
     logger.info(LogMsg.START, username)
 
@@ -248,13 +259,14 @@ def delete_collection(data, db_session, username):
 
     validate_person(user.person_id, db_session)
     logger.debug(LogMsg.PERSON_EXISTS)
+    if not collection_exists(title, user.person_id, db_session):
+        logger.error(LogMsg.NOT_FOUND, {'collection_title': title,
+                                        'person_id': user.person_id})
+        raise Http_error(404, Message.NOT_FOUND)
+    logger.debug(LogMsg.COLLECTION_DELETE, title)
 
     try:
-        if not collection_exists(title, user.person_id, db_session):
-            logger.error(LogMsg.NOT_FOUND, {'collection_title': title,
-                                            'person_id': user.person_id})
-            raise Http_error(404, Message.NOT_FOUND)
-        logger.debug(LogMsg.COLLECTION_DELETE, title)
+
         result = delete_collection_constraints(title, user.person_id,
                                                db_session)
         stmt = Collection.__table__.delete().where(Collection.id.in_(result))
@@ -271,8 +283,9 @@ def delete_collection(data, db_session, username):
 def delete_books_from_collection(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['title', 'book_ids'], data.keys())
+    schema_validate(data, DELETE_BOOK_COLLECTION_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
+
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)
@@ -426,7 +439,7 @@ def delete_collection_constraints(title, person_id, db_session):
 def rename_collection(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['title','new_title'], data.keys())
+    schema_validate(data, RENAME_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
     person_id = data.get('person_id')
     if person_id is None:
@@ -443,8 +456,9 @@ def rename_collection(data, db_session, username):
     # db_session.update(Collection).Where(Collection.title == title,
     #                                     Collection.person_id == person_id).values(
     #     title=new_title)
-    result = db_session.query(Collection).filter(Collection.title == data.get('title'),
-                                                 Collection.person_id == person_id).all()
+    result = db_session.query(Collection).filter(
+        Collection.title == data.get('title'),
+        Collection.person_id == person_id).all()
     final_res = []
     for item in result:
         item.title = new_title
@@ -473,9 +487,8 @@ def rename_collection(data, db_session, username):
     return final_res
 
 
-
 def head_all_collections(db_session, username):
-    result =  get_all_collections({}, db_session, username)
+    result = get_all_collections({}, db_session, username)
     result_str = json.dumps(result).encode()
     result_hash = hashlib.md5(result_str).hexdigest()
 

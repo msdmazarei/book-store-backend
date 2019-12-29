@@ -5,19 +5,20 @@ from celery.result import AsyncResult
 from check_permission import get_user_permissions, has_permission_or_not, \
     has_permission
 from enums import Permissions
-from helper import model_to_dict, Http_error, check_schema
-from books.controllers.book_content import get_internal as get_content,get_by_celery_task as get_content_by_task
+from helper import  Http_error
+from books.controllers.book_content import get_internal as get_content
 from books.controllers.content_path_finder import return_content_full_path
+from infrastructure.schema_validator import schema_validate
 from log import logger, LogMsg
 from messages import Message
 from repository.book_repo import get as get_book
+from .constants import GENERATE_BOOK_SCHEMA_PATH
 
 
 def generate_book( data,db_session,username):
     logger.info(LogMsg.START,username)
 
-    check_schema(['content_id'],data.keys())
-
+    schema_validate(data,GENERATE_BOOK_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     content_id = data.get('content_id')

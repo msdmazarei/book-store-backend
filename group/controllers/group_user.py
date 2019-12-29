@@ -1,15 +1,20 @@
 import os
 
+from check_permission import get_user_permissions, has_permission_or_not, \
+    has_permission
 from configs import ADMINISTRATORS
+from enums import Permissions
 from helper import model_to_dict, Http_error, model_basic_dict, \
-    populate_basic_data, edit_basic_data, Http_response
+    populate_basic_data, Http_response
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.group_repo import validate_groups, validate_group, \
     check_group_title_exists
-from repository.user_repo import check_by_id, validate_users
+from repository.user_repo import validate_users, check_user
 from .group import add as add_group
 from ..models import GroupUser
+from ..constants import USER_ADD_SCHEMA_PATH, USER_GROUP_SCHEMA_PATH
 
 save_path = os.environ.get('save_path')
 
@@ -53,17 +58,32 @@ def get(id, db_session, username=None):
 
 def delete(id, db_session, username):
     logger.info(LogMsg.START, username)
+    user = check_user(username,db_session)
 
     logger.info(LogMsg.DELETE_REQUEST, {'group_user_id': id})
-    if username not in ADMINISTRATORS:
-        logger.error(LogMsg.NOT_ACCESSED, {'username': username})
-        raise Http_error(403, Message.ACCESS_DENIED)
-
+    # if username not in ADMINISTRATORS:
+    #     logger.error(LogMsg.NOT_ACCESSED, {'username': username})
+    #     raise Http_error(403, Message.ACCESS_DENIED)
     model_instance = db_session.query(GroupUser).filter(
         GroupUser.id == id).first()
+
     if model_instance is None:
-        logger.error(LogMsg.NOT_FOUND, {'group_id': id})
+        logger.error(LogMsg.NOT_FOUND, {'group_user_id': id})
         raise Http_error(404, Message.NOT_FOUND)
+
+    permissions, presses = get_user_permissions(username, db_session)
+
+    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_USER_DELETE_PREMIUM],
+                                   permissions)
+    if not permit:
+        press_permit = has_permission_or_not(
+            [Permissions.PERMISSION_GROUP_USER_DELETE_PRESS],
+            permissions)
+        if not (press_permit and (model_instance.group.person_id == user.person_id)):
+            logger.error(LogMsg.PERMISSION_DENIED,
+                         {'PERMISSION_GROUP_USER_DELETE': username})
+            raise Http_error(403, Message.ACCESS_DENIED)
+
 
     try:
         db_session.delete(model_instance)
@@ -78,6 +98,12 @@ def delete(id, db_session, username):
 
 def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
+    permissions, presses = get_user_permissions(username, db_session)
+
+    has_permission(
+        [Permissions.PERMISSION_GROUP_USER_GET_PREMIUM],
+        permissions)
+
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
@@ -113,16 +139,38 @@ def delete_user_group(user_id, group_id, db_session):
 
 def add_users_to_groups(data, db_session, username):
     logger.info(LogMsg.START, username)
+    user = check_user(username,db_session)
 
-    if username not in ADMINISTRATORS:
-        logger.error(LogMsg.NOT_ACCESSED, {'username': username})
-        raise Http_error(403, Message.ACCESS_DENIED)
+    # if username not in ADMINISTRATORS:
+    #     logger.error(LogMsg.NOT_ACCESSED, {'username': username})
+    #     raise Http_error(403, Message.ACCESS_DENIED)
+
+
+    schema_validate(data,USER_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     users = set(data.get('users'))
     groups = set(data.get('groups'))
 
+
     validate_users(users, db_session)
-    validate_groups(groups, db_session)
+    group_entities = validate_groups(groups, db_session)
+
+
+    permissions, presses = get_user_permissions(username, db_session)
+
+    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_USER_ADD_PREMIUM],
+                                   permissions)
+    if not permit:
+        press_permit = has_permission_or_not(
+            [Permissions.PERMISSION_GROUP_USER_ADD_PRESS],
+            permissions)
+
+        if not (press_permit and is_user_group_owner(user.person_id, group_entities)):
+            logger.error(LogMsg.PERMISSION_DENIED,
+                         {'PERMISSION_GROUP_USER_ADD': username})
+            raise Http_error(403, Message.ACCESS_DENIED)
+
     final_res = {}
     for group_id in groups:
         result = []
@@ -142,15 +190,33 @@ def add_users_to_groups(data, db_session, username):
 def delete_users_from_groups(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    if username not in ADMINISTRATORS:
-        logger.error(LogMsg.NOT_ACCESSED, {'username': username})
-        raise Http_error(403, Message.ACCESS_DENIED)
+    user = check_user(username,db_session)
+
+    schema_validate(data,USER_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     users = set(data.get('users'))
     groups = set(data.get('groups'))
 
     validate_users(users, db_session)
-    validate_groups(groups, db_session)
+    group_entities = validate_groups(groups, db_session)
+
+
+
+    permissions, presses = get_user_permissions(username, db_session)
+
+    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_USER_DELETE_PREMIUM],
+                                   permissions)
+    if not permit:
+        press_permit = has_permission_or_not(
+            [Permissions.PERMISSION_GROUP_USER_DELETE_PRESS],
+            permissions)
+
+        if not (press_permit and is_user_group_owner(user.person_id, group_entities)):
+            logger.error(LogMsg.PERMISSION_DENIED,
+                         {'PERMISSION_GROUP_USER_ADD': username})
+            raise Http_error(403, Message.ACCESS_DENIED)
+
     for group_id in groups:
         for user_id in users:
             if not user_is_in_group(user_id, group_id, db_session):
@@ -165,16 +231,31 @@ def delete_users_from_groups(data, db_session, username):
 
 def add_group_users(data, db_session, username):
     logger.info(LogMsg.START, username)
+    user = check_user(username,db_session)
 
-    if username not in ADMINISTRATORS:
-        logger.error(LogMsg.NOT_ACCESSED, {'username': username})
-        raise Http_error(403, Message.ACCESS_DENIED)
+    schema_validate(data,USER_GROUP_SCHEMA_PATH)
 
     group_id = data.get('group_id')
 
     users = data.get('users')
 
-    validate_group(group_id, db_session)
+    group = validate_group(group_id, db_session)
+
+
+    permissions, presses = get_user_permissions(username, db_session)
+
+    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_USER_ADD_PREMIUM],
+                                   permissions)
+    if not permit:
+        press_permit = has_permission_or_not(
+            [Permissions.PERMISSION_GROUP_USER_ADD_PRESS],
+            permissions)
+
+        if not (press_permit and is_user_group_owner(user.person_id, [group])):
+            logger.error(LogMsg.PERMISSION_DENIED,
+                         {'PERMISSION_GROUP_USER_ADD': username})
+            raise Http_error(403, Message.ACCESS_DENIED)
+
     result = []
     for user_id in users:
         if user_is_in_group(user_id, group_id, db_session):
@@ -193,11 +274,23 @@ def add_group_users(data, db_session, username):
 def get_by_group(group_id, db_session, username):
     logger.info(LogMsg.START, username)
 
-    if username not in ADMINISTRATORS:
-        logger.error(LogMsg.NOT_ACCESSED, {'username': username})
-        raise Http_error(403, Message.ACCESS_DENIED)
+    user = check_user(username,db_session)
+    group = validate_group(group_id, db_session)
+    permissions, presses = get_user_permissions(username, db_session)
 
-    validate_group(group_id, db_session)
+    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_USER_GET_PREMIUM],
+                                   permissions)
+    if not permit:
+        press_permit = has_permission_or_not(
+            [Permissions.PERMISSION_GROUP_USER_GET_PRESS],
+            permissions)
+
+        if not (press_permit and user_is_in_group(user.id, group_id, db_session)):
+            logger.error(LogMsg.PERMISSION_DENIED,
+                         {'PERMISSION_GROUP_USER_GET': username})
+            raise Http_error(403, Message.ACCESS_DENIED)
+
+
     result = db_session.query(GroupUser).filter(
         GroupUser.group_id == group_id).all()
     final_res = []
@@ -228,13 +321,14 @@ def add_group_by_users(data, db_session, username):
 
     users = set(data.get('users'))
     group_title = data.get('title')
+    person_id = data.get('person_id')
 
     validate_users(users, db_session)
     if check_group_title_exists(group_title, db_session):
         logger.error(LogMsg.GROUP_EXISTS, {'group_title': group_title})
         raise Http_error(409, Message.ALREADY_EXISTS)
 
-    group = add_group({'title': group_title}, db_session, username)
+    group = add_group({'title': group_title,'person_id':person_id}, db_session, username)
     del data['title']
     data['group_id'] = group.id
     result = add_group_users(data, db_session, username)
@@ -251,3 +345,11 @@ def group_user_to_dict(model_instance):
     primary_data = model_basic_dict(model_instance)
     result.update(primary_data)
     return result
+
+
+def is_user_group_owner(person_id,groups):
+    for item in groups:
+        if person_id !=item.person_id:
+            logger.error(LogMsg.PERMISSION_DENIED,{'group_press_is_not_person':person_id})
+            raise Http_error(403,Message.ACCESS_DENIED)
+    return True

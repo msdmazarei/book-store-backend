@@ -2,6 +2,7 @@ from sqlalchemy import and_
 
 from check_permission import get_user_permissions, has_permission_or_not, \
     has_permission
+from infrastructure.schema_validator import schema_validate
 from repository.comment_repo import get_comment
 from comment.models import CommentAction
 from enums import ReportComment, check_enum, Permissions
@@ -10,10 +11,13 @@ from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
+from ..constants import ACTION_ADD_SCHEMA_PATH
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data,ACTION_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     report = data.get('report', None)
     if report:

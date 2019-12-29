@@ -34,3 +34,11 @@ def users_of_groups(group_list,db_session):
 
     result = set(users)
     return result
+
+
+def user_is_in_group(user_id, group_id, db_session):
+    result = db_session.query(GroupUser).filter(GroupUser.user_id == user_id,
+                                                GroupUser.group_id == group_id).first()
+    if result is None:
+        return False
+    return True

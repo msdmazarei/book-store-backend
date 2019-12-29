@@ -8,19 +8,20 @@ from comment.models import Comment
 from enums import Permissions
 from helper import Http_error, model_to_dict, Http_response, value, \
     populate_basic_data, edit_basic_data
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.comment_repo import delete_book_comments, get_comment
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
 from repository.action_repo import delete_comment_actions_internal
-from configs import ADMINISTRATORS
-
+from ..constants import COMMENT_ADD_SCHEMA_PATH,COMMENT_EDIT_SCHEMA_PATH
 
 def add(db_session, data, username):
-    logger.info(LogMsg.START)
+    logger.info(LogMsg.START,username)
 
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    schema_validate(data,COMMENT_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     book_id = data.get('book_id')
 
@@ -232,9 +233,8 @@ def get_all(data, db_session, username, **kwargs):
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    if "id" in data.keys():
-        del data["id"]
-        logger.debug(LogMsg.EDIT_REQUST)
+    schema_validate(data,COMMENT_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     logger.debug(LogMsg.MODEL_GETTING, id)
     model_instance = db_session.query(Comment).filter(Comment.id == id).first()
     if model_instance is None:
@@ -262,10 +262,6 @@ def edit(id, data, db_session, username):
 
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
-    if 'person_id' in data:
-        del data['person_id']
-    if 'book_id' in data:
-        del data['book_id']
 
     for key, value in data.items():
         # TODO  if key is valid attribute of class

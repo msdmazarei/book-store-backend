@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "properties": {
+
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "status": {
+            "type": "object"
+        }},
+    "required": [
+        "status"
+    ],
+    "additionalProperties": false
+}

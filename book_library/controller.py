@@ -11,12 +11,14 @@ from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from helper import check_schema, populate_basic_data, Http_error, Http_response, \
     model_basic_dict,edit_basic_data
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
 from repository.book_repo import get as get_book
-from configs import ONLINE_BOOK_TYPES, ADMINISTRATORS
+from configs import ONLINE_BOOK_TYPES
+from .constants import ADD_SCHEMA_PATH,EDIT_SCHEMA_PATH
 
 
 def add(data, db_session, username=None):
@@ -25,7 +27,7 @@ def add(data, db_session, username=None):
         permissions,presses = get_user_permissions(username, db_session)
         has_permission([Permissions.LIBRARY_ADD_PREMIUM], permissions)
 
-    check_schema(['book_id', 'person_id'], data.keys())
+    schema_validate(data, ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
     book_id = data.get('book_id')
     person_id = data.get('person_id')
@@ -145,7 +147,7 @@ def add_books_to_library(person_id, book_list, db_session, username=None):
 
 def edit_status(id, data, db_session, username):
     logger.info(LogMsg.START, username)
-
+    schema_validate(data,EDIT_SCHEMA_PATH)
     permissions,presses = get_user_permissions(username, db_session)
     has_permission([Permissions.LIBRARY_GET_PREMIUM], permissions, None,
                    {Permissions.IS_OWNER.value: True})

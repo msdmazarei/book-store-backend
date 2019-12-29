@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "oneOf": [
+      {
+        "debit": {
+          "type": "number"
+        }
+      },
+      {
+        "credit": {
+          "type": "number"
+        }
+      }
+    ],
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "payment_id": {
+      "type": "string",
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    },
+    "account_id": {
+      "type": "string",
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    },
+    "details": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "person_id",
+    "value"
+  ],
+  "additionalProperties": false
+}

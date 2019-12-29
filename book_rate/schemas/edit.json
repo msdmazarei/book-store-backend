@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "properties": {
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "rate": {
+            "type": "number"
+        }},
+    "required": [
+        "rate"
+    ],
+    "additionalProperties": false
+}

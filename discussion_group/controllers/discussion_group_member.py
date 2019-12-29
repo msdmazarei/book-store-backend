@@ -2,17 +2,22 @@ from discussion_group.models import DiscussionMember
 from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from helper import Http_error, model_basic_dict, \
-    populate_basic_data, edit_basic_data, Http_response, check_schema
+    populate_basic_data, edit_basic_data, Http_response
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.discussion_group_repo import get_discussion_group, \
     is_admin_member, is_group_member, discuss_group_members, get_groups_by_list
 from repository.user_repo import check_user
+from ..constants import MEMBER_ADD_SCHEMA_PATH,MEMBER_EDIT_SCHEMA_PATH
 
 
 def add_disscussuion_members(data, db_session, username):
     logger.info(LogMsg.START, username)
-    check_schema(['group_id','members'],data.keys())
+    schema_validate(data,MEMBER_ADD_SCHEMA_PATH)
+
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     group_id = data.get('group_id')
     members = data.get('members')
 
@@ -92,7 +97,7 @@ def get(id, db_session, username):
     logger.info(LogMsg.START, username)
     result = db_session.query(DiscussionMember).filter(
         DiscussionMember.id == id).first()
-    return discussion_member_to_dict(re)
+    return discussion_member_to_dict(result)
 
 
 def delete(id, db_session, username):
@@ -124,6 +129,10 @@ def delete(id, db_session, username):
 
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START, username)
+
+    schema_validate(data,MEMBER_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     group_member = get_model(id, db_session)
     if group_member is None:
         logger.error(LogMsg.NOT_FOUND, {'discussion_group_member': id})

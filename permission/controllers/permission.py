@@ -6,6 +6,8 @@ from helper import model_to_dict, Http_error, model_basic_dict, \
 from log import LogMsg, logger
 from messages import Message
 from permission.models import Permission
+from infrastructure.schema_validator import schema_validate
+from ..constants import PERMISSION_ADD_SCHEMA_PATH,PERMISSION_EDIT_SCHEMA_PATH
 
 
 def add(data, db_session, username):
@@ -14,6 +16,9 @@ def add(data, db_session, username):
     if username not in ADMINISTRATORS:
         logger.error(LogMsg.NOT_ACCESSED, {'username': username})
         raise Http_error(403, Message.ACCESS_DENIED)
+
+    schema_validate(data,PERMISSION_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     if check_permission_exists(data.get('permission'), db_session):
         raise Http_error(409, Message.ALREADY_EXISTS)
@@ -49,14 +54,13 @@ def get(id, db_session, username=None):
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    logger.debug(LogMsg.EDIT_REQUST, {'permission_id': id, 'data': data})
-
     if username not in ADMINISTRATORS:
         logger.error(LogMsg.NOT_ACCESSED, {'username': username})
         raise Http_error(403, Message.ACCESS_DENIED)
 
-    if "id" in data.keys():
-        del data["id"]
+    logger.debug(LogMsg.EDIT_REQUST, {'permission_id': id, 'data': data})
+    schema_validate(data, PERMISSION_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     model_instance = db_session.query(Permission).filter(
         Permission.id == id).first()
@@ -68,7 +72,6 @@ def edit(id, db_session, data, username):
 
     try:
         for key, value in data.items():
-            # TODO  if key is valid attribute of class
             setattr(model_instance, key, value)
         edit_basic_data(model_instance, username, data.get('tags'))
 
@@ -77,7 +80,7 @@ def edit(id, db_session, data, username):
 
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
-        raise Http_error(500, Message.DELETE_FAILED)
+        raise Http_error(409, Message.ALREADY_EXISTS)
 
     logger.info(LogMsg.END)
     return model_instance

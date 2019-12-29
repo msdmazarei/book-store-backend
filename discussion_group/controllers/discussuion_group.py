@@ -6,18 +6,23 @@ from discussion_group.controllers.discussion_group_member import \
 from enums import Permissions
 from helper import model_to_dict, Http_error, model_basic_dict, \
     populate_basic_data, edit_basic_data, Http_response
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.discussion_group_repo import discuss_group_members, \
     is_admin_member, is_group_member
 from repository.user_repo import check_user
 from ..models import DiscussionGroup
+from ..constants import GROUP_ADD_SCHEMA_PATH,GROUP_EDIT_SCHEMA_PATH
 
 save_path = os.environ.get('save_path')
 
 
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
+
+    schema_validate(data,GROUP_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     user = check_user(username, db_session)
     if user is None:
@@ -32,17 +37,20 @@ def add(data, db_session, username):
     model_instance.status = 'Created'
 
     db_session.add(model_instance)
+    result = model_to_dict(model_instance)
+
+    logger.debug(LogMsg.DISCUSSION_GROUP_ADD, result)
+
 
     members = data.get('members', [])
-    members.append({'person_id': user.person_id, 'type': 'Admin'})
-    member_data = {'group_id': model_instance.id, 'members': members}
+    if members is not None:
+        members.append({'person_id': user.person_id, 'type': 'Admin'})
+        member_data = {'group_id': model_instance.id, 'members': members}
 
-    logger.debug(LogMsg.DISCUSSION_GROUP_ADD, model_to_dict(model_instance))
-    discuss_members = add_disscussuion_members(member_data, db_session,
+        discuss_members = add_disscussuion_members(member_data, db_session,
                                                username)
-    logger.debug(LogMsg.DISCUSSION_GROUP_MEMBERS_ADDED, members)
-    result = model_to_dict(model_instance)
-    result['members'] = discuss_members
+        logger.debug(LogMsg.DISCUSSION_GROUP_MEMBERS_ADDED, members)
+        result['members'] = discuss_members
 
     logger.info(LogMsg.END)
     return result
@@ -82,6 +90,9 @@ def edit(id, db_session, data, username):
     #      concurrently. check KAVEH codes (edit functions) to better understanding
     #      version field usage
 
+    schema_validate(data,GROUP_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
     logger.debug(LogMsg.EDIT_REQUST, {'discuss_group_id': id, 'data': data})
 
     user = check_user(username, db_session)
@@ -95,8 +106,6 @@ def edit(id, db_session, data, username):
 
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
-    if "id" in data.keys():
-        del data["id"]
 
     model_instance = db_session.query(DiscussionGroup).filter(
         DiscussionGroup.id == id).first()

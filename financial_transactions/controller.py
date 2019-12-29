@@ -2,18 +2,18 @@ from check_permission import get_user_permissions, has_permission
 from enums import Permissions
 from financial_transactions.models import Transaction
 from helper import Http_error, populate_basic_data, Http_response, model_to_dict
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.account_repo import get_account
+from .constants import ADD_SCHEMA_PATH
 
 
 def add(data, db_session, username=None):
     logger.info(LogMsg.START, username)
 
-    if data.get('credit') and data.get('debit'):
-        logger.error(LogMsg.DATA_MISSING)
-        raise Http_error(400, Message.CREDIT_DEBIT_ERROR)
 
+    # schema_validate(data,ADD_SCHEMA_PATH)
     if username is not None:
         permissions, presses = get_user_permissions(username, db_session)
 
