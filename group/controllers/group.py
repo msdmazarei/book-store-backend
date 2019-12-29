@@ -230,7 +230,7 @@ def search_group(data, db_session, username=None):
 
         if username is not None and not (
         user_is_in_group(user.id, group.id, db_session)):
-            result.remove(group)
+            del result[-1]
 
     logger.debug(LogMsg.GET_SUCCESS, result)
 
