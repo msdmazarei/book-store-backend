@@ -139,11 +139,11 @@ def edit(id, db_session, data, username):
                    permissions, None, per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-    if 'current_book' in data.keys():
-        if not is_book_in_library(model_instance.id, data.get('current_book'),
+    if 'current_book_id' in data.keys():
+        if not is_book_in_library(model_instance.id, data.get('current_book_id'),
                                   db_session):
             logger.error(LogMsg.COLLECTION_BOOK_IS_NOT_IN_LIBRARY,
-                         {'current_book_id': data.get('current_book')})
+                         {'current_book_id': data.get('current_book_id')})
             raise Http_error(404, Message.BOOK_NOT_IN_LIB)
     if 'cell_no' in data.keys():
         cell_person = person_cell_exists(db_session, data.get('cell_no'))
