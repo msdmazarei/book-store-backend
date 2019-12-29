@@ -294,10 +294,10 @@ def get_person_profile(id, db_session, username):
     model_instance = db_session.query(Person).filter(Person.id == id).first()
     if model_instance:
         result = model_to_dict(model_instance)
-        result['current_book'] = get_current_book(
-            model_instance.current_book_id, db_session) or None
-        result['following_list'] = get_following_list_internal(id, db_session)
-        result['wish_list'] = internal_wish_list(db_session, id)
+        result['current_book'] = dict(get_current_book(
+            model_instance.current_book_id, db_session)) or None
+        result['following_list'] = list(get_following_list_internal(id, db_session))
+        result['wish_list'] = list(internal_wish_list(db_session, id))
 
         logger.debug(LogMsg.GET_SUCCESS, result)
     else:

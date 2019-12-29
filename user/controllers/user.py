@@ -93,8 +93,8 @@ def get_profile(username, db_session):
         User.username == username).first()
 
     if model_instance:
-        profile = get_person_profile(model_instance.person_id, db_session,
-                                     username)
+        profile = dict(get_person_profile(model_instance.person_id, db_session,
+                                     username))
         permissions,groups = get_user_permissions(username, db_session)
         logger.debug(LogMsg.GET_SUCCESS, profile)
 
@@ -104,8 +104,8 @@ def get_profile(username, db_session):
 
     result = model_to_dict(model_instance)
     result['person'] = profile
-    result['permissions'] = permissions
-    result['permission_groups'] = groups
+    result['permissions'] = list(permissions)
+    result['permission_groups'] = list(groups)
 
     del result['password']
     logger.debug(LogMsg.USER_PROFILE_IS, result)
