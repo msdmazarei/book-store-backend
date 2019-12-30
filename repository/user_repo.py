@@ -38,3 +38,11 @@ def validate_users(user_list, db_session):
 
 def user_count(db_session):
     return db_session.query(User).count()
+
+
+def persons_by_user(user_list,db_session):
+    result = db_session.query(User).filter(User.id.in_(user_list)).all()
+    final_res = []
+    for user in result:
+        final_res.append(user.person_id)
+    return final_res

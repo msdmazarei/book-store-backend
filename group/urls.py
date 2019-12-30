@@ -22,3 +22,4 @@ def call_router(app):
     app.route('/group-users/user/<user_id>', 'GET', group_user.get_user_groups, apply=wrappers)
 
     app.route('/group-users/group', 'POST', group_user.add_group_by_users, apply=data_plus_wrappers)
+    app.route('/group-users/persons', 'POST', group_user.press_persons, apply=data_plus_wrappers)

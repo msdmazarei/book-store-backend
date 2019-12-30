@@ -28,3 +28,12 @@ def check_group_title_exists(title,db_session):
         return False
     return True
 
+
+def groups_by_presses(press_list,db_session):
+    result = db_session.query(Group).filter(Group.person_id.in_(press_list)).all()
+    final_res =[]
+    for group in result:
+        final_res.append(group.id)
+    return final_res
+
+

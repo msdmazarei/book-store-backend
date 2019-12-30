@@ -10,8 +10,10 @@ from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.group_repo import validate_groups, validate_group, \
-    check_group_title_exists
-from repository.user_repo import validate_users, check_user
+    check_group_title_exists, groups_by_presses
+from repository.group_user_repo import users_of_groups
+from repository.person_repo import get_persons
+from repository.user_repo import validate_users, check_user, persons_by_user
 from .group import add as add_group
 from ..models import GroupUser
 from ..constants import USER_ADD_SCHEMA_PATH, USER_GROUP_SCHEMA_PATH
@@ -353,3 +355,13 @@ def is_user_group_owner(person_id,groups):
             logger.error(LogMsg.PERMISSION_DENIED,{'group_press_is_not_person':person_id})
             raise Http_error(403,Message.ACCESS_DENIED)
     return True
+
+
+def press_persons(data,db_session,username):
+    logger.info(LogMsg.START,username)
+    press_list = data.get('presses')
+    groups = groups_by_presses(press_list, db_session)
+    users = users_of_groups(groups,db_session)
+    person_ids = persons_by_user(users,db_session)
+    persons = get_persons(person_ids,db_session)
+    return persons

@@ -8,7 +8,7 @@ from helper import model_to_dict, Http_error, model_basic_dict, \
     populate_basic_data, edit_basic_data, Http_response
 from log import LogMsg, logger
 from messages import Message
-from permission.controllers.group_permission import \
+from repository.group_permission import \
     delete_all_permissions_of_group
 from repository.group_repo import check_group_title_exists
 from repository.group_user_repo import delete_group_users, user_is_in_group

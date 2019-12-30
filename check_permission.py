@@ -4,7 +4,7 @@ from enums import Permissions
 from helper import Http_error, value
 from log import logger, LogMsg
 from messages import Message
-from permission.controllers.group_permission import \
+from repository.group_permission import \
     get_permission_list_of_groups
 from permission.controllers.permission import get_permissions_values
 from repository.group_user_repo import get_user_group_list

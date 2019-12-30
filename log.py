@@ -1,6 +1,3 @@
-
-
-
 import os
 import gzip
 import logging.handlers
@@ -9,10 +6,8 @@ from datetime import datetime
 
 from bottle import request
 
-
 log_file = os.environ.get('log_path')
 print('log_file : {}'.format(log_file))
-
 
 
 def create_version_conflict_details(obj_version, request_version):
@@ -34,7 +29,6 @@ def get_request_id():
             return request.JJP_RID
     except RuntimeError:
         return 'NO_RID'
-
 
 
 #
@@ -103,6 +97,7 @@ class GZipRotator:
         f_in.close()
         os.remove(dest)
 
+
 class JJPFormatter(logging.Formatter):
     def formatException(self, exc_info):
         """
@@ -113,10 +108,11 @@ class JJPFormatter(logging.Formatter):
 
     def format(self, record):
         s = super(JJPFormatter, self).format(record)
-        s="{} - {}".format(get_request_id(),s)
+        s = "{} - {}".format(get_request_id(), s)
         if record.exc_text:
             s = s.replace('\n', '') + '|'
         return s
+
 
 handler = logging.handlers.TimedRotatingFileHandler(log_file,
                                                     encoding='utf8',
@@ -124,14 +120,15 @@ handler = logging.handlers.TimedRotatingFileHandler(log_file,
                                                     interval=1,
                                                     backupCount=5)
 logger = logging.getLogger(__name__)
-fmtr = JJPFormatter('%(asctime)s,%(msecs)d %(levelname)-2s[%(pathname)s :%(lineno)d - %(funcName)s] %(message)s')
+fmtr = JJPFormatter(
+    '%(asctime)s,%(msecs)d %(levelname)-2s[%(pathname)s :%(lineno)d - %(funcName)s] %(message)s')
 
 handler.setFormatter(fmtr)
 logger.addHandler(handler)
 logging.basicConfig(
-            filename=log_file,
-            datefmt='%Y-%m-%d:%H:%M:%S',
-            level=logging.DEBUG)
+    filename=log_file,
+    datefmt='%Y-%m-%d:%H:%M:%S',
+    level=logging.DEBUG)
 
 
 class LogMsg:
@@ -185,7 +182,7 @@ class LogMsg:
     USR_ADDING = 'user is going to create...'
     USER_BY_CELL_EXIST = 'user with this cell no already exist'
     NOT_UNIQUE = 'must be unique,change it please'
-    NOT_ACCESSED ='this user can not access to this section'
+    NOT_ACCESSED = 'this user can not access to this section'
     SCROLL_UNDEFINED = 'scrolling mood is undefined.it should be up or down'
     SCHEMA_CHECKED = 'schema checked for required data'
     USERNAME_NOT_UNIQUE = 'this username already exists'
@@ -204,7 +201,7 @@ class LogMsg:
     POPULATING_BASIC_DATA = 'new model is populating with basic data'
     EDITING_BASIC_DATA = 'editing basic data for model : %s'
 
-    #Account
+    # Account
     GETTING_USER_ACCOUNTS = 'getting acount of user by type  : %s '
     ACCOUNT_BY_TYPE_EXISTS = 'user has already an account of type : %s '
     GETTING_PERSON_ALL_ACCOUNTS = 'getting all acounts of person_id : %s'
@@ -218,18 +215,16 @@ class LogMsg:
     GETTING_ACCOUNT_PERSON = 'getting account by data : %s'
     USER_HAS_NO_ACCOUNT = 'user has no account of type: %s'
 
-
     # Token
     CHECKING_VALID_TOKEN = 'checking if user: %s has valid token '
     USER_HAS_VALID_TOKEN = 'user already has valid token : %s '
-
 
     # BOOK
     ADD_BOOK = 'adding book by data : %s '
     DELETE_BOOK_FILES = 'deleting files of book by id : %s'
     DELETE_BOOK_IMAGES = 'deleting images of book by id : %s '
     EDITING_BOOK = 'editing book : %s '
-    DELETING_BOOK  = 'deleting book by id : %s '
+    DELETING_BOOK = 'deleting book by id : %s '
     GETTING_ALL_BOOKS = 'request for getting all books'
     ADDING_MULTIPLE_BOOKS = 'adding multiple books by data : %s '
     ADDING_ROLES_TO_BOOK = 'adding roles to book : %s '
@@ -287,7 +282,6 @@ class LogMsg:
     ACTION_USER_CANT_DISLIKE = 'user not liked the comment so cant dislike it'
     ACTION_USER_CANT_DISREPORT = 'user not reported the comment so cant desreport it'
 
-
     # Price
     ADDING_PRICE = 'adding price for book : %s '
     CHECK_BOOK_PRICE_EXISTANCE = 'checking if book already has price in db : %s'
@@ -306,8 +300,6 @@ class LogMsg:
     SEARCH_ELASTIC_INDEXES = 'searching in elastic search for indexes by phrase : %s '
     ELASTIC_SEARCH_RESULTS = 'elastic search result for book_id s is : %s '
 
-
-
     # USER
     USER_HAS_NO_PERSON = 'user by ths username has no related person : %s '
     NOT_RELATED_USER_FOR_PERSON = 'person has not related user : %s'
@@ -315,7 +307,6 @@ class LogMsg:
     USER_PROFILE_IS = 'users profile is : %s'
     USER_GET_BY_FILTER = 'searching user by filter like : %s'
     USER_PASSWORD_RESET = 'users password changed successfully : %s'
-
 
     # PERSON
     PERSON_HAS_BOOKS = 'person already has roles for books '
@@ -343,7 +334,6 @@ class LogMsg:
     LIBRARY_GET_PERSON_LIBRARY = 'getting library contents for person by username : %s'
     LIBRARY_ADD_BOOKS = 'adding books to persons library : %s'
 
-
     # COLLECTION
     COLLECTION_ADD_NEW_COLLECTION = 'adding new collection by title : %s'
     COLLECTION_ADD_BOOKS_TO_COLLECTION = 'adding books to collection: %s'
@@ -359,7 +349,6 @@ class LogMsg:
     COLLECTION_ARRANGE_BY_TITLE = 'arranged collection contents by title'
     COLLECTION_EXISTS = 'collection by this title already exists : %s'
 
-
     # RATE
     RATE_CHECK = 'checking if person rated to book by now : %s'
     RATE_EXISTS = 'user already rated to book : %s'
@@ -370,13 +359,11 @@ class LogMsg:
     RATE_GET = 'getting book rate : %s'
     RATE_NOT_EXISTS = 'user not rated to the book : %s'
 
-
     # TRANSACTION
     TRANSACTION_ADDED = 'transaction added by this data : %s'
     TRANSACTION_GET = 'getting transaction by data : %s'
     TRANSACTION_EXISTS = 'transaction exists : %s'
     TRANSACTION_DELETED = 'transaction by this id deleted : %s'
-
 
     # FOLLOW
     FOLLOW_REQUEST = 'following request by data : %s'
@@ -387,7 +374,6 @@ class LogMsg:
     FOLLOW_SELF_DENIED = 'user cannot follow him/her self'
     FOLLOWING_LIST = 'get users following list : %s'
     FOLLOWER_LIST = 'get follower list : %s'
-
 
     # ORDER
     ORDER_CHECKOUT_REQUEST = 'request for checking out order by id : %s'
@@ -414,8 +400,7 @@ class LogMsg:
     ORDER_ITEM_DELETED = 'order item by id: %s deleted'
     ORDERS_ITEMS = 'orders items collected successfully : %s '
 
-
-    #REGISTER
+    # REGISTER
     MESSAGE_NOT_SENT = 'message not sent by data : %s'
     REDIS_SET = 'setting reset pass key in redis : %s'
 
@@ -425,7 +410,7 @@ class LogMsg:
     SIGNUP_TOKEN_INVALID = 'signup token not send correctly and is not compatible by redis data : %s'
     SIGNUP_SUCCESS = 'signup process finished successfully : %s'
 
-    #WISH LIST
+    # WISH LIST
     WISH_CHECK_IF_IN_LIST = 'checking if book is in wish list of user already : %s'
     WISH_ALREADY_EXISTS = 'book is already in wish list of user :%s'
     WISH_ADD = 'book added to users wish list : %s'
@@ -452,6 +437,7 @@ class LogMsg:
     PERMISSION_CHECK = 'checking permission of user : %s'
     PERMISSION_DENIED = 'user has no permission for action : %s'
     PERMISSION_VERIFIED = 'user has permission for vthe action : %s'
+    PREMIUM_PERMISSION_ADDITION_RESTRICTION = 'user with not premium permission cant assign premium permission to group : %s'
 
     # DISCUSSION_GROUP
     DISCUSSION_GROUP_ADD = 'discussion group added by data : %s'
@@ -492,8 +478,6 @@ class LogMsg:
     PAYMENT_STATUS = 'payment status is : %s'
     PAYMENT_INQUIRY_RESULT = 'payment inquiry result is : %s'
 
-
-
     # BOOK CONTENT
     CONTENT_EXIST = 'book content ba data exists : %s'
     DELETING_BOOK_CONTENT = 'deleteing contents of book by id : %s'
@@ -505,11 +489,10 @@ class LogMsg:
     CONTENT_NOT_GENERATED = 'content of book not generated yet : %s'
     CONTENT_NOT_FOUND = 'content not found for book : %s'
 
-    #DEVICE CODE
+    # DEVICE CODE
 
     MAXIMUM_ACTIVE_DEVICE = 'maximum device per user is already active : %s'
     USER_DEVICE_COUNT = 'number of users active devices is : %s'
-
 
     # BOOK PREPARE
     PREPARE_FULL_CONTENT = 'preparing full content for the owner of book: %s'
@@ -518,17 +501,13 @@ class LogMsg:
     ALREADY_PREPARED = 'book content already prepared: %s'
     CHECK_FILE_EXISTANCE = 'checking for the existance of content for preparation : %s'
 
-
     # REPORTS
     REPORT_BOOK_OF_WEEK = 'book of week report : %s'
     REPORT_BOOK_OF_MONTH = 'book of month report : %s'
     USER_PERFORMANCE_REPORT = 'user performance report data : %s'
 
-
-    #RID
+    # RID
     RID_OPERATION_FAILED = 'attaching request ID to request failed : %s'
-
-
 
     UPLOAD_FAILED = 'uploading files failed'
     FILE_EXISTS = 'this file exists by path : %s'
