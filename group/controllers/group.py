@@ -11,11 +11,13 @@ from messages import Message
 from repository.group_permission import \
     delete_all_permissions_of_group
 from repository.group_repo import check_group_title_exists
-from repository.group_user_repo import delete_group_users, user_is_in_group
+from repository.group_user_repo import delete_group_users, user_is_in_group, \
+    add_owner_to_group_users
 from repository.user_repo import check_user
+from user.controllers.user import get_by_person
 from ..constants import GROUP_EDIT_SCHEMA_PATH, GROUP_ADD_SCHEMA_PATH
 from infrastructure.schema_validator import schema_validate
-
+from user.controllers.person import get as get_person
 from ..models import Group
 
 save_path = os.environ.get('save_path')
@@ -26,25 +28,37 @@ def add(data, db_session, username):
 
     schema_validate(data, GROUP_ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
-    person_id = data.get('person_id')
+
+    person_id = data.get('person_id',None)
+    if person_id is not  None:
+        owner_person = get_person(person_id,db_session)
+        if owner_person is not None and not owner_person.is_legal:
+            logger.error(LogMsg.PERSON_IS_NOT_LEGAL,username)
+            raise Http_error(400,Message.PERSON_IS_NOT_LEGAL)
+        owner_user = get_by_person(person_id,db_session)
+        if owner_user is None:
+            logger.error(LogMsg.PERSON_MUST_HAVE_USER,person_id)
+            raise Http_error(404,Message.PERSON_MUST_HAVE_USER)
+
     user = check_user(username, db_session)
 
-    permissions, presses = get_user_permissions(username, db_session)
+    if username not in ADMINISTRATORS:
 
-    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_ADD_PREMIUM],
-                                   permissions)
-    if not permit:
-        press_permit = has_permission_or_not(
-            [Permissions.PERMISSION_GROUP_ADD_PRESS],
-            permissions)
-        if not (press_permit and (person_id == user.person_id)):
-            logger.error(LogMsg.PERMISSION_DENIED,
-                         {'PERMISSION_GROUP_ADD': username})
-            raise Http_error(403, Message.ACCESS_DENIED)
+        permissions, presses = get_user_permissions(username, db_session)
+        permit = has_permission_or_not([Permissions.PERMISSION_GROUP_ADD_PREMIUM],
+                                       permissions)
+        if not permit:
+            press_permit = has_permission_or_not(
+                [Permissions.PERMISSION_GROUP_ADD_PRESS],
+                permissions)
+            if not (press_permit and (person_id == user.person_id)):
+                logger.error(LogMsg.PERMISSION_DENIED,
+                             {'PERMISSION_GROUP_ADD': username})
+                raise Http_error(403, Message.ACCESS_DENIED)
 
-    if check_group_title_exists(data.get('title', None), db_session):
-        logger.error(LogMsg.GROUP_EXISTS)
-        raise Http_error(409, Message.ALREADY_EXISTS)
+        if check_group_title_exists(data.get('title', None), db_session):
+            logger.error(LogMsg.GROUP_EXISTS)
+            raise Http_error(409, Message.ALREADY_EXISTS)
 
     model_instance = Group()
     populate_basic_data(model_instance, username, data.get('tags'))
@@ -52,6 +66,8 @@ def add(data, db_session, username):
     model_instance.title = data.get('title')
     model_instance.person_id = data.get('person_id')
     db_session.add(model_instance)
+    db_session.flush()
+    add_owner_to_group_users(model_instance.id,owner_user.id,db_session,username)
 
     logger.info(LogMsg.END)
     return model_instance
@@ -69,7 +85,7 @@ def get(id, db_session, username=None):
             permissions)
         if not permit:
             press_permit = has_permission_or_not(
-                [Permissions.PERMISSION_GROUP_ADD_PRESS],
+                [Permissions.PERMISSION_GROUP_GET_PRESS],
                 permissions)
             if not (press_permit and (
             user_is_in_group(user.id, id, db_session))):
@@ -119,7 +135,19 @@ def edit(id, db_session, data, username):
                          {'PERMISSION_GROUP_ADD': username})
             raise Http_error(403, Message.ACCESS_DENIED)
 
+    person_id = data.get('person_id', None)
+    if person_id is not None:
+        owner_person = get_person(person_id, db_session)
+        if owner_person is not None and not owner_person.is_legal:
+            logger.error(LogMsg.PERSON_IS_NOT_LEGAL, username)
+            raise Http_error(400, Message.PERSON_IS_NOT_LEGAL)
+        owner_user = get_by_person(person_id, db_session)
+        if owner_user is None:
+            logger.error(LogMsg.PERSON_MUST_HAVE_USER, person_id)
+            raise Http_error(404, Message.PERSON_MUST_HAVE_USER)
+
     try:
+
         for key, value in data.items():
             setattr(model_instance, key, value)
         edit_basic_data(model_instance, username, data.get('tags'))

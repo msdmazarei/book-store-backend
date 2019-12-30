@@ -1,4 +1,7 @@
+from uuid import uuid4
+
 from group.models import GroupUser
+from helper import Now
 from repository.group_repo import validate_groups
 
 
@@ -42,3 +45,14 @@ def user_is_in_group(user_id, group_id, db_session):
     if result is None:
         return False
     return True
+
+def add_owner_to_group_users(group_id,user_id,db_session,username):
+    model_instance = GroupUser()
+    model_instance.id = uuid4()
+    model_instance.group_id = group_id
+    model_instance.user_id = user_id
+    model_instance.creation_date = Now()
+    model_instance.creator = username
+    model_instance.version =1
+    db_session.add(model_instance)
+    return model_instance

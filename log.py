@@ -316,6 +316,9 @@ class LogMsg:
     PERSON_DELETED = 'person by id : %s deleted successfully'
     PERSON_USERS_GOT = 'users of person : %s got successfully'
     ANOTHER_PERSON_BY_CELL = 'another person exists by this cell_no'
+    LEGAL_PERSON_USER_RESTRICTION = 'legal persons cannot have more than 1 user'
+    PERSON_IS_NOT_LEGAL = 'person is not legal :  %s'
+    PERSON_MUST_HAVE_USER = 'person must have user : %s'
 
     # UNIQUE CONSTRAINT
     GENERATE_UNIQUE_CONSTRAINT = 'generating unique constraint key for entity by data : %s'

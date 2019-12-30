@@ -47,6 +47,12 @@ def add(db_session, data, username):
         person_is_valid = validate_person(person_id, db_session)
         logger.debug(LogMsg.PERSON_EXISTS, {'person_id': person_id})
         if person_is_valid:
+            if person_is_valid.is_legal:
+               person_user =  get_by_person(person_id, db_session)
+               if person_user is not None:
+                   logger.error(LogMsg.LEGAL_PERSON_USER_RESTRICTION)
+                   raise Http_error(409,Message.LEGAL_PERSON_USER_RESTRICTION)
+
             model_instance.person_id = person_id
 
         else:
@@ -56,9 +62,13 @@ def add(db_session, data, username):
     db_session.add(model_instance)
 
     logger.debug(LogMsg.DB_ADD, model_to_dict(model_instance))
-
     logger.info(LogMsg.END)
+
     return model_instance
+
+
+def get_by_person(person_id,db_session):
+    return db_session.query(User).filter(User.person_id==person_id).first()
 
 
 def get(id, db_session, username):

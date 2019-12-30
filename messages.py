@@ -84,3 +84,6 @@ class Message:
     INVALID_DEVICE = 'invalid_device'
     RID_OPERATION_FAILED = 'RID_opration_failed'
     SCHEMA_NOT_VALID = 'schema_not_valid'
+    LEGAL_PERSON_USER_RESTRICTION = 'legal_user_restriction'
+    PERSON_IS_NOT_LEGAL = 'person_is_not_legal'
+    PERSON_MUST_HAVE_USER = 'person_must_have_user'
