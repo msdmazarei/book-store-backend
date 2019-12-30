@@ -37,6 +37,7 @@ def signup(data, db_session, *args, **kwargs):
 
     user_data = {k: v for k, v in data.items() if k in ['username', 'password']}
     person_data = {k: v for k, v in data.items() if k not in user_data.keys()}
+    del person_data['signup_token']
 
     logger.debug(LogMsg.PERSON_GENERATING,person_data)
     person = add_person(db_session, person_data, SIGNUP_USER)
