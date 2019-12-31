@@ -4,6 +4,8 @@ from sqlalchemy.orm import relationship
 from db_session import Base, PrimaryModel
 from sqlalchemy import Column, String, ForeignKey, UniqueConstraint
 
+from user.models import User
+
 
 class Group(Base,PrimaryModel):
 
@@ -20,5 +22,6 @@ class GroupUser(Base,PrimaryModel):
     UniqueConstraint(group_id,user_id)
 
     group = relationship(Group, primaryjoin=group_id == Group.id)
+    user = relationship(User,primaryjoin=user_id==User.id)
 
 

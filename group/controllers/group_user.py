@@ -14,6 +14,7 @@ from repository.group_repo import validate_groups, validate_group, \
 from repository.group_user_repo import users_of_groups
 from repository.person_repo import get_persons
 from repository.user_repo import validate_users, check_user, persons_by_user
+from user.controllers.user import user_to_dict
 from .group import add as add_group
 from ..models import GroupUser
 from ..constants import USER_ADD_SCHEMA_PATH, USER_GROUP_SCHEMA_PATH
@@ -408,7 +409,8 @@ def group_user_to_dict(model_instance):
     result = {
         'group_id': model_instance.group_id,
         'user_id': model_instance.user_id,
-        'group': model_to_dict(model_instance.group)
+        'group': model_to_dict(model_instance.group),
+        'user': user_to_dict(model_instance.user)
     }
     primary_data = model_basic_dict(model_instance)
     result.update(primary_data)

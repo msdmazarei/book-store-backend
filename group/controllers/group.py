@@ -264,3 +264,5 @@ def search_group(data, db_session, username=None):
 
     logger.info(LogMsg.END)
     return result
+
+
