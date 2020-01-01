@@ -1,4 +1,6 @@
 import os
+
+from check_permission import get_user_permissions, has_permission_or_not
 from configs import ADMINISTRATORS
 from enums import Permissions
 from helper import model_to_dict, Http_error, model_basic_dict, \
@@ -35,6 +37,24 @@ def add(data, db_session, username):
 
 def get(id, db_session, username=None):
     logger.info(LogMsg.START, username)
+    limited_permissions = False
+    if username is not None:
+        if username not in ADMINISTRATORS:
+            permissions, presses = get_user_permissions(username, db_session)
+
+            permit = has_permission_or_not(
+                [Permissions.PERMISSION_GET_PREMIUM],
+                permissions)
+            if not permit:
+                press_permit = has_permission_or_not(
+                    [Permissions.PERMISSION_GET_PRESS],
+                    permissions)
+
+                if not press_permit :
+                    logger.error(LogMsg.PERMISSION_DENIED,
+                                 {'PERMISSION_GET': username})
+                    raise Http_error(403, Message.ACCESS_DENIED)
+                limited_permissions = True
 
     logger.debug(LogMsg.MODEL_GETTING)
     model_instance = db_session.query(Permission).filter(
@@ -42,10 +62,16 @@ def get(id, db_session, username=None):
     if model_instance:
         logger.debug(LogMsg.GET_SUCCESS,
                      model_to_dict(model_instance))
+
     else:
         logger.debug(LogMsg.MODEL_GETTING_FAILED)
         raise Http_error(404, Message.NOT_FOUND)
-    logger.error(LogMsg.GET_FAILED, {"id": id})
+    if limited_permissions:
+        if 'PREMIUM' in model_instance.permission:
+            logger.error(LogMsg.PERMISSION_DENIED,
+                         {'premium_permission_id': id})
+            raise Http_error(403,Message.ACCESS_DENIED)
+
     logger.info(LogMsg.END)
 
     return model_instance
@@ -113,26 +139,76 @@ def delete(id, db_session, username):
 
 def get_all(db_session, username):
     logger.info(LogMsg.START, username)
+    limited_permissions = False
+
+    if username is not None:
+        if username not in ADMINISTRATORS:
+            permissions, presses = get_user_permissions(username, db_session)
+
+            permit = has_permission_or_not(
+                [Permissions.PERMISSION_GET_PREMIUM],
+                permissions)
+            if not permit:
+                press_permit = has_permission_or_not(
+                    [Permissions.PERMISSION_GET_PRESS],
+                    permissions)
+
+                if not press_permit :
+                    logger.error(LogMsg.PERMISSION_DENIED,
+                                 {'PERMISSION_GET_ALL': username})
+                    raise Http_error(403, Message.ACCESS_DENIED)
+                limited_permissions = True
+
     try:
         result = db_session.query(Permission).all()
         logger.debug(LogMsg.GET_SUCCESS)
     except:
         logger.error(LogMsg.GET_FAILED)
         raise Http_error(500, LogMsg.GET_FAILED)
+    final_res = []
+    if limited_permissions:
+        for model in result:
+            if not 'PREMIUM' in model.permission:
+                final_res.append(model)
+        return final_res
+
 
     logger.debug(LogMsg.END)
     return result
 
 
 def search_permission(data, db_session, username=None):
+    logger.info(LogMsg.START,username)
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
+    limited_permissions = True
+    if username is not None:
+        if username not in ADMINISTRATORS:
+            permissions, presses = get_user_permissions(username, db_session)
 
+            permit = has_permission_or_not(
+                [Permissions.PERMISSION_GET_PREMIUM],
+                permissions)
+            if not permit:
+                press_permit = has_permission_or_not(
+                    [Permissions.PERMISSION_GET_PRESS],
+                    permissions)
 
+                if not press_permit :
+                    logger.error(LogMsg.PERMISSION_DENIED,
+                                 {'PERMISSION_GET_ALL': username})
+                    raise Http_error(403, Message.ACCESS_DENIED)
+                limited_permissions = True
     result = []
     permissions = Permission.mongoquery(
             db_session.query(Permission)).query(
             **data).end().all()
+    if limited_permissions:
+        for model in permissions:
+            if not 'PREMIUM' in model.permission:
+                result.append(model_to_dict(model))
+        return result
+
     for permission in permissions:
         result.append(model_to_dict(permission))
     logger.debug(LogMsg.GET_SUCCESS, result)

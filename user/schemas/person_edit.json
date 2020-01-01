@@ -4,7 +4,14 @@
     "tags": {
       "type": "array",
       "items": {
-        "type": "string"
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     },
     "person_id": {
@@ -18,9 +25,16 @@
       "type": "string"
     },
     "email": {
-      "type": "string",
-      "format": "email"
-    },
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
     "last_name": {
       "type": "string"
     },
@@ -34,13 +48,27 @@
       "type": "string"
     },
     "image": {
-      "type": "string",
-      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-    },
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
     "current_book_id": {
-      "type": "string",
-      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-    },
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
     "is_legal": {
       "type": "boolean"
     }
