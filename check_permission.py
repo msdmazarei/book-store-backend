@@ -6,7 +6,7 @@ from log import logger, LogMsg
 from messages import Message
 from repository.group_permission import \
     get_permission_list_of_groups
-from permission.controllers.permission import get_permissions_values
+from repository.permission_repo import get_permissions_values
 from repository.group_user_repo import get_user_group_list
 from repository.user_repo import check_user
 from app_redis import app_redis
