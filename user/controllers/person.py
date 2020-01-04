@@ -54,7 +54,6 @@ def add(db_session, data, username):
         raise Http_error(409, Message.ALREADY_EXISTS)
 
     logger.debug(LogMsg.CHECK_UNIQUE_EXISTANCE, data)
-    unique_code = add_uniquecode(data, db_session)
 
     model_instance = Person()
     populate_basic_data(model_instance, username, data.get('tags'))
@@ -70,7 +69,9 @@ def add(db_session, data, username):
     model_instance.image = data.get('image')
     model_instance.is_legal = data.get('is_legal', False)
 
+    unique_code = add_uniquecode(model_instance, db_session)
     db_session.add(model_instance)
+
     db_session.flush()
     logger.debug(LogMsg.DB_ADD)
     add_initial_account(model_instance.id, db_session, username)
@@ -167,12 +168,12 @@ def edit(id, db_session, data, username):
         logger.debug(LogMsg.UNIQUE_CONSTRAINT_IS_CHANGING)
         unique_connector = get_connector(id, db_session)
         if unique_connector:
-            if persons_code(data) != unique_connector.UniqueCode:
+            if persons_code(model_instance) != unique_connector.UniqueCode:
                 logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)
                 delete_uniquecode(unique_connector.UniqueCode, db_session)
                 db_session.flush()
                 logger.debug(LogMsg.GENERATE_UNIQUE_CONSTRAINT, data)
-                code = add_uniquecode(data, db_session)
+                code = add_uniquecode(model_instance, db_session)
                 delete_connector(id, db_session)
                 add_connector(id, code.UniqueCode, db_session)
     except:

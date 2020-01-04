@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/check_permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/check_permission.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/schemas/kipo_pay.json" beforeDir="false" afterPath="$PROJECT_DIR$/payment/schemas/kipo_pay.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/permission/controllers/permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/permission/controllers/permission.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/user_repo.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/user_repo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/controllers/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/controllers/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/schemas/reset_pass.json" beforeDir="false" afterPath="$PROJECT_DIR$/user/schemas/reset_pass.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/schemas/user_edit.json" beforeDir="false" afterPath="$PROJECT_DIR$/user/schemas/user_edit.json" afterDir="false" />
-    </list>
+    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,11 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/accounts/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-54">
-              <caret line="17" column="30" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+            <state relative-caret-position="405">
+              <caret line="22" column="58" selection-start-line="20" selection-end-line="23" selection-end-column="66" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -47,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="142" column="12" lean-forward="true" selection-start-line="142" selection-start-column="12" selection-end-line="142" selection-end-column="12" />
+            <state relative-caret-position="140">
+              <caret line="168" column="16" lean-forward="true" selection-start-line="168" selection-start-column="16" selection-end-line="168" selection-end-column="16" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
                 <element signature="e#7460#9518#0" />
@@ -59,6 +49,15 @@
                 <element signature="e#10078#10768#0" />
                 <element signature="e#10825#11899#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/constraint_handler/controllers/person_constraint.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="567">
+              <caret line="30" column="22" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -161,7 +160,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/book_collections/constants.py" />
         <option value="$PROJECT_DIR$/book_collections/controller.py" />
         <option value="$PROJECT_DIR$/book_collections/schemas/book_to_collection.json" />
         <option value="$PROJECT_DIR$/book_library/controller.py" />
@@ -187,7 +185,6 @@
         <option value="$PROJECT_DIR$/book_library/schemas/add.json" />
         <option value="$PROJECT_DIR$/book_library/schemas/edit.json" />
         <option value="$PROJECT_DIR$/file_handler/schemas/upload_file.json" />
-        <option value="$PROJECT_DIR$/user/controllers/person.py" />
         <option value="$PROJECT_DIR$/permission/controllers/group_permission.py" />
         <option value="$PROJECT_DIR$/repository/group_permission.py" />
         <option value="$PROJECT_DIR$/group/urls.py" />
@@ -212,6 +209,8 @@
         <option value="$PROJECT_DIR$/user/controllers/user.py" />
         <option value="$PROJECT_DIR$/check_permission.py" />
         <option value="$PROJECT_DIR$/accounts/controller.py" />
+        <option value="$PROJECT_DIR$/constraint_handler/controllers/person_constraint.py" />
+        <option value="$PROJECT_DIR$/user/controllers/person.py" />
       </list>
     </option>
   </component>
@@ -502,9 +501,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.25822642" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.25822642" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5005574" side_tool="true" weight="0.18181819" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -515,7 +513,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998884" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" weight="0.49832776" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49916342" visible="true" weight="0.49832776" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5008366" side_tool="true" weight="0.522854" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.43366778" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -843,7 +841,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/user/controllers/person.py</url>
-          <line>298</line>
+          <line>299</line>
           <option name="timeStamp" value="304" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -930,18 +928,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/book_library/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1211">
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-            <element signature="e#2213#3216#0" />
-            <element signature="e#3261#3733#0" />
-            <element signature="e#3800#4168#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/book_library/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
@@ -1472,20 +1458,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="142" column="12" lean-forward="true" selection-start-line="142" selection-start-column="12" selection-end-line="142" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#7460#9518#0" />
-            <element signature="e#9560#10024#0" />
-            <element signature="e#10078#10768#0" />
-            <element signature="e#10825#11899#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/user/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -1498,10 +1470,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/accounts/controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-54">
-          <caret line="17" column="30" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+        <state relative-caret-position="405">
+          <caret line="22" column="58" selection-start-line="20" selection-end-line="23" selection-end-column="66" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/constraint_handler/controllers/person_constraint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="30" column="22" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="168" column="16" lean-forward="true" selection-start-line="168" selection-start-column="16" selection-end-line="168" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#7460#9518#0" />
+            <element signature="e#9560#10024#0" />
+            <element signature="e#10078#10768#0" />
+            <element signature="e#10825#11899#0" />
           </folding>
         </state>
       </provider>
