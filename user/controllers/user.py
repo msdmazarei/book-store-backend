@@ -24,7 +24,7 @@ from ..constants import USER_ADD_SCHEMA_PATH, RESET_PASS_SCHEMA_PATH, \
 
 def add(db_session, data, username):
     logger.info(LogMsg.START)
-    schema_validate(data,USER_ADD_SCHEMA_PATH)
+    schema_validate(data, USER_ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
     new_username = data.get('username')
 
@@ -48,10 +48,10 @@ def add(db_session, data, username):
         logger.debug(LogMsg.PERSON_EXISTS, {'person_id': person_id})
         if person_is_valid:
             if person_is_valid.is_legal:
-               person_user =  get_by_person(person_id, db_session)
-               if person_user is not None:
-                   logger.error(LogMsg.LEGAL_PERSON_USER_RESTRICTION)
-                   raise Http_error(409,Message.LEGAL_PERSON_USER_RESTRICTION)
+                person_user = get_by_person(person_id, db_session)
+                if person_user is not None:
+                    logger.error(LogMsg.LEGAL_PERSON_USER_RESTRICTION)
+                    raise Http_error(409, Message.LEGAL_PERSON_USER_RESTRICTION)
 
             model_instance.person_id = person_id
 
@@ -67,19 +67,17 @@ def add(db_session, data, username):
     return model_instance
 
 
-def get_by_person(person_id,db_session):
-    return db_session.query(User).filter(User.person_id==person_id).first()
+def get_by_person(person_id, db_session):
+    return db_session.query(User).filter(User.person_id == person_id).first()
 
 
 def get(id, db_session, username):
     logger.info(LogMsg.START, username)
 
-
     permissions, presses = get_user_permissions(username, db_session)
 
-    has_permission([Permissions.USER_GET_PREMIUM,Permissions.USER_GET_PRESS],
-                                   permissions)
-
+    has_permission([Permissions.USER_GET_PREMIUM, Permissions.USER_GET_PRESS],
+                   permissions)
 
     logger.debug(LogMsg.MODEL_GETTING, {'user_id': id})
     model_instance = db_session.query(User).filter(User.id == id).first()
@@ -104,8 +102,8 @@ def get_profile(username, db_session):
 
     if model_instance:
         profile = dict(get_person_profile(model_instance.person_id, db_session,
-                                     username))
-        permissions,groups = get_user_permissions(username, db_session)
+                                          username))
+        permissions, groups = get_user_permissions(username, db_session)
         logger.debug(LogMsg.GET_SUCCESS, profile)
 
     else:
@@ -128,8 +126,8 @@ def delete(id, db_session, username):
     logger.info(LogMsg.START, username)
     user = db_session.query(User).filter(User.id == id).first()
     if user is None:
-        logger.error(LogMsg.NOT_FOUND,{'user_id':id})
-        raise Http_error(404,Message.NOT_FOUND)
+        logger.error(LogMsg.NOT_FOUND, {'user_id': id})
+        raise Http_error(404, Message.NOT_FOUND)
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if user.username == username:
@@ -161,7 +159,7 @@ def get_all(db_session, username):
 
     permissions, presses = get_user_permissions(username, db_session)
 
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     # per_data = {}
     # if user.person_id in presses:
     #     per_data.update({Permissions.IS_OWNER.value:True})
@@ -192,9 +190,9 @@ def serach_user(data, db_session, username):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-    result =  User.mongoquery(
-            db_session.query(User)).query(
-            **data).end().all()
+    result = User.mongoquery(
+        db_session.query(User)).query(
+        **data).end().all()
     final_res = []
     for item in result:
         final_res.append(user_to_dict(item))
@@ -207,8 +205,15 @@ def serach_user(data, db_session, username):
 
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
-    schema_validate(data,USER_EDIT_SCHEMA_PATH)
+    schema_validate(data, USER_EDIT_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
+
+    old_pass = data.get('old_password', None)
+    if old_pass is not None:
+        user = check_user(username, db_session)
+        if user.password != old_pass:
+            logger.error(LogMsg.INVALID_USER, {'old_password': 'not correct'})
+            raise Http_error(403, Message.INVALID_USER)
 
     logger.debug(LogMsg.EDIT_REQUST, {'user_id': id, 'data': data})
 
@@ -223,16 +228,17 @@ def edit(id, db_session, data, username):
     permissions, presses = get_user_permissions(username, db_session)
     if model_instance.username == username:
         password = data.get('old_password')
-        if model_instance.password!=password:
-            logger.error(LogMsg.INVALID_USER,{'password':'incorrect password'})
-            raise Http_error(403,Message.INVALID_PASSWORD)
+        if model_instance.password != password:
+            logger.error(LogMsg.INVALID_USER,
+                         {'password': 'incorrect password'})
+            raise Http_error(403, Message.INVALID_PASSWORD)
         per_data.update({Permissions.IS_OWNER.value: True})
     has_permission([Permissions.USER_EDIT_PREMIUM],
                    permissions, None, per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     if not has_permission_or_not([Permissions.USER_EDIT_PREMIUM],
-                   permissions):
+                                 permissions):
         if "person_id" in data:
             del data["person_id"]
     # if "person_id" in data:
@@ -324,7 +330,7 @@ def edit_profile(id, db_session, data, username):
 
 def reset_pass(data, db_session):
     logger.info(LogMsg.START, data)
-    schema_validate(data,RESET_PASS_SCHEMA_PATH)
+    schema_validate(data, RESET_PASS_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     cell_no = data.get('cell_no')
@@ -354,7 +360,7 @@ def reset_pass(data, db_session):
 
 
 def head_profile(username, db_session):
-    logger.info(LogMsg.START,username)
+    logger.info(LogMsg.START, username)
     profile = get_profile(username, db_session)
     profile_str = json.dumps(dict(profile)).encode()
     result_hash = hashlib.md5(profile_str).hexdigest()

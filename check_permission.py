@@ -1,5 +1,7 @@
 import json
 
+from books.models import Book
+from configs import ADMINISTRATORS
 from enums import Permissions
 from helper import Http_error, value
 from log import logger, LogMsg
@@ -16,7 +18,8 @@ permission_list_expiration_time = value('permission_list_expiration_time', 60)
 
 def has_permission(func_permissions, user_permission_list, model_instance=None,
                    data=None):
-    if any(permission.value in user_permission_list for permission in func_permissions):
+    if any(permission.value in user_permission_list for permission in
+           func_permissions):
 
         return True
     elif data is not None and data.get(Permissions.IS_OWNER.value,
@@ -27,8 +30,9 @@ def has_permission(func_permissions, user_permission_list, model_instance=None,
     raise Http_error(403, Message.ACCESS_DENIED)
 
 
-def has_permission_or_not(func_permissions, user_permission_list, model_instance=None,
-                   data=None):
+def has_permission_or_not(func_permissions, user_permission_list,
+                          model_instance=None,
+                          data=None):
     if any(permission.value in user_permission_list for permission in
            func_permissions):
         return True
@@ -49,17 +53,54 @@ def get_user_permissions(username, db_session):
     redis_key = 'PERMISSIONS_{}'.format(user.id)
     permission_list = app_redis.get(redis_key)
     if permission_list is not None:
-        data =  json.loads(permission_list.decode("utf-8"))
-        return data.get('permission_values',None),data.get('presses',None)
+        data = json.loads(permission_list.decode("utf-8"))
+        return data.get('permission_values', None), data.get('presses', None)
 
     group_list = get_user_group_list(user.id, db_session)
     if not bool(group_list):
-        return [],[]
+        return [], []
     permissions = get_permission_list_of_groups(group_list.keys(), db_session)
     permission_values = get_permissions_values(permissions, db_session)
 
-    app_redis.set(redis_key, json.dumps({'permission_values':permission_values,'presses':list(group_list.values())}),
+    app_redis.set(redis_key, json.dumps({'permission_values': permission_values,
+                                         'presses': list(group_list.values())}),
                   ex=permission_list_expiration_time)
 
+    return permission_values, list(group_list.values())
 
-    return permission_values,group_list.values()
+
+def validate_permissions_and_access(username, db_session, requirements,
+                                    special_data=None, model=None):
+    access_type = 'ADMIN'
+    premium_requirements = requirements.get('premium', None)
+    press_requirements = requirements.get('press', None)
+
+    if username is not None:
+        if username not in ADMINISTRATORS:
+            access_type = 'PREMIUM'
+            permissions, presses = get_user_permissions(username, db_session)
+
+            if model is not None:
+                if model.creator == username:
+                    special_data['ownership'] = {
+                        Permissions.IS_OWNER.value: True}
+                # if isinstance(model, Book):
+                #     group_person = model.press
+                #     if group_person in presses:
+                #         press_permissions = get_permission_list_of_groups(
+                #             [group_person], db_session)
+                #
+
+            permit = has_permission_or_not(premium_requirements, permissions,
+                                           None,
+                                           special_data.get('ownership', None))
+            if not permit:
+                press_permit = has_permission_or_not(press_requirements,
+                                                     permissions)
+                access_type = 'Press'
+
+                if not press_permit:
+                    logger.error(LogMsg.PERMISSION_DENIED,
+                                 {'PERMISSION': requirements,'username':username})
+                    raise Http_error(403, Message.ACCESS_DENIED)
+    return {'access_type':access_type}

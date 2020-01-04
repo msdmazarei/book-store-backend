@@ -181,7 +181,7 @@ def search_permission(data, db_session, username=None):
     logger.info(LogMsg.START,username)
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
-    limited_permissions = True
+    limited_permissions = False
     if username is not None:
         if username not in ADMINISTRATORS:
             permissions, presses = get_user_permissions(username, db_session)
@@ -255,13 +255,17 @@ def permission_list(db_session, query_term=None):
     return final_res
 
 def permissions_to_db(db_session,username):
+    logger.info(LogMsg.START,username)
+    if username not in ADMINISTRATORS:
+        logger.error(LogMsg.PERMISSION_DENIED,{'username':username})
+        raise Http_error(403,Message.ACCESS_DENIED)
+
     permissions = Permissions.__members__
     print(permissions)
     result = []
     for permission in permissions:
-        if check_permission_exists(permission, db_session):
-            pass
-        else:
+        if not check_permission_exists(permission, db_session):
+
             model_instance = Permission()
             populate_basic_data(model_instance, username)
             logger.debug(LogMsg.POPULATING_BASIC_DATA)

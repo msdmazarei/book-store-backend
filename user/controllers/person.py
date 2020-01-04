@@ -20,7 +20,7 @@ from repository.person_repo import person_cell_exists, person_mail_exists
 from books.controllers.book import get_current_book
 from configs import SIGNUP_USER, ADMINISTRATORS
 from constraint_handler.controllers.person_constraint import \
-    add as add_uniquecode
+    add as add_uniquecode, persons_code
 from constraint_handler.controllers.unique_entity_connector import \
     get_by_entity as get_connector, add as add_connector, \
     delete as delete_connector
@@ -167,13 +167,14 @@ def edit(id, db_session, data, username):
         logger.debug(LogMsg.UNIQUE_CONSTRAINT_IS_CHANGING)
         unique_connector = get_connector(id, db_session)
         if unique_connector:
-            logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)
-            delete_uniquecode(unique_connector.UniqueCode, db_session)
-            logger.debug(LogMsg.GENERATE_UNIQUE_CONSTRAINT, data)
-            db_session.flush()
-            code = add_uniquecode(data, db_session)
-            delete_connector(id, db_session)
-            add_connector(id, code.UniqueCode, db_session)
+            if persons_code(data) != unique_connector.UniqueCode:
+                logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)
+                delete_uniquecode(unique_connector.UniqueCode, db_session)
+                db_session.flush()
+                logger.debug(LogMsg.GENERATE_UNIQUE_CONSTRAINT, data)
+                code = add_uniquecode(data, db_session)
+                delete_connector(id, db_session)
+                add_connector(id, code.UniqueCode, db_session)
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
         raise Http_error(403, Message.DELETE_FAILED)

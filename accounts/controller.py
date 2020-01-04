@@ -9,9 +9,9 @@ from log import LogMsg
 from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
-from configs import ADMINISTRATORS
 from log import logger
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from .constants import ADD_SCHEMA_PATH,EDIT_SCHEMA_PATH
 
 
@@ -19,9 +19,11 @@ def add(data, db_session, username):
     logger.debug(LogMsg.START, username)
     schema_validate(data, ADD_SCHEMA_PATH)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_ADD_PREMIUM], permissions)
+    requirements = {'premium':[Permissions.ACCOUNT_ADD_PREMIUM]}
+    validate_permissions_and_access(username, db_session, requirements,
+                                    special_data=None, model=None)
     logger.debug(LogMsg.SCHEMA_CHECKED)
+
     check_enum(data.get('type'), AccountTypes)
     logger.debug(LogMsg.ENUM_CHECK,
                  {'enum': data.get('type'), 'reference_enum': 'AccountTypes'})

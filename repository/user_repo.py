@@ -17,10 +17,12 @@ def check_by_cell_no(cell_no,db_session):
 
     return user
 
+
 def check_by_username(username,db_session):
     user = db_session.query(User).filter(User.username == username).first()
 
     return user
+
 
 def check_by_id(id,db_session):
     user = db_session.query(User).filter(User.id == id).first()

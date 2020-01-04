@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="" />
+    <list default="true" id="bd924ac9-a533-48d8-a0ae-18ca14e17889" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/check_permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/check_permission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/schemas/kipo_pay.json" beforeDir="false" afterPath="$PROJECT_DIR$/payment/schemas/kipo_pay.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/permission/controllers/permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/permission/controllers/permission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/user_repo.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/user_repo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/controllers/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/controllers/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/schemas/reset_pass.json" beforeDir="false" afterPath="$PROJECT_DIR$/user/schemas/reset_pass.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/schemas/user_edit.json" beforeDir="false" afterPath="$PROJECT_DIR$/user/schemas/user_edit.json" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,140 +24,53 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/permission/controllers/permission.py">
+        <entry file="file://$PROJECT_DIR$/check_permission.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="236" selection-start-line="236" selection-end-line="244" />
+            <state relative-caret-position="216">
+              <caret line="74" column="52" selection-start-line="74" selection-start-column="45" selection-end-line="74" selection-end-column="52" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/repository/permission_repo.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/check_permission.py">
+        <entry file="file://$PROJECT_DIR$/accounts/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="8" column="54" lean-forward="true" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/user/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="-54">
+              <caret line="17" column="30" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
               <folding>
-                <element signature="e#0#142#0" expanded="true" />
+                <element signature="e#0#27#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
+        <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="5" column="49" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="49" />
+              <caret line="142" column="12" lean-forward="true" selection-start-line="142" selection-start-column="12" selection-end-line="142" selection-end-column="12" />
               <folding>
-                <element signature="e#919#2437#0" />
-                <element signature="e#1196#1296#0" />
-                <element signature="e#1636#2282#0" />
-                <element signature="e#1802#2139#0" />
-                <element signature="e#1846#2089#0" />
-                <element signature="e#1960#2089#0" />
-                <element signature="e#2167#2282#0" />
-                <element signature="e#2485#2556#0" />
-                <element signature="e#2598#3245#0" />
-                <element signature="e#2996#3082#0" />
-                <element signature="e#3101#3197#0" />
-                <element signature="e#3291#4184#0" />
-                <element signature="e#3523#3764#0" />
-                <element signature="e#3784#3892#0" />
-                <element signature="e#4229#5221#0" />
-                <element signature="e#4358#4451#0" />
-                <element signature="e#4799#5051#0" />
-                <element signature="e#5073#5178#0" />
-                <element signature="e#5263#5978#0" />
-                <element signature="e#5549#5564#0" />
-                <element signature="e#6030#6635#0" />
-                <element signature="e#6684#8496#0" />
-                <element signature="e#7028#7124#0" />
-                <element signature="e#7266#7546#0" />
-                <element signature="e#7360#7486#0" />
-                <element signature="e#7800#7857#0" />
-                <element signature="e#7862#7887#0" />
-                <element signature="e#8201#8287#0" />
-                <element signature="e#9098#10759#0" />
-                <element signature="e#9308#9416#0" />
-                <element signature="e#9524#10506#0" />
-                <element signature="e#9615#10355#0" />
-                <element signature="e#10242#10355#0" />
-                <element signature="e#10383#10506#0" />
-                <element signature="e#10526#10622#0" />
-                <element signature="e#10800#11667#0" />
-                <element signature="e#11059#11157#0" />
-                <element signature="e#11252#11345#0" />
-                <element signature="e#11418#11577#0" />
-                <element signature="e#11714#12059#0" />
+                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#7460#9518#0" />
+                <element signature="e#9560#10024#0" />
+                <element signature="e#10078#10768#0" />
+                <element signature="e#10825#11899#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/order/controllers/checkout_order.py">
+        <entry file="file://$PROJECT_DIR$/user/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="294">
+              <caret line="17" column="19" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="19" />
               <folding>
-                <element signature="e#0#56#0" expanded="true" />
+                <element signature="e#0#58#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/order/schemas/checkout.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="9" column="18" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/books/schemas/book_add.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="15" column="6" lean-forward="true" selection-start-line="3" selection-start-column="12" selection-end-line="15" selection-end-column="6" />
-              <folding>
-                <element signature="n#!!block;n#pub_year#0;n#!!block;n#properties#0;n#!!top" />
-                <element signature="n#!!block;n#language#0;n#!!block;n#properties#0;n#!!top" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/user/schemas/person_edit.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1039">
-              <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/enums.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4617">
-              <caret line="173" column="48" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -238,8 +161,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/book_collections/schemas/rename.json" />
-        <option value="$PROJECT_DIR$/book_collections/schemas/collection.json" />
         <option value="$PROJECT_DIR$/book_collections/constants.py" />
         <option value="$PROJECT_DIR$/book_collections/controller.py" />
         <option value="$PROJECT_DIR$/book_collections/schemas/book_to_collection.json" />
@@ -256,8 +177,6 @@
         <option value="$PROJECT_DIR$/sign_up/constants.py" />
         <option value="$PROJECT_DIR$/send_message/schemas/send_message.json" />
         <option value="$PROJECT_DIR$/user/schemas/user_add.json" />
-        <option value="$PROJECT_DIR$/user/schemas/user_edit.json" />
-        <option value="$PROJECT_DIR$/user/schemas/reset_pass.json" />
         <option value="$PROJECT_DIR$/user/constants.py" />
         <option value="$PROJECT_DIR$/user/schemas/person_add.json" />
         <option value="$PROJECT_DIR$/wish_list/schemas/add.json" />
@@ -270,13 +189,10 @@
         <option value="$PROJECT_DIR$/file_handler/schemas/upload_file.json" />
         <option value="$PROJECT_DIR$/user/controllers/person.py" />
         <option value="$PROJECT_DIR$/permission/controllers/group_permission.py" />
-        <option value="$PROJECT_DIR$/repository/user_repo.py" />
-        <option value="$PROJECT_DIR$/check_permission.py" />
         <option value="$PROJECT_DIR$/repository/group_permission.py" />
         <option value="$PROJECT_DIR$/group/urls.py" />
         <option value="$PROJECT_DIR$/sign_up/schemas/sign_up.json" />
         <option value="$PROJECT_DIR$/sign_up/fast_signup.py" />
-        <option value="$PROJECT_DIR$/user/controllers/user.py" />
         <option value="$PROJECT_DIR$/repository/group_user_repo.py" />
         <option value="$PROJECT_DIR$/messages.py" />
         <option value="$PROJECT_DIR$/log.py" />
@@ -285,10 +201,17 @@
         <option value="$PROJECT_DIR$/group/controllers/group.py" />
         <option value="$PROJECT_DIR$/group/controllers/group_user.py" />
         <option value="$PROJECT_DIR$/enums.py" />
-        <option value="$PROJECT_DIR$/permission/controllers/permission.py" />
-        <option value="$PROJECT_DIR$/books/schemas/book_add.json" />
         <option value="$PROJECT_DIR$/user/schemas/person_edit.json" />
         <option value="$PROJECT_DIR$/repository/permission_repo.py" />
+        <option value="$PROJECT_DIR$/books/schemas/book_add.json" />
+        <option value="$PROJECT_DIR$/permission/controllers/permission.py" />
+        <option value="$PROJECT_DIR$/payment/schemas/kipo_pay.json" />
+        <option value="$PROJECT_DIR$/user/schemas/reset_pass.json" />
+        <option value="$PROJECT_DIR$/user/schemas/user_edit.json" />
+        <option value="$PROJECT_DIR$/repository/user_repo.py" />
+        <option value="$PROJECT_DIR$/user/controllers/user.py" />
+        <option value="$PROJECT_DIR$/check_permission.py" />
+        <option value="$PROJECT_DIR$/accounts/controller.py" />
       </list>
     </option>
   </component>
@@ -316,13 +239,7 @@
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="books" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="books" type="462c0819:PsiDirectoryNode" />
-              <item name="schemas" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
@@ -338,35 +255,30 @@
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="order" type="462c0819:PsiDirectoryNode" />
+              <item name="payment" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="order" type="462c0819:PsiDirectoryNode" />
+              <item name="payment" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="order" type="462c0819:PsiDirectoryNode" />
+              <item name="payment" type="462c0819:PsiDirectoryNode" />
               <item name="schemas" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="permission" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="permission" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="repository" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
@@ -383,12 +295,6 @@
               <item name="online_library" type="462c0819:PsiDirectoryNode" />
               <item name="user" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="online_library" type="462c0819:PsiDirectoryNode" />
-              <item name="user" type="462c0819:PsiDirectoryNode" />
-              <item name="schemas" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -596,13 +502,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.25432235" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944258" visible="true" weight="0.25822642" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5005574" side_tool="true" weight="0.18181819" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32998884" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.44927537" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.44927537" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.483835" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -753,16 +660,6 @@
           <url>file://$PROJECT_DIR$/repository/library_repo.py</url>
           <line>8</line>
           <option name="timeStamp" value="98" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/accounts/controller.py</url>
-          <line>28</line>
-          <option name="timeStamp" value="101" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/accounts/controller.py</url>
-          <line>18</line>
-          <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/book_collections/controller.py</url>
@@ -951,7 +848,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/user/controllers/user.py</url>
-          <line>105</line>
+          <line>103</line>
           <option name="timeStamp" value="305" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1033,83 +930,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/user/schemas/reset_pass.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user/schemas/user_edit.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="13" column="16" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user/constants.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="7" column="64" selection-start-line="7" selection-start-column="64" selection-end-line="7" selection-end-column="64" />
-          <caret line="8" column="65" selection-start-line="8" selection-start-column="65" selection-end-line="8" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wish_list/schemas/add.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="26" />
-          <folding>
-            <element signature="n#!!block;n#tags#0;n#!!block;n#properties#0;n#!!top" />
-            <element signature="n#!!block;n#tags#1;n#!!block;n#properties#0;n#!!top" />
-            <element signature="n#!!block;n#person_id#0;n#!!block;n#properties#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wish_list/constants.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wish_list/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-715">
-          <caret line="118" column="17" lean-forward="true" selection-start-line="118" selection-start-column="17" selection-end-line="118" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#406#1807#0" />
-            <element signature="e#1861#2869#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requirements">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app_configs.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user/schemas/person_add.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="564">
-          <caret line="43" column="15" selection-start-line="43" selection-start-column="15" selection-end-line="43" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/book_library/controller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1211">
@@ -1156,16 +976,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8397">
-          <caret line="311" column="37" lean-forward="true" selection-start-line="311" selection-start-column="37" selection-end-line="311" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/file_handler/schemas/delete_files.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1182,21 +992,6 @@
           <caret line="690" column="25" selection-start-line="690" selection-start-column="25" selection-end-line="690" selection-end-column="25" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/repository/user_repo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
-          <caret line="42" column="41" lean-forward="true" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="41" />
-          <folding>
-            <element signature="e#173#244#0" />
-            <element signature="e#292#597#0" />
-            <element signature="e#388#580#0" />
-            <element signature="e#647#735#0" />
-            <element signature="e#773#849#0" />
-            <element signature="e#1169#1206#0" />
           </folding>
         </state>
       </provider>
@@ -1249,13 +1044,6 @@
           <folding>
             <element signature="e#0#67#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/repository/group_permission.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
         </state>
       </provider>
     </entry>
@@ -1317,16 +1105,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/repository/group_user_repo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="770">
-          <caret line="57" column="25" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/repository/group_repo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
@@ -1340,16 +1118,6 @@
           <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="17" column="19" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1436,13 +1204,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/enums.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4617">
-          <caret line="173" column="48" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/order/controllers/checkout_order.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1461,19 +1222,57 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/books/schemas/book_add.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="15" column="6" lean-forward="true" selection-start-line="3" selection-start-column="12" selection-end-line="15" selection-end-column="6" />
+        <state relative-caret-position="243">
+          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
           <folding>
-            <element signature="n#!!block;n#pub_year#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#52#132#0" />
+            <element signature="n#!!block;n#items#0;n#!!block;n#tags#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#111#314#0" />
+            <element signature="e#123#252#0" />
+            <element signature="e#264#304#0" />
+            <element signature="e#147#258#0" />
+            <element signature="e#273#303#0" />
+            <element signature="e#318#348#0" />
+            <element signature="n#!!block;n#edition#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="n#!!block;n#types#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="n#!!block;n#items#0;n#!!block;n#types#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#626#742#0" />
+            <element signature="e#638#680#0" />
+            <element signature="e#692#732#0" />
+            <element signature="n#!!block;n#genre#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="n#!!block;n#items#0;n#!!block;n#genre#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#829#945#0" />
+            <element signature="e#841#883#0" />
+            <element signature="e#895#935#0" />
+            <element signature="n#!!block;n#files#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#688#918#0" />
+            <element signature="e#707#910#0" />
+            <element signature="e#719#848#0" />
+            <element signature="e#860#900#0" />
+            <element signature="n#!!block;n#images#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#974#1204#0" />
+            <element signature="e#993#1196#0" />
+            <element signature="e#1005#1134#0" />
+            <element signature="e#1146#1186#0" />
             <element signature="n#!!block;n#language#0;n#!!block;n#properties#0;n#!!top" />
+            <element signature="e#1274#1308#0" />
+            <element signature="e#1331#1365#0" />
+            <element signature="e#1382#1416#0" />
+            <element signature="e#1436#1470#0" />
+            <element signature="e#1486#1520#0" />
+            <element signature="e#1537#1571#0" />
+            <element signature="e#1594#1628#0" />
+            <element signature="e#1645#2272#0" />
+            <element signature="e#1689#2264#0" />
+            <element signature="e#1743#2176#0" />
+            <element signature="e#1765#1811#0" />
+            <element signature="e#1835#2164#0" />
+            <element signature="e#1897#2084#0" />
+            <element signature="e#1921#2068#0" />
+            <element signature="e#2112#2150#0" />
+            <element signature="e#2200#2254#0" />
+            <element signature="e#2296#2347#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user/schemas/person_edit.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1039">
-          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -1486,11 +1285,74 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/user/schemas/person_edit.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="67" column="26" selection-start-line="67" selection-start-column="26" selection-end-line="67" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/permission_repo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment/controllers/kipo_pay.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2353">
+          <caret line="92" column="11" selection-start-line="92" selection-start-column="11" selection-end-line="92" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#1086#3183#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment/controllers/payment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-769">
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment/schemas/kipo_pay.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="20" column="17" lean-forward="true" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/user_repo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="32" column="9" lean-forward="true" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+          <folding>
+            <element signature="e#173#244#0" />
+            <element signature="e#292#597#0" />
+            <element signature="e#388#580#0" />
+            <element signature="e#647#735#0" />
+            <element signature="e#773#849#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/user/controllers/user.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="5" column="49" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="49" />
+        <state relative-caret-position="305">
+          <caret line="210" column="37" selection-start-line="210" selection-start-column="25" selection-end-line="210" selection-end-column="37" />
           <folding>
+            <element signature="e#0#14#0" expanded="true" />
             <element signature="e#919#2437#0" />
             <element signature="e#1196#1296#0" />
             <element signature="e#1636#2282#0" />
@@ -1512,13 +1374,9 @@
             <element signature="e#5263#5978#0" />
             <element signature="e#5549#5564#0" />
             <element signature="e#6030#6635#0" />
-            <element signature="e#6684#8496#0" />
-            <element signature="e#7028#7124#0" />
             <element signature="e#7266#7546#0" />
             <element signature="e#7360#7486#0" />
             <element signature="e#7800#7857#0" />
-            <element signature="e#7862#7887#0" />
-            <element signature="e#8201#8287#0" />
             <element signature="e#9098#10759#0" />
             <element signature="e#9308#9416#0" />
             <element signature="e#9524#10506#0" />
@@ -1535,25 +1393,118 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/check_permission.py">
+    <entry file="file://$PROJECT_DIR$/user/schemas/user_edit.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="8" column="54" lean-forward="true" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="68" />
+        <state relative-caret-position="243">
+          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/schemas/reset_pass.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/group_user_repo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="584">
+          <caret line="26" column="17" lean-forward="true" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reports/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="635">
+          <caret line="32" column="42" selection-start-line="32" selection-start-column="42" selection-end-line="32" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reports/controllers/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="284">
+          <caret line="147" column="10" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#2484#3050#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/group_permission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/permission/controllers/permission.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="236" selection-start-line="236" selection-end-line="244" />
+        <state relative-caret-position="608">
+          <caret line="200" column="32" selection-start-line="200" selection-start-column="32" selection-end-line="200" selection-end-column="32" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/repository/permission_repo.py">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/enums.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1552">
+          <caret line="78" column="14" lean-forward="true" selection-start-line="78" selection-start-column="14" selection-end-line="78" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/check_permission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="74" column="52" selection-start-line="74" selection-start-column="45" selection-end-line="74" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/controllers/person.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="142" column="12" lean-forward="true" selection-start-line="142" selection-start-column="12" selection-end-line="142" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#7460#9518#0" />
+            <element signature="e#9560#10024#0" />
+            <element signature="e#10078#10768#0" />
+            <element signature="e#10825#11899#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="17" column="19" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-54">
+          <caret line="17" column="30" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
