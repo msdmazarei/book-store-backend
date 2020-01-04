@@ -213,7 +213,7 @@ def edit(id, db_session, data, username):
         user = check_user(username, db_session)
         if user.password != old_pass:
             logger.error(LogMsg.INVALID_USER, {'old_password': 'not correct'})
-            raise Http_error(403, Message.INVALID_USER)
+            raise Http_error(403, Message.INVALID_PASSWORD)
 
     logger.debug(LogMsg.EDIT_REQUST, {'user_id': id, 'data': data})
 

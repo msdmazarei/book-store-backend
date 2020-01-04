@@ -178,7 +178,7 @@ def edit(id, db_session, data, username):
                 add_connector(id, code.UniqueCode, db_session)
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
-        raise Http_error(403, Message.DELETE_FAILED)
+        raise Http_error(500, Message.DELETE_FAILED)
 
     logger.info(LogMsg.END)
     return model_instance
