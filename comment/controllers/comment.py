@@ -1,7 +1,7 @@
 from book_rate.controller import get_users_rate
 from books.controllers.book import get as get_book
 from check_permission import get_user_permissions, has_permission, \
-    has_permission_or_not
+    has_permission_or_not, validate_permissions_and_access
 from comment.controllers.actions import get_comment_like_count, \
     get_comment_reports, liked_by_user, reported_by_user
 from comment.models import Comment
@@ -15,12 +15,13 @@ from repository.comment_repo import delete_book_comments, get_comment
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
 from repository.action_repo import delete_comment_actions_internal
-from ..constants import COMMENT_ADD_SCHEMA_PATH,COMMENT_EDIT_SCHEMA_PATH
+from ..constants import COMMENT_ADD_SCHEMA_PATH, COMMENT_EDIT_SCHEMA_PATH
+
 
 def add(db_session, data, username):
-    logger.info(LogMsg.START,username)
+    logger.info(LogMsg.START, username)
 
-    schema_validate(data,COMMENT_ADD_SCHEMA_PATH)
+    schema_validate(data, COMMENT_ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     book_id = data.get('book_id')
@@ -110,18 +111,11 @@ def delete(id, db_session, username, **kwargs):
         logger.error(LogMsg.USER_HAS_NO_PERSON, username)
         raise Http_error(400, Message.Invalid_persons)
 
-    permission_data = {}
-    if model_instance.person_id == user.person_id:
-        permission_data.update({Permissions.IS_OWNER.value: True
-                                })
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    has_permission(
-        [Permissions.COMMENT_DELETE_PREMIUM],
-        permissions, None, permission_data)
-
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'COMMENT_DELETE',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     try:
         logger.debug(LogMsg.COMMENT_DELETE_ACTIONS, id)
@@ -142,24 +136,33 @@ def delete_comments(book_id, db_session, username, **kwargs):
 
     logger.debug(LogMsg.COMMENT_DELETING_BOOK_COMMENTS, book_id)
 
-    book = get_book(book_id,db_session)
-    press = book.get('press',None)
+    book = get_book(book_id, db_session)
+    if book is None:
+        logger.error(LogMsg.NOT_FOUND,{'book_id':book_id})
+        raise Http_error(404,Message.NOT_FOUND)
 
-    permissions, presses = get_user_permissions(username, db_session)
+    press = book.get('press', None)
 
-    has_permit = has_permission_or_not(
-        [Permissions.COMMENT_DELETE_PREMIUM],
-        permissions)
-    if not has_permit:
-        if press in presses:
-            has_permission(
-                [Permissions.COMMENT_DELETE_PRESS],
-                permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED,username)
-            raise Http_error(403,Message.ACCESS_DENIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'COMMENT_DELETE',
+                                    model=book)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    # permissions, presses = get_user_permissions(username, db_session)
+    #
+    # has_permit = has_permission_or_not(
+    #     [Permissions.COMMENT_DELETE_PREMIUM],
+    #     permissions)
+    # if not has_permit:
+    #     if press in presses:
+    #         has_permission(
+    #             [Permissions.COMMENT_DELETE_PRESS],
+    #             permissions)
+    #     else:
+    #         logger.error(LogMsg.PERMISSION_DENIED, username)
+    #         raise Http_error(403, Message.ACCESS_DENIED)
+    #
+    # logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     delete_book_comments(book_id, db_session)
 
@@ -174,21 +177,14 @@ def get_book_comments(book_id, data, db_session, username, **kwargs):
         data['sort'] = ['creation_date-']
 
     if data.get('filter') is None:
-        data.update({'filter':{'book_id':book_id}})
+        data.update({'filter': {'book_id': book_id}})
     else:
-        data['filter'].update({'person_id':book_id})
-
-    # permissions, presses = get_user_permissions(username, db_session)
-    #
-    # has_permission(
-    #     [Permissions.COMMENT_GET_PREMIUM,Permissions.COMMENT_GET],
-    #     permissions)
-    #
-    # logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+        data['filter'].update({'book_id': book_id})
 
     try:
         logger.debug(LogMsg.COMMENT_GETTING_BOOK_COMMENTS, book_id)
-        res =  Comment.mongoquery(db_session.query(Comment)).query(**data).end().all()
+        res = Comment.mongoquery(db_session.query(Comment)).query(
+            **data).end().all()
         result = []
         for item in res:
             result.append(comment_to_dict(db_session, item, username))
@@ -206,17 +202,14 @@ def get_all(data, db_session, username, **kwargs):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
-    permissions, presses = get_user_permissions(username, db_session)
-
-    has_permission_or_not(
-        [Permissions.COMMENT_GET_PREMIUM],
-        permissions)
-
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'COMMENT_GET')
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     try:
-        res = Comment.mongoquery(db_session.query(Comment)).query(**data).end().all()
+        res = Comment.mongoquery(db_session.query(Comment)).query(
+            **data).end().all()
         result = []
         for item in res:
             comment = comment_to_dict(db_session, item, username)
@@ -233,7 +226,7 @@ def get_all(data, db_session, username, **kwargs):
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    schema_validate(data,COMMENT_EDIT_SCHEMA_PATH)
+    schema_validate(data, COMMENT_EDIT_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
     logger.debug(LogMsg.MODEL_GETTING, id)
     model_instance = db_session.query(Comment).filter(Comment.id == id).first()
@@ -249,19 +242,10 @@ def edit(id, data, db_session, username):
         logger.error(LogMsg.USER_HAS_NO_PERSON, username)
         raise Http_error(400, Message.Invalid_persons)
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    per_data = {}
-    if model_instance.person_id == user.person_id:
-        per_data.update({Permissions.IS_OWNER.value:True})
-
-    has_permission(
-        [Permissions.COMMENT_EDIT_PREMIUM],
-        permissions,None,per_data)
-
-
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
-
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'COMMENT_EDIT',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     for key, value in data.items():
         # TODO  if key is valid attribute of class

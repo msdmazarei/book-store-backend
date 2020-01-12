@@ -1,6 +1,7 @@
 import os
 
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from discussion_group.controllers.discussion_group_member import \
     add_disscussuion_members, delete_group_members
 from enums import Permissions
@@ -60,12 +61,12 @@ def get(id, db_session, username):
     logger.info(LogMsg.START, username)
     user = check_user(username, db_session)
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if is_group_member(user.person_id, id, db_session):
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DISCUSSION_GROUP_PREMIUM],
-                   permissions, None, per_data)
 
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_GROUP',per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     logger.debug(LogMsg.MODEL_GETTING)
@@ -85,11 +86,6 @@ def get(id, db_session, username):
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    # TODO: you never checked version of passed data, we have version field in our
-    #      records, to prevent conflict when we received two different edit request
-    #      concurrently. check KAVEH codes (edit functions) to better understanding
-    #      version field usage
-
     schema_validate(data,GROUP_EDIT_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
@@ -98,14 +94,12 @@ def edit(id, db_session, data, username):
     user = check_user(username, db_session)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if is_admin_member(user.person_id, id, db_session):
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DISCUSSION_GROUP_PREMIUM],
-                   permissions, None, per_data)
-
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_GROUP', per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
-
 
     model_instance = db_session.query(DiscussionGroup).filter(
         DiscussionGroup.id == id).first()
@@ -151,11 +145,11 @@ def delete(id, db_session, username):
     user = check_user(username, db_session)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if is_admin_member(user.person_id, id, db_session):
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DISCUSSION_GROUP_PREMIUM],
-                   permissions, None, per_data)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_GROUP', per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     model_instance = db_session.query(DiscussionGroup).filter(
@@ -183,10 +177,10 @@ def delete(id, db_session, username):
 
 def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.DISCUSSION_GROUP_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_GROUP')
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
-
 
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
@@ -209,8 +203,9 @@ def search_group(data, db_session, username=None):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.DISCUSSION_GROUP_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_GROUP')
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     result = []

@@ -1,5 +1,6 @@
-from check_permission import get_user_permissions, has_permission
-from enums import Permissions
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
+from enums import Permissions, Access_level
 from financial_transactions.models import Transaction
 from helper import Http_error, populate_basic_data, Http_response, model_to_dict
 from infrastructure.schema_validator import schema_validate
@@ -12,13 +13,12 @@ from .constants import ADD_SCHEMA_PATH
 def add(data, db_session, username=None):
     logger.info(LogMsg.START, username)
 
-
     # schema_validate(data,ADD_SCHEMA_PATH)
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-
-        has_permission([Permissions.TRANSACTION_ADD_PREMIUM],
-                       permissions)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'TRANSACTION_ADD',
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     account_id = data.get('account_id')
     logger.debug(LogMsg.GETTING_ACCOUNT_BY_ID, account_id)
@@ -35,7 +35,6 @@ def add(data, db_session, username=None):
     model_instance.debit = data.get('debit')
     model_instance.payment_details = data.get('payment_details')
 
-
     db_session.add(model_instance)
     logger.debug(LogMsg.TRANSACTION_ADDED, model_to_dict(model_instance))
     logger.info(LogMsg.END)
@@ -47,9 +46,11 @@ def get(id, db_session, username=None):
     logger.info(LogMsg.START, username)
 
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-
-        has_permission([Permissions.TRANSACTION_GET_PREMIUM], permissions)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'TRANSACTION_GET',
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     return db_session.query(Transaction).filter(
         Transaction.account_id == id).order_by(
@@ -60,13 +61,14 @@ def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
 
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.TRANSACTION_GET_PREMIUM], permissions)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'TRANSACTION_GET',
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
-
 
     result = Transaction.mongoquery(db_session.query(Transaction)).query(
         **data).end().all()
@@ -80,9 +82,11 @@ def get_all(data, db_session, username):
 def delete(id, db_session, username=None):
     logger.info(LogMsg.START, username)
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.TRANSACTION_DELETE_PREMIUM], permissions)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'TRANSACTION_DELETE',
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     try:
         db_session.query(Transaction).filter(Transaction.id == id).delete()
@@ -111,7 +115,6 @@ def internal_add(data, db_session):
     model_instance.debit = data.get('debit')
     model_instance.details = data.get('details')
     model_instance.payment_id = data.get('payment_id')
-
 
     db_session.add(model_instance)
     logger.debug(LogMsg.TRANSACTION_ADDED, model_to_dict(model_instance))

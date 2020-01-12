@@ -1,6 +1,7 @@
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from configs import ADMINISTRATORS
-from enums import OrderStatus, Permissions
+from enums import OrderStatus, Permissions, Access_level
 from order.controllers.order_items import add_orders_items, \
     delete_orders_items_internal
 from repository.user_repo import check_user
@@ -10,7 +11,7 @@ from helper import Http_error, populate_basic_data, Http_response, \
 from log import LogMsg, logger
 from messages import Message
 from user.controllers.person import get as get_person
-from ..constants import ORDER_ADD_SCHEMA_PATH,ORDER_EDIT_SCHEMA_PATH
+from ..constants import ORDER_ADD_SCHEMA_PATH, ORDER_EDIT_SCHEMA_PATH
 from infrastructure.schema_validator import schema_validate
 
 administrator_users = value('administrator_users', ['admin'])
@@ -19,7 +20,7 @@ administrator_users = value('administrator_users', ['admin'])
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    schema_validate(data,ORDER_ADD_SCHEMA_PATH)
+    schema_validate(data, ORDER_ADD_SCHEMA_PATH)
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)
@@ -31,11 +32,13 @@ def add(data, db_session, username):
     model_instance = Order()
 
     populate_basic_data(model_instance, username)
-    if 'person_id' in data :
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission(
-            [Permissions.ORDER_ADD_PREMIUM,Permissions.ORDER_ADD_PRESS], permissions)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+    if 'person_id' in data:
+
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_ADD')
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
         person_id = data.get('person_id')
     else:
         person_id = user.person_id
@@ -43,7 +46,7 @@ def add(data, db_session, username):
 
     db_session.add(model_instance)
     item_data = {}
-    item_data['items']= data.get('items')
+    item_data['items'] = data.get('items')
     item_data['person_id'] = person_id
     logger.debug(LogMsg.ORDER_ADD_ITEMS, data.get('items'))
     model_instance.total_price = add_orders_items(model_instance.id,
@@ -59,13 +62,10 @@ def get(id, db_session, username=None):
     logger.info(LogMsg.START, username)
     result = db_session.query(Order).filter(Order.id == id).first()
 
-    permissions, presses = get_user_permissions(username, db_session)
-    per_data = {}
-    if username is not None and result.creator == username:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission(
-        [Permissions.ORDER_GET_PREMIUM], permissions, None, per_data)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'ORDER_GET', model=result)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     return order_to_dict(result, db_session, username)
 
@@ -80,14 +80,15 @@ def get_all(data, db_session, username=None):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission(
-        [Permissions.ORDER_GET_PREMIUM], permissions)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'ORDER_GET',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     result = Order.mongoquery(
-            db_session.query(Order)).query(
-            **data).end().all()
+        db_session.query(Order)).query(
+        **data).end().all()
     res = []
     for item in result:
         res.append(order_to_dict(item, db_session, username))
@@ -110,15 +111,14 @@ def get_user_orders(data, db_session, username=None):
         logger.error(LogMsg.USER_HAS_NO_PERSON, username)
         raise Http_error(400, Message.Invalid_persons)
 
-
     if data.get('filter') is None:
-        data.update({'filter':{'person_id':user.person_id}})
+        data.update({'filter': {'person_id': user.person_id}})
     else:
-        data['filter'].update({'person_id':user.person_id})
+        data['filter'].update({'person_id': user.person_id})
 
     result = Order.mongoquery(
-            db_session.query(Order)).query(
-            **data).end().all()
+        db_session.query(Order)).query(
+        **data).end().all()
 
     res = []
     for item in result:
@@ -134,10 +134,11 @@ def get_person_orders(data, db_session, username=None):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission(
-        [Permissions.ORDER_GET_PREMIUM], permissions)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'ORDER_GET',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     result = Order.mongoquery(
         db_session.query(Order)).query(
@@ -150,7 +151,6 @@ def get_person_orders(data, db_session, username=None):
     return res
 
 
-
 def delete(id, db_session, username=None):
     logger.info(LogMsg.START, username)
 
@@ -159,13 +159,11 @@ def delete(id, db_session, username=None):
         logger.error(LogMsg.NOT_FOUND, {'order_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    per_data = {}
-    if order.creator == username:
-        per_data.update({Permissions.IS_OWNER.value:True})
-    has_permission(
-        [Permissions.ORDER_DELETE_PREMIUM], permissions,None,per_data)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'ORDER_DELETE', model=order,
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     if order.status == OrderStatus.Invoiced:
         logger.error(LogMsg.ORDER_NOT_EDITABLE,
@@ -187,7 +185,7 @@ def delete(id, db_session, username=None):
 def edit(id, data, db_session, username=None):
     logger.info(LogMsg.START, username)
 
-    schema_validate(data,ORDER_EDIT_SCHEMA_PATH)
+    schema_validate(data, ORDER_EDIT_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     model_instance = internal_get(id, db_session)
@@ -196,23 +194,21 @@ def edit(id, data, db_session, username=None):
         logger.error(LogMsg.NOT_FOUND, {'order_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    per_data = {}
-    if model_instance.creator == username:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission(
-        [Permissions.ORDER_EDIT_PREMIUM], permissions, None, per_data)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'ORDER_EDIT', model=model_instance,
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     if model_instance.status == OrderStatus.Invoiced:
         logger.error(LogMsg.ORDER_NOT_EDITABLE, {'order_id': id})
         raise Http_error(403, Message.ORDER_INVOICED)
 
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     if user.person_id is None:
-        logger.error(LogMsg.USER_HAS_NO_PERSON,username)
-        raise Http_error(404,Message.INVALID_USER)
-
+        logger.error(LogMsg.USER_HAS_NO_PERSON, username)
+        raise Http_error(404, Message.INVALID_USER)
 
     for key, value in data.items():
         # TODO  if key is valid attribute of class
@@ -248,9 +244,12 @@ def edit_status_internal(id, status, db_session, username=None):
         raise Http_error(404, Message.NOT_FOUND)
 
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.ORDER_EDIT_PREMIUM], permissions)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_EDIT', model=model_instance,
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     try:
         model_instance.status = status

@@ -9,7 +9,9 @@ from book_collections.constants import ADD_SCHEMA_PATH, \
     RENAME_SCHEMA_PATH, COLLECTION_SCHEMA_PATH
 from book_collections.models import Collection
 from book_library.controller import is_book_in_library, books_are_in_lib
-from helper import Http_error, populate_basic_data, Http_response, check_schema, \
+from check_permission import validate_permissions_and_access
+from enums import Access_level
+from helper import Http_error, populate_basic_data, Http_response, \
     model_basic_dict
 from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
@@ -17,7 +19,6 @@ from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
 from books.controllers.book import get as get_book, book_to_dict
-from configs import ADMINISTRATORS
 
 from constraint_handler.controllers.collection_constraint import \
     add as add_uniquecode, unique_code_exists
@@ -35,6 +36,10 @@ def add(data, db_session, username):
 
     if 'person_id' in data:
         person_id = data.get('person_id')
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'COLLECTION_ADD')
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
     else:
         user = check_user(username, db_session)
         if user is None:
@@ -127,6 +132,10 @@ def add_book_to_collections(data, db_session, username):
     logger.debug(LogMsg.SCHEMA_CHECKED)
     if 'person_id' in data:
         person_id = data.get('person_id')
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'COLLECTION_ADD')
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
     else:
         user = check_user(username, db_session)
         if user is None:
@@ -159,6 +168,10 @@ def get_all_collections(data, db_session, username):
     logger.info(LogMsg.START, username)
     if data.get('sort') is None:
         data['sort'] = ['title+']
+    #
+    # logger.debug(LogMsg.PERMISSION_CHECK, username)
+    # validate_permissions_and_access(username, db_session, 'COLLECTION_GET')
+    # logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     user = check_user(username, db_session)
     if user is None:
@@ -201,7 +214,7 @@ def get_all_collections(data, db_session, username):
 def get_collection(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    schema_validate(data,COLLECTION_SCHEMA_PATH )
+    schema_validate(data, COLLECTION_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
     title = data.get('title')
 
@@ -217,7 +230,12 @@ def get_collection(data, db_session, username):
     validate_person(user.person_id, db_session)
     logger.debug(LogMsg.PERSON_EXISTS)
 
-    if 'person_id' in data.keys() and username in ADMINISTRATORS:
+    if 'person_id' in data.keys():
+
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'COLLECTION_GET')
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
         person_id = data.get('person_id')
     else:
         person_id = user.person_id
@@ -354,6 +372,12 @@ def arrange_collections(collection_items):
 
 def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'COLLECTION_GET',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
     final_res = []
@@ -370,9 +394,20 @@ def get_all(data, db_session, username):
 
 def delete_by_id(id, db_session, username):
     logger.info(LogMsg.START, username)
+    user = check_user(username, db_session)
+    model_instance = db_session.query(Collection).filter(
+        Collection.id == id).first()
+    if model_instance is None:
+        logger.error(LogMsg.NOT_FOUND, id)
+        raise Http_error(404, Message.NOT_FOUND)
+
+    if model_instance.person_id != user.person_id:
+        logger.error(LogMsg.NOT_ACCESSED, username)
+        raise Http_error(403, Message.ACCESS_DENIED)
+
     try:
         logger.debug(LogMsg.DELETE_REQUEST, {'collection_id': id})
-        db_session.query(Collection).filter(Collection.id == id).delete()
+        db_session.delete(model_instance)
         unique_connector = get_connector(id, db_session)
         if unique_connector:
             logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)

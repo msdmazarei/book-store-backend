@@ -1,7 +1,7 @@
 from books.controllers.book import book_to_dict
 from books.models import BookContent
 from check_permission import get_user_permissions, has_permission_or_not, \
-    has_permission
+    has_permission, validate_permissions_and_access
 from enums import Permissions, BookContentType, check_enums, check_enum
 from helper import populate_basic_data, check_schema, Http_error, model_to_dict, \
     edit_basic_data, Http_response, model_basic_dict
@@ -36,16 +36,8 @@ def add(db_session, data, username):
         raise Http_error(409, Message.ALREADY_EXISTS)
 
     logger.debug(LogMsg.PERMISSION_CHECK, username)
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_ADD_PREMIUM],
-                                       permissions)
-    if not has_permit:
-        if book.press in presses:
-            has_permission([Permissions.BOOK_ADD_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_ADD',model=book)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     model_instance = BookContent()
 
@@ -78,19 +70,11 @@ def get(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'book_id': content.book_id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permission_data = {}
-    if content.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_CONTENT_GET_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if book.press in presses:
-            has_permission([Permissions.BOOK_CONTENT_GET_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_CONTENT_GET',model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
 
     return content_to_dict(content, db_session)
 
@@ -127,24 +111,14 @@ def edit(id, data, db_session, username):
             logger.error(LogMsg.NOT_FOUND, {'book_id': data.get('book_id')})
             raise Http_error(404, Message.NOT_FOUND)
 
-    logger.debug(LogMsg.PERMISSION_CHECK, username)
 
-    permission_data = {}
-    if content.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_EDIT_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if book.get('press') in presses:
-            has_permission([Permissions.BOOK_EDIT_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_EDIT',model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
     try:
         for key, value in data.items():
-            # TODO  if key is valid attribute of class
             setattr(content, key, value)
 
         new_content = get_be_data(content.book_id, content.type, db_session)
@@ -175,20 +149,11 @@ def delete(id, db_session, username):
         raise Http_error(404, Message.NOT_FOUND)
 
     logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_DELETE',
+                                    model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-    permission_data = {}
-    if content.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_DELETE_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if content.book_press in presses:
-            has_permission([Permissions.BOOK_DELETE_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
     try:
         db_session.delete(content)
     except:

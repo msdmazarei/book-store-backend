@@ -1,7 +1,8 @@
 from uuid import uuid4
 from sqlalchemy import and_
 
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from enums import Permissions
 from follow.models import Follow
 from helper import Http_error, Now, model_to_dict, check_schema
@@ -86,9 +87,6 @@ def get_following_list(data,username, db_session):
         data['filter'].update({'follower_id':user.person_id})
 
     res = Follow.mongoquery(db_session.query(Follow)).query(**data).end().all()
-
-    # res = db_session.query(Follow).filter(
-    #     Follow.follower_id == user.person_id).all()
     for item in res:
         result.append(follow_to_dict(item))
     logger.debug(LogMsg.FOLLOWING_LIST, result)
@@ -122,8 +120,6 @@ def get_follower_list(data,username, db_session):
         data['filter'].update({'following_id': user.person_id})
 
     res = Follow.mongoquery(db_session.query(Follow)).query(**data).end().all()
-    # res = db_session.query(Follow).filter(
-    #     Follow.following_id == user.person_id).all()
     for item in res:
         result.append(follow_to_dict(item))
     logger.debug(LogMsg.FOLLOWER_LIST, result)
@@ -151,15 +147,14 @@ def delete(id, db_session, username, **kwargs):
         logger.debug(LogMsg.NOT_FOUND, {'follow_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permissions, presses = get_user_permissions(username, db_session)
-
     per_data = {}
     if model_instance.follower_id == user.person_id or \
             model_instance.following_id == user.person_id:
         per_data.update({Permissions.IS_OWNER.value: True})
-
-    has_permission(
-        [Permissions.FOLLOW_DELETE_PREMIUM], permissions, None, per_data)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'FOLLOW_DELETE',per_data)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     try:
         logger.debug(LogMsg.FOLLOW_DELETE, follow_to_dict(model_instance))
