@@ -1,5 +1,4 @@
 from elastic.elastic_engine import es
-from enums import str_genre, str_type
 from log import logger, LogMsg
 from repository.person_repo import fullname_persons, full_name_by_id
 
