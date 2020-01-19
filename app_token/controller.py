@@ -5,7 +5,7 @@ from log import LogMsg,logger
 from helper import Now, Http_error, value
 from messages import Message
 from .models import APP_Token
-from .constants import ADD_SCHEMA_PATH,EDIT_SCHEMA_PATH
+from .constants import ADD_SCHEMA_PATH
 
 token_expiration_interval = value('token_expiration_interval', '1200')
 new_token_request_valid_interval = value('new_token_request_valid_interval','30')

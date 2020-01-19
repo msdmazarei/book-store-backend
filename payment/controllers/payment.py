@@ -1,5 +1,6 @@
-from check_permission import get_user_permissions, has_permission
-from enums import Permissions
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
+from enums import Permissions, Access_level
 from helper import populate_basic_data, model_to_dict
 from log import logger, LogMsg
 from payment.models import Payment
@@ -39,10 +40,11 @@ def get_all(data,db_session,username):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission(
-        [Permissions.PAYMENT_GET_PREMIUM], permissions)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'PAYMENT_GET',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     result = Payment.mongoquery(
         db_session.query(Payment)).query(

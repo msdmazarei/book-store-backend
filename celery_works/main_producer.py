@@ -3,7 +3,7 @@ from celery_works.celery_consumers import generate_book_content
 from celery.result import AsyncResult
 
 from check_permission import get_user_permissions, has_permission_or_not, \
-    has_permission
+    has_permission, validate_permissions_and_access
 from enums import Permissions
 from helper import  Http_error
 from books.controllers.book_content import get_internal as get_content
@@ -33,20 +33,14 @@ def generate_book( data,db_session,username):
         raise Http_error(404,Message.NOT_FOUND)
 
     logger.debug(LogMsg.PERMISSION_CHECK, username)
-    permissions, presses = get_user_permissions(username, db_session)
     per_data ={}
     if book.creator==username:
         per_data.update({Permissions.IS_OWNER.value:True})
 
-    has_permit = has_permission_or_not([Permissions.BOOK_CONTENT_ADD_PREMIUM],
-                                       permissions,None,per_data)
-    if not has_permit:
-        if book.press in presses :
-            has_permission([Permissions.BOOK_CONTENT_ADD_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_CONTENT_ADD',
+                                    model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     if content.content_generated:
         logger.error(LogMsg.CONTENT_ALREADY_GENERATED)

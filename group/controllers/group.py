@@ -1,9 +1,9 @@
 import os
 
 from check_permission import get_user_permissions, has_permission, \
-    has_permission_or_not
+    has_permission_or_not, validate_permissions_and_access
 from configs import ADMINISTRATORS
-from enums import Permissions
+from enums import Permissions, Access_level
 from helper import model_to_dict, Http_error, model_basic_dict, \
     populate_basic_data, edit_basic_data, Http_response
 from log import LogMsg, logger
@@ -29,24 +29,25 @@ def add(data, db_session, username):
     schema_validate(data, GROUP_ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
-    person_id = data.get('person_id',None)
-    if person_id is not  None:
-        owner_person = get_person(person_id,db_session)
+    person_id = data.get('person_id', None)
+    if person_id is not None:
+        owner_person = get_person(person_id, db_session)
         if owner_person is not None and not owner_person.is_legal:
-            logger.error(LogMsg.PERSON_IS_NOT_LEGAL,username)
-            raise Http_error(400,Message.PERSON_IS_NOT_LEGAL)
-        owner_user = get_by_person(person_id,db_session)
+            logger.error(LogMsg.PERSON_IS_NOT_LEGAL, username)
+            raise Http_error(400, Message.PERSON_IS_NOT_LEGAL)
+        owner_user = get_by_person(person_id, db_session)
         if owner_user is None:
-            logger.error(LogMsg.PERSON_MUST_HAVE_USER,person_id)
-            raise Http_error(404,Message.PERSON_MUST_HAVE_USER)
+            logger.error(LogMsg.PERSON_MUST_HAVE_USER, person_id)
+            raise Http_error(404, Message.PERSON_MUST_HAVE_USER)
 
     user = check_user(username, db_session)
 
     if username not in ADMINISTRATORS:
 
         permissions, presses = get_user_permissions(username, db_session)
-        permit = has_permission_or_not([Permissions.PERMISSION_GROUP_ADD_PREMIUM],
-                                       permissions)
+        permit = has_permission_or_not(
+            [Permissions.PERMISSION_GROUP_ADD_PREMIUM],
+            permissions)
         if not permit:
             press_permit = has_permission_or_not(
                 [Permissions.PERMISSION_GROUP_ADD_PRESS],
@@ -67,7 +68,8 @@ def add(data, db_session, username):
     model_instance.person_id = data.get('person_id')
     db_session.add(model_instance)
     db_session.flush()
-    add_owner_to_group_users(model_instance.id,owner_user.id,db_session,username)
+    add_owner_to_group_users(model_instance.id, owner_user.id, db_session,
+                             username)
 
     logger.info(LogMsg.END)
     return model_instance
@@ -77,21 +79,13 @@ def get(id, db_session, username=None):
     logger.info(LogMsg.START, username)
     if username is not None:
         user = check_user(username, db_session)
-
-        permissions, presses = get_user_permissions(username, db_session)
-
-        permit = has_permission_or_not(
-            [Permissions.PERMISSION_GROUP_GET_PREMIUM],
-            permissions)
-        if not permit:
-            press_permit = has_permission_or_not(
-                [Permissions.PERMISSION_GROUP_GET_PRESS],
-                permissions)
-            if not (press_permit and (
-            user_is_in_group(user.id, id, db_session))):
-                logger.error(LogMsg.PERMISSION_DENIED,
-                             {'PERMISSION_GROUP_ADD': username})
-                raise Http_error(403, Message.ACCESS_DENIED)
+        per_data = dict()
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        if user_is_in_group(user.id, id, db_session):
+            per_data = {Permissions.IS_MEMBER.value: True}
+        validate_permissions_and_access(username, db_session,
+                                        'PERMISSION_GROUP_GET', per_data)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     logger.debug(LogMsg.MODEL_GETTING)
     model_instance = db_session.query(Group).filter(Group.id == id).first()
@@ -122,18 +116,11 @@ def edit(id, db_session, data, username):
         logger.debug(LogMsg.MODEL_GETTING_FAILED, {'group_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    permit = has_permission_or_not([Permissions.PERMISSION_GROUP_EDIT_PREMIUM],
-                                   permissions)
-    if not permit:
-        press_permit = has_permission_or_not(
-            [Permissions.PERMISSION_GROUP_EDIT_PRESS],
-            permissions)
-        if not (press_permit and (model_instance.person_id == user.person_id)):
-            logger.error(LogMsg.PERMISSION_DENIED,
-                         {'PERMISSION_GROUP_ADD': username})
-            raise Http_error(403, Message.ACCESS_DENIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'PERMISSION_GROUP_EDIT',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     person_id = data.get('person_id', None)
     if person_id is not None:
@@ -174,19 +161,11 @@ def delete(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'group_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    permit = has_permission_or_not(
-        [Permissions.PERMISSION_GROUP_DELETE_PREMIUM],
-        permissions)
-    if not permit:
-        press_permit = has_permission_or_not(
-            [Permissions.PERMISSION_GROUP_DELETE_PRESS],
-            permissions)
-        if not (press_permit and (model_instance.person_id == user.person_id)):
-            logger.error(LogMsg.PERMISSION_DENIED,
-                         {'PERMISSION_GROUP_ADD': username})
-            raise Http_error(403, Message.ACCESS_DENIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'PERMISSION_GROUP_DELETE',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     try:
         logger.debug(LogMsg.DELETE_GROUP_USERS, {'group_id': id})
@@ -208,12 +187,13 @@ def delete(id, db_session, username):
 
 def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
-    user = check_user(username, db_session)
 
-    permissions, presses = get_user_permissions(username, db_session)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
 
-    has_permission([Permissions.PERMISSION_GROUP_GET_PREMIUM],
-                   permissions)
+    validate_permissions_and_access(username, db_session,
+                                    'PERMISSION_GROUP_GET',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
@@ -234,19 +214,10 @@ def search_group(data, db_session, username=None):
     if username is not None:
         user = check_user(username, db_session)
 
-        permissions, presses = get_user_permissions(username, db_session)
-
-        permit = has_permission_or_not(
-            [Permissions.PERMISSION_GROUP_GET_PREMIUM],
-            permissions)
-        if not permit:
-            press_permit = has_permission_or_not(
-                [Permissions.PERMISSION_GROUP_ADD_PRESS],
-                permissions)
-            if not press_permit:
-                logger.error(LogMsg.PERMISSION_DENIED,
-                             {'PERMISSION_GROUP_SEARCH': username})
-                raise Http_error(403, Message.ACCESS_DENIED)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'PERMISSION_GROUP_GET')
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
@@ -257,12 +228,10 @@ def search_group(data, db_session, username=None):
         result.append(model_to_dict(group))
 
         if username is not None and not (
-        user_is_in_group(user.id, group.id, db_session)):
+                user_is_in_group(user.id, group.id, db_session)):
             del result[-1]
 
     logger.debug(LogMsg.GET_SUCCESS, result)
 
     logger.info(LogMsg.END)
     return result
-
-

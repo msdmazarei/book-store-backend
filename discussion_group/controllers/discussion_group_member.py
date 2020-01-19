@@ -1,5 +1,6 @@
 from discussion_group.models import DiscussionMember
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from enums import Permissions
 from helper import Http_error, model_basic_dict, \
     populate_basic_data, edit_basic_data, Http_response
@@ -34,13 +35,12 @@ def add_disscussuion_members(data, db_session, username):
             is_admin = True
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if is_admin or is_admin_member(user.person_id, group_id, db_session) :
         per_data.update({Permissions.IS_OWNER.value: True})
 
-    has_permission([Permissions.DISCUSSION_MEMBER_PREMIUM],
-                   permissions, None, per_data)
-
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_MEMBER',per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     group_members = []
@@ -62,11 +62,12 @@ def delete_group_members(group_id, db_session, username):
     user = check_user(username, db_session)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if is_admin_member(user.person_id, group_id, db_session):
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DISCUSSION_MEMBER_PREMIUM],permissions, None, per_data)
 
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_MEMBER',per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     db_session.query(DiscussionMember).filter(
@@ -110,13 +111,13 @@ def delete(id, db_session, username):
     user = check_user(username, db_session)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if group_member.person_id == user.person_id or is_admin_member(
             user.person_id, group_member.group_id, db_session):
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DISCUSSION_MEMBER_PREMIUM],
-                   permissions, None, per_data)
 
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_MEMBER',per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     db_session.query(DiscussionMember).filter(
@@ -141,11 +142,12 @@ def edit(id, data, db_session, username):
     user = check_user(username, db_session)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if is_admin_member(user.person_id, group_member.group_id, db_session):
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DISCUSSION_MEMBER_PREMIUM],
-                   permissions, None, per_data)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'DISCUSSION_MEMBER',per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     for key, value in data.items():

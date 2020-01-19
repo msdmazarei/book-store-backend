@@ -1,5 +1,6 @@
-from check_permission import get_user_permissions, has_permission
-from enums import Permissions
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
+from enums import Permissions, Access_level
 from helper import Http_error, value, populate_basic_data, edit_basic_data, \
     model_to_dict, Http_response, check_schema
 from infrastructure.schema_validator import schema_validate
@@ -30,11 +31,12 @@ def add(data, db_session, username):
         user_id = data.get('user_id')
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if user.id == user_id:
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DEVICE_KEY_ADD_PREMIUM],
-                   permissions, None, per_data)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'DEVICE_KEY_ADD',
+                                    per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     devices = get_user_active_devices(user_id, db_session)
@@ -89,11 +91,13 @@ def get(id, db_session, username):
     logger.debug(LogMsg.GET_SUCCESS, result)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if model_instance.user_id == user.id:
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DEVICE_KEY_GET_PREMIUM],
-                   permissions, None, per_data)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'DEVICE_KEY_GET',
+                                    per_data, access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
@@ -109,15 +113,17 @@ def get_user_devices(user_id, db_session, username):
     logger.debug(LogMsg.PERMISSION_CHECK,
                  {username: Permissions.DEVICE_KEY_GET_PREMIUM})
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if user_id == user.id:
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DEVICE_KEY_GET_PREMIUM],
-                   permissions, None, per_data)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'DEVICE_KEY_GET',
+                                    per_data, access_level=Access_level.Premium)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     result = db_session.query(DeviceCode).filter(
-        DeviceCode.user_id == user_id).order_by(DeviceCode.creation_date.desc()).all()
+        DeviceCode.user_id == user_id).order_by(
+        DeviceCode.creation_date.desc()).all()
     final_res = []
     for item in result:
         final_res.append(model_to_dict(item))
@@ -140,17 +146,17 @@ def delete(id, db_session, username):
     logger.debug(LogMsg.GET_SUCCESS, result)
 
     per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
     if model_instance.user_id == user.id:
         per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.DEVICE_KEY_DELETE_PREMIUM],
-                   permissions, None, per_data)
 
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'DEVICE_KEY_DELETE',
+                                    per_data, access_level=Access_level.Premium)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     try:
         db_session.delete(model_instance)
-        logger.debug(LogMsg.DELETE_SUCCESS, {'device_key_id':id})
+        logger.debug(LogMsg.DELETE_SUCCESS, {'device_key_id': id})
     except:
         logger.exception(LogMsg.DELETE_FAILED, exc_info=True)
         raise Http_error(500, Message.DELETE_FAILED)
@@ -162,10 +168,9 @@ def delete(id, db_session, username):
 def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    has_permission([Permissions.DEVICE_KEY_GET_PREMIUM], permissions)
-
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'DEVICE_KEY_GET',
+                                    access_level=Access_level.Premium)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     if data.get('sort') is None:

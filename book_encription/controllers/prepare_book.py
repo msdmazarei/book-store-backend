@@ -3,7 +3,8 @@ import shutil
 from book_encription.controllers.device_key import user_device_exist
 from book_library.controller import is_book_in_library
 from books.controllers.book_content import get_be_data
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from enums import Permissions
 from helper import Http_error, value, check_schema
 from log import LogMsg, logger
@@ -60,10 +61,10 @@ def prepare_book(data, db_session, username):
                      {'person_id': user.person_id, 'book_id': book_id})
 
         per_data = {Permissions.IS_OWNER.value: True}
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.PREPARE_BOOK_PREMIUM],
-                       permissions, None, per_data)
 
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'PREPARE_BOOK',
+                                        per_data)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
         content = get_be_data(book_id, 'Original', db_session)

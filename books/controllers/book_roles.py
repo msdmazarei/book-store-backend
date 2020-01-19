@@ -112,22 +112,19 @@ def get(id, db_session):
 def edit(id,db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    if "id" in data.keys():
-        del data["id"]
     logger.debug(LogMsg.EDIT_REQUST, id)
 
     logger.debug(LogMsg.MODEL_GETTING, id)
 
     model_instance = db_session.query(BookRole).filter(
         BookRole.id == id).first()
-    if model_instance:
+    if model_instance is not None:
         logger.debug(LogMsg.GET_SUCCESS, book_role_to_dict(model_instance))
     else:
         logger.debug(LogMsg.GET_FAILED, id)
         raise Http_error(404, Message.NOT_FOUND)
 
     for key, value in data.items():
-        # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
 
     logger.debug(LogMsg.EDITING_BASIC_DATA, id)

@@ -1,4 +1,3 @@
-from uuid import uuid4
 
 from bottle import Bottle, run, hook, request
 

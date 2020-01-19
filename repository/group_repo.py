@@ -45,3 +45,12 @@ def limit_groups_by_person(group_ids, person_id, db_session):
     for item in result:
         final_res.append(item.id)
     return final_res
+
+
+def groups_by_press(press, db_session):
+    result = db_session.query(Group).filter(
+        Group.person_id==press).all()
+    final_res = []
+    for group in result:
+        final_res.append(group.id)
+    return final_res

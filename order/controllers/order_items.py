@@ -1,8 +1,9 @@
 from book_encription.controllers.prepare_book import is_generated
 from book_library.controller import is_book_in_library
 from books.controllers.book_content import book_has_content
-from check_permission import get_user_permissions, has_permission
-from enums import Permissions
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
+from enums import Permissions, Access_level
 from prices.controller import get_book_price_internal, calc_net_price
 from repository.item_repo import get_orders_items_internal
 from order.models import OrderItem
@@ -114,14 +115,12 @@ def get(id, db_session, username=None):
         raise Http_error(404, Message.NOT_FOUND)
 
     if username is not None:
-        user = check_user(username, db_session)
-        per_data = {}
-        permissions, presses = get_user_permissions(username, db_session)
-        if item.creator == username or order.person_id == user.person_id:
-            per_data.update({Permissions.IS_OWNER.value: True})
-        has_permission([Permissions.ORDER_ITEM_GET_PREMIUM], permissions, None,
-                       per_data)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_ITEM_GET', model=item,
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
     return item_to_dict(item, db_session)
 
 
@@ -131,9 +130,11 @@ def get_all(data, db_session, username=None):
         data['sort'] = ['creation_date-']
 
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.ORDER_ITEM_GET_PREMIUM], permissions)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_ITEM_GET',
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     result = OrderItem.mongoquery(
         db_session.query(OrderItem)).query(
@@ -161,13 +162,14 @@ def get_orders_items(order_id, db_session, username=None):
     if username is not None:
         user = check_user(username, db_session)
         per_data = {}
-        permissions, presses = get_user_permissions(username, db_session)
         if order.person_id == user.person_id or (
                 result is not None and result[0].creator == username):
             per_data.update({Permissions.IS_OWNER.value: True})
-        has_permission([Permissions.ORDER_ITEM_GET_PREMIUM], permissions, None,
-                       per_data)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_ITEM_GET',per_data, model=order,
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     final_res = []
     for item in result:
@@ -192,14 +194,12 @@ def delete(id, db_session, username=None):
         raise Http_error(404, Message.NOT_FOUND)
 
     if username is not None:
-        user = check_user(username, db_session)
-        per_data = {}
-        permissions, presses = get_user_permissions(username, db_session)
-        if order_item.creator == username or order.person_id == user.person_id:
-            per_data.update({Permissions.IS_OWNER.value: True})
-        has_permission([Permissions.ORDER_ITEM_GET_PREMIUM], permissions, None,
-                       per_data)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
+
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_ITEM_GET', model=order_item,
+                                        access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     try:
         db_session.delete(order_item)
@@ -245,14 +245,13 @@ def edit(id, data, db_session, username=None):
         raise Http_error(404, Message.NOT_FOUND)
 
     if username is not None:
-        user = check_user(username, db_session)
-        per_data = {}
+
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session,
+                                        'ORDER_ITEM_GET', model=model_instance)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
         permissions, presses = get_user_permissions(username, db_session)
-        if model_instance.creator == username or order.person_id == user.person_id:
-            per_data.update({Permissions.IS_OWNER.value: True})
-        has_permission([Permissions.ORDER_ITEM_GET_PREMIUM], permissions, None,
-                       per_data)
-        logger.debug(LogMsg.PERMISSION_VERIFIED)
 
 
     if Permissions.ORDER_ITEM_EDIT_PREMIUM not in permissions:

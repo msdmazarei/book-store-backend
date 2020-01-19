@@ -45,10 +45,7 @@ def get(id, db_session, username=None):
     logger.info(LogMsg.START, username)
     model_instance = db_session.query(GroupUser).filter(
         GroupUser.id == id).first()
-    if model_instance:
-        logger.debug(LogMsg.GET_SUCCESS,
-                     model_to_dict(model_instance))
-    else:
+    if model_instance is None:
         logger.debug(LogMsg.MODEL_GETTING_FAILED)
         raise Http_error(404, Message.NOT_FOUND)
 
@@ -83,9 +80,6 @@ def delete(id, db_session, username):
     user = check_user(username, db_session)
 
     logger.info(LogMsg.DELETE_REQUEST, {'group_user_id': id})
-    # if username not in ADMINISTRATORS:
-    #     logger.error(LogMsg.NOT_ACCESSED, {'username': username})
-    #     raise Http_error(403, Message.ACCESS_DENIED)
     model_instance = db_session.query(GroupUser).filter(
         GroupUser.id == id).first()
 

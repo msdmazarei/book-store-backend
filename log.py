@@ -441,6 +441,7 @@ class LogMsg:
     PERMISSION_DENIED = 'user has no permission for action : %s'
     PERMISSION_VERIFIED = 'user has permission for vthe action : %s'
     PREMIUM_PERMISSION_ADDITION_RESTRICTION = 'user with not premium permission cant assign premium permission to group : %s'
+    PREMIUM_PERMISSION_NOT_FOUND = 'user has no premium permission by data : %s'
 
     # DISCUSSION_GROUP
     DISCUSSION_GROUP_ADD = 'discussion group added by data : %s'
