@@ -7,10 +7,14 @@
                 "type": "string"
             }
         },
-        "price": {
+        "price":{ "anyOf": [
+          {
             "type": "number"
-        },
-    "required": []
-    },
+          },
+          {
+            "type": "null"
+          }
+        ]}},
+    "required": [],
     "additionalProperties": false
 }
