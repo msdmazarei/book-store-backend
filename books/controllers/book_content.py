@@ -148,6 +148,9 @@ def delete(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'content_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
+    book = get_book(content.book_id, db_session)
+
+
     logger.debug(LogMsg.PERMISSION_CHECK, username)
     validate_permissions_and_access(username, db_session, 'BOOK_DELETE',
                                     model=content)
@@ -156,6 +159,8 @@ def delete(id, db_session, username):
 
     try:
         db_session.delete(content)
+        book.size=None
+
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
         raise Http_error(409, Message.DELETE_FAILED)
@@ -217,4 +222,10 @@ def book_has_content(book_id,type,db_session):
         logger.debug(LogMsg.NOT_FOUND,{'content_of_book':book_id,'type':type})
         return False
     return content.id
+
+def check_book_content(data,db_session,username):
+    book_id = data.get('book_id')
+    type = data.get('type')
+    return {'content':book_has_content(book_id,type,db_session)}
+
 

@@ -1,5 +1,5 @@
 from helper import check_auth, inject_db, jsonify, pass_data,timeit
-from celery_works.main_producer import generate_book, check_status
+from celery_works.main_producer import generate_book, check_status, content_size
 
 
 def call_router(app):
@@ -10,3 +10,4 @@ def call_router(app):
     app.route('/generate-book', 'POST', generate_book,
               apply=[check_auth, pass_data, jsonify, inject_db,timeit])
     app.route('/generate-book/<id>', 'GET', check_status, apply=[jsonify,timeit])
+    app.route('/book-size/<id>', 'GET', content_size, apply=[jsonify, timeit])

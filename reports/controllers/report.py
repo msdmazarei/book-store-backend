@@ -1,7 +1,3 @@
-from decimal import Decimal
-
-from sqlalchemy.dialects.postgresql import UUID
-
 from check_permission import has_permission, get_user_permissions
 from enums import check_enum, BookTypes, Permissions
 from helper import model_to_dict

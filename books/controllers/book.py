@@ -364,13 +364,16 @@ def edit_book(id, db_session, data, username):
     if 'roles' in data.keys():
         roles = data.get('roles')
         del data['roles']
+    if 'price' in data.keys():
+        price = data.get('price')
+        if price is None:
+            delete_book_price(model_instance.id, db_session)
+        else:
+            edit_price(model_instance.id, price, db_session)
 
     for key, value in data.items():
         setattr(model_instance, key, value)
     edit_basic_data(model_instance, username, data.get('tags'))
-    price = data.get('price', None)
-    if price is not None:
-        edit_price(model_instance.id, price, db_session)
 
     if len(roles) > 0:
         logger.debug(LogMsg.DELETING_BOOK_ROLES, id)

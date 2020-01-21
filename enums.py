@@ -191,6 +191,8 @@ class Permissions(enum.Enum):
 
 
 
+
+
 def check_enums(data, enum_class):
     for type in data:
         if type not in enum_class.__members__:
