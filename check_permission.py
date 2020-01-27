@@ -20,7 +20,7 @@ permission_list_expiration_time = value('permission_list_expiration_time', 30)
 
 def has_permission(func_permissions, user_permission_list, model_instance=None,
                    data=None):
-    if any(permission.value in user_permission_list for permission in
+    if any(permission in user_permission_list for permission in
            func_permissions):
 
         return True
@@ -35,7 +35,7 @@ def has_permission(func_permissions, user_permission_list, model_instance=None,
 def has_permission_or_not(func_permissions, user_permission_list,
                           model_instance=None,
                           data=None):
-    if any(permission.value in user_permission_list for permission in
+    if any(permission in user_permission_list for permission in
            func_permissions):
         return True
     elif data is not None:
