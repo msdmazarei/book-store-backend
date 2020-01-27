@@ -51,7 +51,7 @@ def user_is_in_group(user_id, group_id, db_session):
 
 def add_owner_to_group_users(group_id, user_id, db_session, username):
     model_instance = GroupUser()
-    model_instance.id = uuid4()
+    model_instance.id = str(uuid4())
     model_instance.group_id = group_id
     model_instance.user_id = user_id
     model_instance.creation_date = Now()

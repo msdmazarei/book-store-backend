@@ -98,6 +98,11 @@ def validate_permissions_and_access(username, db_session, func_name,
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'
+            if hasattr(model,'receiver_id')and model.receiver_id == user.person_id:
+                special_data.update({
+                    Permissions.IS_OWNER.value: True})
+                access_type = 'OWNER'
+
 
 
         permit = has_permission_or_not(premium_requirements, permissions,

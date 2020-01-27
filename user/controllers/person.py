@@ -310,7 +310,7 @@ def get_person_profile(id, db_session, username):
     return result
 
 
-def person_to_dict(person, db_session):
+def person_to_dict(person, db_session=None):
     result = model_basic_dict(person)
     model_attrs = {
         'address': person.address,

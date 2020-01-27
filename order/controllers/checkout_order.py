@@ -34,17 +34,9 @@ def checkout(order_id, data, db_session, username):
         raise Http_error(409,Message.ORDER_INVOICED)
 
     # CHECK PERMISSION
-    per_data = {}
-    if person_id is not None:
-        if order.person_id == person_id:
-            per_data.update({Permissions.IS_OWNER.value: True})
-    else:
-        if order.creator == username:
-            per_data.update({Permissions.IS_OWNER.value: True})
-
     logger.debug(LogMsg.PERMISSION_CHECK, username)
     validate_permissions_and_access(username, db_session,
-                                    'ORDER_CHECKOUT',per_data)
+                                    'ORDER_CHECKOUT',model=order)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     logger.debug(LogMsg.GETTING_ACCOUNT_PERSON, {'person_id': order.person_id})

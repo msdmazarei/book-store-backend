@@ -21,9 +21,8 @@ def upgrade():
     op.alter_column('persons', 'name',
                existing_type=sa.VARCHAR(),
                nullable=False)
-    op.create_unique_constraint(None, 'persons', ['email'])
-    op.create_unique_constraint(None, 'persons', ['image'])
-    op.create_unique_constraint(None, 'persons', ['cell_no'])
+    op.create_unique_constraint( 'persons_email', 'persons', ['email'])
+    op.create_unique_constraint('persons_cellno', 'persons', ['cell_no'])
     # ### end Alembic commands ###
 
 

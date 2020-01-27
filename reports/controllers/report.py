@@ -2,7 +2,7 @@ from check_permission import has_permission, get_user_permissions
 from enums import check_enum, BookTypes, Permissions
 from helper import model_to_dict
 from log import logger, LogMsg
-from reports.controllers.report_models import BestsellerBookOfMonth, \
+from reports.controllers.report_model import BestsellerBookOfMonth, \
     BestsellerBookOfWeek, LowsellerBookOfMonth, LowsellerBookOfWeek, \
     TotalAnnualSale, LastAudioBooks, LastDVDBooks, LastEpubBooks, \
     LastHardCopyBooks, LastMsdBooks, LastPdfBooks, BestYearBook, \

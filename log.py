@@ -6,7 +6,7 @@ from datetime import datetime
 
 from bottle import request
 
-log_file = os.environ.get('log_path')
+log_file = os.environ.get('log_path') or '/home/nsm/PycharmProjects/online_library/logs/app.log'
 print('log_file : {}'.format(log_file))
 
 
@@ -30,62 +30,6 @@ def get_request_id():
     except RuntimeError:
         return 'NO_RID'
 
-
-#
-# def info(msg, func_name=None, func_path=None, user=None, rcvd_data=None,
-#          returned_data=None, extra_details=None):
-#
-#     request_id = __get_request_id()
-#
-#     logger.info('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
-#                   request_id, func_name, func_path, _dump_json(user),
-#                   _dump_json(rcvd_data), _dump_json(returned_data),
-#                   _dump_json(extra_details))
-#
-#
-# def debug(msg, func_name=None, func_path=None, user=None, rcvd_data=None,
-#           returned_data=None, extra_details=None):
-#
-#     request_id = __get_request_id()
-#
-#     logger.debug('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
-#                    request_id, func_name, func_path, _dump_json(user),
-#                    _dump_json(rcvd_data), _dump_json(returned_data),
-#                    _dump_json(extra_details))
-#
-#
-# def warning(msg, func_name=None, func_path=None, user=None, rcvd_data=None,
-#             returned_data=None, extra_details=None):
-#
-#     request_id = __get_request_id()
-#
-#     logger.warning('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
-#                      request_id, func_name, func_path, _dump_json(user),
-#                      _dump_json(rcvd_data), _dump_json(returned_data),
-#                      _dump_json(extra_details))
-#
-#
-# def error(msg=None, func_name=None, func_path=None, user=None, rcvd_data=None,
-#           returned_data=None, extra_details=None):
-#
-#     request_id = __get_request_id()
-#
-#     logger.error('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
-#                    request_id, func_name, func_path, _dump_json(user),
-#                    _dump_json(rcvd_data), _dump_json(returned_data),
-#                    _dump_json(extra_details))
-#
-#
-# def critical(msg=None, func_name=None, func_path=None, user=None, rcvd_data=None,
-#              returned_data=None, extra_details=None):
-#
-#     request_id = __get_request_id()
-#
-#     logger.critical('##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\t##%s\n\n', msg,
-#                       request_id, func_name, func_path, _dump_json(user),
-#                       _dump_json(rcvd_data), _dump_json(returned_data),
-#                       _dump_json(extra_details))
-#
 
 class GZipRotator:
     def __call__(self, source, dest):
@@ -114,11 +58,11 @@ class JJPFormatter(logging.Formatter):
         return s
 
 
-handler = logging.handlers.TimedRotatingFileHandler(log_file,
+handler = logging.handlers.TimedRotatingFileHandler(filename=log_file,
                                                     encoding='utf8',
                                                     when='Midnight',
-                                                    interval=1,
-                                                    backupCount=5)
+                                                    interval=1,backupCount=5)
+
 logger = logging.getLogger(__name__)
 fmtr = JJPFormatter(
     '%(asctime)s,%(msecs)d %(levelname)-2s[%(pathname)s :%(lineno)d - %(funcName)s] %(message)s')

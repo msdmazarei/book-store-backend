@@ -28,7 +28,7 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('last_name', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id', 'username')
+    sa.PrimaryKeyConstraint('id')
     )
     op.drop_table('primarymodel')
     # ### end Alembic commands ###

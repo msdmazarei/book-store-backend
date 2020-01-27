@@ -211,7 +211,6 @@ def edit(id, data, db_session, username=None):
         raise Http_error(404, Message.INVALID_USER)
 
     for key, value in data.items():
-        # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
     if 'items' in data:
         item_data = {}

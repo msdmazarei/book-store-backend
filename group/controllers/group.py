@@ -18,6 +18,7 @@ from user.controllers.user import get_by_person
 from ..constants import GROUP_EDIT_SCHEMA_PATH, GROUP_ADD_SCHEMA_PATH
 from infrastructure.schema_validator import schema_validate
 from user.controllers.person import get as get_person
+from repository.person_repo import validate_person
 from ..models import Group
 
 save_path = os.environ.get('save_path')
@@ -31,7 +32,7 @@ def add(data, db_session, username):
 
     person_id = data.get('person_id', None)
     if person_id is not None:
-        owner_person = get_person(person_id, db_session)
+        owner_person = validate_person(person_id, db_session)
         if owner_person is not None and not owner_person.is_legal:
             logger.error(LogMsg.PERSON_IS_NOT_LEGAL, username)
             raise Http_error(400, Message.PERSON_IS_NOT_LEGAL)
@@ -67,7 +68,7 @@ def add(data, db_session, username):
     model_instance.title = data.get('title')
     model_instance.person_id = data.get('person_id')
     db_session.add(model_instance)
-    db_session.flush()
+    # db_session.flush()
     add_owner_to_group_users(model_instance.id, owner_user.id, db_session,
                              username)
 
