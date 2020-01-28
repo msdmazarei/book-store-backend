@@ -1,9 +1,9 @@
 from contextlib import contextmanager
 
-from bottle import request
-from kombu.exceptions import HttpError
+# from bottle import request
+# from kombu.exceptions import HttpError
 from mongosql import MongoSqlBase
-from pexpect.FSM import Error
+# from pexpect.FSM import Error
 from sqlalchemy import create_engine, Column, Integer, String, MetaData
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.ext.declarative import declarative_base

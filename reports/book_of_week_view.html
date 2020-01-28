@@ -1,0 +1,35 @@
+CREATE OR REPLACE VIEW public.book_of_week AS
+ SELECT tb1.book_id,
+    tb1.value_occurrence,
+    books.creation_date,
+    books.modification_date,
+    books.id,
+    books.version,
+    books.tags,
+    books.creator,
+    books.modifier,
+    books.title,
+    books.edition,
+    books.pub_year,
+    books.type,
+    books.language,
+    books.rate,
+    books.images,
+    books.genre,
+    books.files,
+    books.description,
+    books.duration,
+    books.isben,
+    books.pages,
+    books.size,
+    books.from_editor,
+    books.press
+   FROM ( SELECT order_items.book_id,
+            count(order_items.book_id) AS value_occurrence
+           FROM order_items
+          WHERE order_items.creation_date::double precision > (date_part('epoch'::text, now()) - 604800::double precision)
+          GROUP BY order_items.book_id
+          ORDER BY (count(order_items.book_id)) DESC
+         LIMIT 10) tb1
+     JOIN books ON tb1.book_id::text = books.id::text
+  ORDER BY tb1.value_occurrence DESC;

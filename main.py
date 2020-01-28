@@ -1,8 +1,8 @@
-from bottle import Bottle, run, request
-from raven.contrib.bottle import Sentry
-import bottle
 
-import sentry
+from bottle import Bottle, run, hook, request
+
+from helper import generate_RID
+
 
 from register.urls import call_router as register_routes
 from user.urls import call_router as user_routes
@@ -27,7 +27,9 @@ from messaging.urls import call_router as messaging_routes
 from payment.urls import call_router as payment_routes
 from db_migration.urls import call_router as db_routse
 from celery_works.urls import call_router as celery_routes
-
+from run_process.urls import call_router as process_routes
+from book_encription.urls import call_router as encription_routes
+from reports.urls import call_router as reports_routes
 
 app = Bottle()
 
@@ -57,12 +59,19 @@ messaging_routes(app)
 payment_routes(app)
 db_routse(app)
 celery_routes(app)
+process_routes(app)
+encription_routes(app)
+reports_routes(app)
 
+
+app.add_hook('before_request',generate_RID)
 
 if __name__ == '__main__':
     print('hello world')
 
-
     run(host='0.0.0.0', port=7000, debug=True, app=app)
+
+
+
 
 

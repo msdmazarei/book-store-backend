@@ -8,11 +8,14 @@ from log import LogMsg, logger
 from messages import Message
 from repository.book_repo import get as get_book
 from configs import ADMINISTRATORS, ONLINE_BOOK_TYPES
+from infrastructure.schema_validator import schema_validate
+from .constants import ADD_SCHEMA_PATH,EDIT_SCHEMA_PATH
 
 
 def add(data, db_session, username):
     logger.info(LogMsg.START, username)
-    check_schema(['price', 'book_id'], data.keys())
+
+    schema_validate(data,ADD_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     book_id = data.get('book_id')
@@ -131,7 +134,7 @@ def delete(id, db_session, username=None):
 def edit(id, data, db_session, username=None):
     logger.info(LogMsg.START, username)
 
-    check_schema(['price'], data.keys())
+    schema_validate(data,EDIT_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     model_instance = get_by_id(id, db_session)
@@ -175,11 +178,13 @@ def internal_edit(book_id, price, db_session):
     model_instance = get_by_book(book_id, db_session)
 
     if model_instance is None:
-        logger.error(LogMsg.NOT_FOUND, {'book_price_id': id})
-        raise Http_error(404, Message.NOT_FOUND)
+        logger.error(LogMsg.NOT_FOUND, {'book_price_id':book_id })
+        model_instance = add_internal(price, book_id, db_session, 'INTERNAL')
+        logger.debug(LogMsg.ADDING_PRICE,model_instance)
+    else:
 
-    model_instance.price = price
-    logger.debug(LogMsg.MODEL_ALTERED, model_to_dict(model_instance))
+        model_instance.price = price
+        logger.debug(LogMsg.MODEL_ALTERED, model_to_dict(model_instance))
 
     logger.info(LogMsg.END)
 

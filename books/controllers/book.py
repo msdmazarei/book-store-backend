@@ -1,11 +1,14 @@
 from sqlalchemy import desc
 
 from check_permission import get_user_permissions, has_permission, \
-    has_permission_or_not
+    has_permission_or_not, validate_permissions_and_access
+from infrastructure.schema_validator import schema_validate
+from repository.group_user_repo import get_user_group_list
 from repository.price_repo import delete_book_price
 from repository.rate_repo import book_average_rate
 from repository.comment_repo import delete_book_comments
-from elastic.book_index import index_book, delete_book_index, search_phrase
+from elastic.book_index import index_book, delete_book_index, search_phrase, \
+    is_book_already_indexed
 from file_handler.handle_file import delete_files
 from helper import Now, Http_error, populate_basic_data, edit_basic_data, \
     Http_response
@@ -13,6 +16,7 @@ from books.models import Book
 from enums import BookTypes as legal_types, check_enums, Genre, str_genre, \
     Permissions
 from messages import Message
+from repository.user_repo import check_user
 from .book_roles import add_book_roles, get_book_roles, book_role_to_dict, \
     delete_book_roles, append_book_roles_dict, \
     books_by_person, persons_of_book
@@ -28,6 +32,8 @@ from constraint_handler.controllers.common_methods import \
 from constraint_handler.controllers.unique_entity_connector import \
     get_by_entity as get_connector, add as add_connector, \
     delete as delete_connector
+
+from ..constants import BOOK_ADD_SCHEMA_PATH, BOOK_EDIT_SCHEMA_PATH
 
 
 def add(db_session, data, username, **kwargs):
@@ -60,6 +66,11 @@ def add(db_session, data, username, **kwargs):
     model_instance.description = data.get('description')
     model_instance.from_editor = data.get('from_editor')
     model_instance.press = data.get('press')
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_ADD',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     db_session.add(model_instance)
     logger.debug(LogMsg.DB_ADD)
@@ -98,25 +109,17 @@ def get(id, db_session):
 
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
-    if "id" in data.keys():
-        del data["id"]
-    logger.debug(LogMsg.EDIT_REQUST)
-    logger.debug(LogMsg.MODEL_GETTING, {'book_id': id})
+
+    logger.debug(LogMsg.EDIT_REQUST, {'book_id': id})
     model_instance = db_session.query(Book).filter(Book.id == id).first()
-    if model_instance:
-        logger.debug(LogMsg.GET_SUCCESS)
-    else:
+    if model_instance is None:
         logger.debug(LogMsg.NOT_FOUND, {'book_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    # permission_data = {}
-    # if model_instance.creator == username:
-    #     permission_data = {Permissions.IS_OWNER.value: True}
-    # permissions, presses = get_user_permissions(username, db_session)
-    # has_permit = has_permission_or_not([Permissions.BOOK_EDIT_PREMIUM],
-    #                                    permissions, None, permission_data)
-    # if not has_permit and  model_instance.press in presses:
-    #     has_permission([Permissions.BOOK_EDIT_PRESS], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'LIBRARY_EDIT',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     logger.debug(LogMsg.EDITING_BOOK, id)
 
@@ -131,7 +134,6 @@ def edit(id, db_session, data, username):
         delete_files(model_instance.images)
 
     for key, value in data.items():
-        # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
     edit_basic_data(model_instance, username, data.get('tags'))
 
@@ -175,16 +177,23 @@ def delete(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'book_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    if book.images:
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'LIBRARY_DELETE',
+                                    model=book)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
+    if book.images is not None:
         logger.debug(LogMsg.DELETE_BOOK_IMAGES)
         delete_files(book.images)
-    if book.files:
+    if book.files is not None:
         logger.debug(LogMsg.DELETE_BOOK_FILES)
         delete_files(book.files)
-
-    db_session.query(Book).filter(Book.id == id).delete()
-    logger.debug(LogMsg.ENTITY_DELETED, {"Book.id": id})
-
+    try:
+        db_session.query(Book).filter(Book.id == id).delete()
+        logger.debug(LogMsg.ENTITY_DELETED, {"Book.id": id})
+    except:
+        logger.exception(LogMsg.DELETE_FAILED, exc_info=True)
+        raise Http_error(403, Message.USED_SOMEWHERE)
     unique_connector = get_connector(id, db_session)
     if unique_connector:
         logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)
@@ -195,16 +204,17 @@ def delete(id, db_session, username):
     return Http_response(204, True)
 
 
-def get_all(db_session,data):
+def get_all(data, db_session, username):
     logger.info(LogMsg.START)
     logger.info(LogMsg.GETTING_ALL_BOOKS)
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
     try:
         final_res = []
-        result = Book.mongoquery(
-            db_session.query(Book)).query(
-            **data).end().all()
+        mq = Book.mongoquery(
+            db_session.query(Book))
+        # data=dict(filter=dict(title="hello"))
+        result = mq.query(**data).end().all()
 
         logger.debug(LogMsg.GET_SUCCESS)
 
@@ -252,6 +262,7 @@ def book_to_dict(db_session, book):
         'size': book.size,
         'isben': book.isben,
         'from_editor': book.from_editor,
+        'press': book.press,
         'price': get_book_price_internal(book.id, db_session)
 
     }
@@ -269,6 +280,7 @@ def book_to_dict(db_session, book):
 
 def add_multiple_type_books(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data, BOOK_ADD_SCHEMA_PATH)
 
     logger.debug(LogMsg.BOOK_CHECKING_IF_EXISTS, data)
     types = data.get('types')
@@ -278,10 +290,7 @@ def add_multiple_type_books(db_session, data, username):
     roles_data = data.get('roles')
 
     book_data = {k: v for k, v in data.items() if k not in ['roles', 'types']}
-    logger.debug(LogMsg.PERMISSION_CHECK, username)
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_ADD_PREMIUM],
-                                       permissions)
+
     press = None
     for item in roles_data:
         if 'Press' in item.values():
@@ -291,14 +300,6 @@ def add_multiple_type_books(db_session, data, username):
     if press is None:
         logger.error(LogMsg.DATA_MISSING, {'press': None})
         raise Http_error(400, Message.MISSING_REQUIERED_FIELD)
-
-    if not has_permit:
-        if press in presses:
-            has_permission([Permissions.BOOK_ADD_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     result = []
     logger.debug(LogMsg.ADDING_MULTIPLE_BOOKS, data)
@@ -342,32 +343,19 @@ def edit_book(id, db_session, data, username):
     logger.info(LogMsg.START, username)
 
     logger.info(LogMsg.EDITING_BOOK, id)
+    schema_validate(data, BOOK_EDIT_SCHEMA_PATH)
 
     model_instance = db_session.query(Book).filter(Book.id == id).first()
     if model_instance is None:
         logger.error(LogMsg.NOT_FOUND, {'book_id': id})
         raise Http_error(404, Message.NOT_FOUND)
-
-    logger.debug(LogMsg.PERMISSION_CHECK, username)
-    permission_data = {}
-    if model_instance.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_EDIT_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if model_instance.press in presses:
-            has_permission([Permissions.BOOK_EDIT_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
-
     logger.debug(LogMsg.GET_SUCCESS, id)
 
-    if "id" in data.keys():
-        del data["id"]
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_EDIT',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
     logger.debug(LogMsg.EDIT_REQUST, {'book_id': id})
 
     roles = []
@@ -376,14 +364,16 @@ def edit_book(id, db_session, data, username):
     if 'roles' in data.keys():
         roles = data.get('roles')
         del data['roles']
+    if 'price' in data.keys():
+        price = data.get('price')
+        if price is None:
+            delete_book_price(model_instance.id, db_session)
+        else:
+            edit_price(model_instance.id, price, db_session)
 
     for key, value in data.items():
-        # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
     edit_basic_data(model_instance, username, data.get('tags'))
-    price = data.get('price', None)
-    if price is not None:
-        edit_price(model_instance.id, price, db_session)
 
     if len(roles) > 0:
         logger.debug(LogMsg.DELETING_BOOK_ROLES, id)
@@ -427,21 +417,14 @@ def delete_book(id, db_session, username):
     logger.info(LogMsg.DELETE_REQUEST, {'book_id': id})
 
     model_instance = db_session.query(Book).filter(Book.id == id).first()
+    if model_instance is None:
+        logger.error(LogMsg.NOT_FOUND, {'book_id': id})
+        raise Http_error(404, Message.NOT_FOUND)
 
     logger.debug(LogMsg.PERMISSION_CHECK, username)
-    permission_data = {}
-    if model_instance.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_DELETE_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if model_instance.press in presses:
-            has_permission([Permissions.BOOK_DELETE_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_DELETE',
+                                    model=model_instance)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     logger.debug(LogMsg.DELETING_BOOK_ROLES, id)
     delete_book_roles(id, db_session)
@@ -579,7 +562,6 @@ def search_book(data, db_session):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
     logger.debug(LogMsg.SEARCH_BOOKS, filter)
     result = []
 
@@ -590,7 +572,7 @@ def search_book(data, db_session):
     search_phrase = filter.get(search_key)
 
     search_data = {'limit': limit, 'skip': skip,
-                   'search_phrase': search_phrase,'sort': data.get('sort')}
+                   'search_phrase': search_phrase, 'sort': data.get('sort')}
     if search_key == 'genre':
         result = search_by_genre(search_data, db_session)
     elif search_key == 'title':
@@ -652,10 +634,9 @@ def newest_books(data, db_session):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
     try:
         logger.debug(LogMsg.GETTING_NEWEST_BOOKS)
-        news =  Book.mongoquery(
+        news = Book.mongoquery(
             db_session.query(Book)).query(
             **data).end().all()
         res = []
@@ -714,3 +695,32 @@ def books_in_admin(db_session, username):
     books = book_by_press(presses, db_session)
     logger.info(LogMsg.END)
     return books
+
+
+def book_bulk_index(db_session, username):
+    logger.info(LogMsg.START, username)
+    books = get_all({}, db_session, username)
+    for book in books:
+        if is_book_already_indexed(book.get('id')):
+            logger.debug(LogMsg.BOOK_INDEX_EXISTS, book)
+        else:
+            roles = persons_of_book(book.get('id'), db_session)
+            book['book_id'] = book.get('id')
+            del book['roles']
+            book.update(roles)
+            index_book(book, db_session)
+            logger.debug(LogMsg.BOOK_INDEXED, book)
+    logger.info(LogMsg.END)
+    return {'result': 'successful'}
+
+
+def book_list_change(data, db_session, username):
+    #TODO this function is incomplete
+    logger.info(LogMsg.START, username)
+    book_ids = data.keys()
+    result = db_session.query(Book).filter(Book.id.in_(book_ids)).all()
+    id_book_dict = {}
+    for item in result:
+        id_book_dict[item.id] = book_to_dict(db_session,item)
+
+

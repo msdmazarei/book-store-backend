@@ -17,10 +17,12 @@ def check_by_cell_no(cell_no,db_session):
 
     return user
 
+
 def check_by_username(username,db_session):
     user = db_session.query(User).filter(User.username == username).first()
 
     return user
+
 
 def check_by_id(id,db_session):
     user = db_session.query(User).filter(User.id == id).first()
@@ -35,3 +37,14 @@ def validate_users(user_list, db_session):
         return result
     else:
         raise Http_error(404, Message.INVALID_USER)
+
+def user_count(db_session):
+    return db_session.query(User).count()
+
+
+def persons_by_user(user_list,db_session):
+    result = db_session.query(User).filter(User.id.in_(user_list)).all()
+    final_res = []
+    for user in result:
+        final_res.append(user.person_id)
+    return final_res

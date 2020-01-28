@@ -1,49 +1,42 @@
 from sqlalchemy import and_
 
 from accounts.models import Account
-from enums import check_enum, AccountTypes, str_account_type, Permissions
+from enums import check_enum, AccountTypes, str_account_type, Permissions, \
+    Access_level
 from helper import Http_error, populate_basic_data, model_to_dict, \
     Http_response, model_basic_dict, check_schema
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg
 from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
-from configs import ADMINISTRATORS
 from log import logger
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
+from .constants import ADD_SCHEMA_PATH, EDIT_SCHEMA_PATH
 
 
 def add(data, db_session, username):
     logger.debug(LogMsg.START, username)
+    schema_validate(data, ADD_SCHEMA_PATH)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_ADD_PREMIUM], permissions)
-    check_schema(['person_id','type'],data.keys())
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_ADD',
+                                    access_level=Access_level.Premium)
     logger.debug(LogMsg.SCHEMA_CHECKED)
+
     check_enum(data.get('type'), AccountTypes)
     logger.debug(LogMsg.ENUM_CHECK,
                  {'enum': data.get('type'), 'reference_enum': 'AccountTypes'})
 
-    user = check_user(username, db_session)
     logger.debug(LogMsg.USER_CHECKING, username)
 
-    if user is None:
-        logger.error(LogMsg.INVALID_USER, username)
-        raise Http_error(404, Message.INVALID_USER)
-
-    logger.info(LogMsg.USER_XISTS, username)
-
-    if user.person_id is None:
-        logger.info(LogMsg.PERSON_NOT_EXISTS, username)
-
-        raise Http_error(404, Message.Invalid_persons)
-
-    validate_person(user.person_id, db_session)
-    logger.info(LogMsg.PERSON_EXISTS, username)
-
-    type = data.get('type','Main')
-    value = data.get('value',0.0)
+    type = data.get('type', 'Main')
+    value = data.get('value', 0.0)
     person_id = data.get('person_id')
+    person = validate_person(person_id, db_session)
+    if person is None:
+        logger.error(LogMsg.NOT_FOUND, {'person_id': person_id})
+        raise Http_error(404, Message.Invalid_persons)
 
     logger.info(LogMsg.GETTING_USER_ACCOUNTS, type)
 
@@ -75,8 +68,6 @@ def get(person_id, type, db_session):
     logger.info(LogMsg.START)
     logger.debug(LogMsg.GETTING_USER_ACCOUNTS, type)
 
-
-
     try:
         result = db_session.query(Account).filter(
             and_(Account.person_id == person_id, Account.type == type)).first()
@@ -102,8 +93,9 @@ def get(person_id, type, db_session):
 def get_person_accounts(person_id, db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_GET_PREMIUM], permissions)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_GET',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     rtn = []
 
@@ -129,8 +121,10 @@ def get_person_accounts(person_id, db_session, username):
 
 def get_all(data, db_session, username):
     logger.info(LogMsg.START, username)
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_GET_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_GET',
+                                    access_level=Access_level.Premium)
+
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
     result = []
@@ -150,14 +144,12 @@ def get_all(data, db_session, username):
     return result
 
 
-def get_user_accounts(username, db_session,data):
+def get_user_accounts(username, db_session, data):
     logger.info(LogMsg.START, username)
+    logger.debug(LogMsg.PERMISSION_CHECK,username)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_GET')
 
     user = check_user(username, db_session)
-    if user is None:
-        logger.error(LogMsg.INVALID_USER, username)
-
-        raise Http_error(404, Message.INVALID_USER)
 
     if user.person_id is None:
         logger.error(LogMsg.PERSON_NOT_EXISTS, username)
@@ -170,9 +162,9 @@ def get_user_accounts(username, db_session,data):
         data['sort'] = ['creation_date-']
 
     if data.get('filter') is None:
-        data.update({'filter':{'person_id':user.person_id}})
+        data.update({'filter': {'person_id': user.person_id}})
     else:
-        data['filter'].update({'person_id':user.person_id})
+        data['filter'].update({'person_id': user.person_id})
 
     try:
         result = Account.mongoquery(
@@ -199,14 +191,10 @@ def get_user_accounts(username, db_session,data):
 def delete_all(username, db_session):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_DELETE_PREMIUM], permissions)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_DELETE',
+                                    access_level=Access_level.Premium)
 
     user = check_user(username, db_session)
-    if user is None:
-        logger.error(LogMsg.INVALID_USER, username)
-
-        raise Http_error(404, Message.INVALID_USER)
 
     if user.person_id is None:
         logger.error(LogMsg.PERSON_NOT_EXISTS, username)
@@ -232,8 +220,10 @@ def delete_all(username, db_session):
 def delete(id, db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_DELETE_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_DELETE',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     user = check_user(username, db_session)
     if user is None:
@@ -266,8 +256,10 @@ def edit_account_value(account_id, value, db_session, username=None):
     logger.info(LogMsg.START)
 
     if username is not None:
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.ACCOUNT_EDIT_PREMIUM], permissions)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'ACCOUNT_EDIT',
+                                    access_level=Access_level.Premium)
+        logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     logger.debug(LogMsg.EDIT_ACCOUNT_VALUE,
                  {'account_id': account_id, 'value': value})
@@ -288,14 +280,7 @@ def edit_account_value(account_id, value, db_session, username=None):
 def get_by_id(id, db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_GET_PREMIUM], permissions)
-
     user = check_user(username, db_session)
-    if user is None:
-        logger.error(LogMsg.INVALID_USER, username)
-
-        raise Http_error(404, Message.INVALID_USER)
 
     if user.person_id is None:
         logger.error(LogMsg.PERSON_NOT_EXISTS, username)
@@ -322,11 +307,13 @@ def get_by_id(id, db_session, username):
 
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data, EDIT_SCHEMA_PATH)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_EDIT_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_EDIT',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
-    check_schema(['value'], data.keys())
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     value = data.get('value')
@@ -374,12 +361,14 @@ def add_initial_account(person_id, db_session, username):
 def edit_by_person(data, db_session, username):
     logger.info(LogMsg.START, username)
 
+    check_schema(['person_id', 'value'], data.keys())
+
     user = check_user(username, db_session)
 
-    check_schema(['person_id','value'],data.keys())
-
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.ACCOUNT_EDIT_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'ACCOUNT_EDIT',
+                                    access_level=Access_level.Premium)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
@@ -395,13 +384,13 @@ def edit_by_person(data, db_session, username):
     if account is None:
         logger.error(LogMsg.NOT_FOUND, {'account_id': id})
         raise Http_error(404, Message.NOT_FOUND)
-
-    permissions, presses = get_user_permissions(username, db_session)
-    per_data = {}
-    if user.person_id == account.person_id:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.ACCOUNT_EDIT_PREMIUM], permissions, None,
-                   per_data)
+    # special_data = {}
+    # if user.person_id == account.person_id:
+    #     special_data.update({Permissions.IS_OWNER.value: True})
+    # logger.debug(LogMsg.PERMISSION_CHECK, username)
+    # validate_permissions_and_access(username, db_session, 'ACCOUNT_EDIT',
+    #                                 special_data)
+    # logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     account.value += value
     logger.debug(LogMsg.EDIT_SUCCESS)

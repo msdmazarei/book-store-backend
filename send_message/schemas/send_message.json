@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "receptor": {
+            "type": "string",
+            "pattern": "[0-9]{11}"
+        },
+        "message": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "receptor"
+    ],
+    "additionalProperties": true
+}

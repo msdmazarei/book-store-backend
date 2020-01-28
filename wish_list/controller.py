@@ -1,4 +1,4 @@
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 
 from helper import Http_error, Now, Http_response, populate_basic_data
 from log import LogMsg,logger
@@ -7,11 +7,14 @@ from repository.person_repo import validate_person
 from repository.user_repo import check_user
 from books.controllers.book import get as get_book, book_to_dict
 from wish_list.models import WishList
+from infrastructure.schema_validator import schema_validate
+from .constants import ADD_SCHEMA_PATH
 
 
 def add(data, db_session, username):
     logger.info(LogMsg.START,username)
-
+    schema_validate(data,ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)
@@ -68,7 +71,7 @@ def get_wish_list(data, db_session, username):
     logger.debug(LogMsg.PERSON_EXISTS,username)
     result = []
 
-    if data['filter'] is None:
+    if data.get('filter') is None:
         data.update({'filter':{'person_id':user.person_id}})
     else:
         data['filter'].update({'person_id':user.person_id})
@@ -115,6 +118,7 @@ def delete_wish_list(db_session, username):
 
 def delete_books_from_wish_list(data, db_session, username):
     logger.info(LogMsg.START,username)
+    schema_validate(data,ADD_SCHEMA_PATH)
     user = check_user(username, db_session)
     if user is None:
         raise Http_error(400, Message.INVALID_USER)
@@ -155,7 +159,7 @@ def internal_wish_list( db_session, person_id):
     result = []
 
     book_ids = db_session.query(WishList).filter(
-        WishList.person_id == person_id).all()
+        WishList.person_id == person_id).order_by(desc(WishList.creation_date)).all()
     for item in book_ids:
         logger.debug(LogMsg.BOOK_CHECKING_IF_EXISTS,item)
         book = get_book(item.book_id, db_session)

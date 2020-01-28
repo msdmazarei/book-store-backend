@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {
+        "username": {
+            "type": "string"
+        },
+        "cell_no": {
+            "type": "string",
+            "pattern": "0[0-9]{10}"
+        }},
+    "additionalProperties": false
+}

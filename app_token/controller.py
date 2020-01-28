@@ -1,9 +1,11 @@
-import json
 from uuid import uuid4
+
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg,logger
 from helper import Now, Http_error, value
 from messages import Message
 from .models import APP_Token
+from .constants import ADD_SCHEMA_PATH
 
 token_expiration_interval = value('token_expiration_interval', '1200')
 new_token_request_valid_interval = value('new_token_request_valid_interval','30')
@@ -11,6 +13,7 @@ new_token_request_valid_interval = value('new_token_request_valid_interval','30'
 
 def add(db_session, data, username):
     logger.info(LogMsg.START,username)
+    schema_validate(data, ADD_SCHEMA_PATH)
 
     logger.debug(LogMsg.CHECKING_VALID_TOKEN,username)
 

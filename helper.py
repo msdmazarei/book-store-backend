@@ -1,4 +1,5 @@
 import datetime
+import functools
 import logging
 from os import environ
 import time
@@ -15,50 +16,23 @@ from db_session import Session
 import json
 
 
-def model_to_dict(obj):
-    object_dict = dict((name, getattr(obj, name)) for name in dir(obj) if
-                       (not name.startswith('_')) and not name.startswith(
-                           'mongo') and not name.startswith(
-                           'create_query')) if not isinstance(obj,
-                                                              dict) else obj
+# AUTHORIZATION ACTIONS
 
-    if "metadata" in object_dict:
-        del object_dict['metadata']
-    print(object_dict)
-    return object_dict
-
-
-def multi_model_to_dict(obj_list):
-    result = []
-    for item in obj_list:
-        obj = model_to_dict(item)
-        result.append(obj)
+def validate_token(id, db_session):
+    result = db_session.query(APP_Token).filter(APP_Token.id == id).first()
+    if result is None or result.expiration_date < Now():
+        raise Http_error(401, Message.TOKEN_INVALID)
     return result
-
-
-def check_auth(func):
-    def wrapper(*args, **kwargs):
-        logging.debug(LogMsg.AUTH_CHECKING)
-
-        kwargs['username'] = check_Authorization()['username']
-
-        logging.debug(LogMsg.AUTH_SUCCEED)
-        logging.debug("user is {}".format(kwargs['username']))
-
-        rtn = func(*args, **kwargs)
-        return rtn
-
-    return wrapper
 
 
 def if_login(func):
     def wrapper(*args, **kwargs):
-        logging.debug(LogMsg.AUTH_CHECKING)
+        logger.debug(LogMsg.AUTH_CHECKING)
 
         kwargs['username'] = check_login()['username']
 
-        logging.debug(LogMsg.AUTH_SUCCEED)
-        logging.debug("user is {}".format(kwargs['username']))
+        logger.debug(LogMsg.AUTH_SUCCEED)
+        logger.debug("user is {}".format(kwargs['username']))
 
         rtn = func(*args, **kwargs)
         return rtn
@@ -73,7 +47,6 @@ def check_login():
         return {'username': None}
 
     username, password = decode(auth)
-    print(username, password)
 
     if password is None:
         return model_to_dict(validate_token(username, db_session))
@@ -94,7 +67,6 @@ def check_Authorization():
         raise Http_error(401, Message.NO_AUTH)
 
     username, password = decode(auth)
-    print(username, password)
 
     if password is None:
         return model_to_dict(validate_token(username, db_session))
@@ -139,18 +111,16 @@ def decode(encoded_str):
     # bail out.
     elif len(split) == 2:
         if split[0].strip().lower() == 'basic':
-            logging.debug("auth is basic")
+            logger.debug("auth is basic")
             try:
                 username, password = b64decode(split[1]).decode().split(':', 1)
             except:
                 raise Http_error(400, Message.AUTH_DECODING_FAILED)
 
         elif split[0].strip().lower() == 'bearer':
-            logging.debug("auth is bearer")
-            print(split[0].strip())
-            print(split[1].strip())
+            logger.debug("auth is bearer")
             username, password = split[1].strip(), None
-            logging.debug(
+            logger.debug(
                 "token is {} and pass is {}".format(username, password))
         else:
             raise Http_error(400, Message.AUTH_DECODING_FAILED)
@@ -166,6 +136,23 @@ def decode(encoded_str):
     return str(username), str(password)
 
 
+# DECORATORS
+
+def check_auth(func):
+    def wrapper(*args, **kwargs):
+        logger.debug(LogMsg.AUTH_CHECKING)
+
+        kwargs['username'] = check_Authorization()['username']
+
+        logger.debug(LogMsg.AUTH_SUCCEED)
+        logger.debug("user is {}".format(kwargs['username']))
+
+        rtn = func(*args, **kwargs)
+        return rtn
+
+    return wrapper
+
+
 def get_db_session():
     if hasattr(request, 'db_session'):
         return request.db_session
@@ -177,6 +164,8 @@ def get_db_session():
 def inject_db(func):
     def wrapper(*args, **kwargs):
         kwargs['db_session'] = get_db_session()
+
+        # generate_RID()
         rtn = func(*args, **kwargs)
         db_session = kwargs['db_session']
         try:
@@ -198,7 +187,6 @@ def jsonify(func):
         if isinstance(rtn, list):
             result = []
             for item in rtn:
-                print("list is here: ", rtn)
                 if isinstance(item, str):
                     result.append(item)
                 else:
@@ -206,7 +194,6 @@ def jsonify(func):
             result = {"result": result}
         else:
             result = model_to_dict(rtn)
-            print("json result is : ", result)
         return result
 
     return wrapper
@@ -232,11 +219,38 @@ def pass_data(func):
     return wrapper
 
 
+def timeit(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        # kwargs['start_time'] = start_time
+        result = func(*args, **kwargs)
+        finish_time = time.time()
+
+        logger.info(str({'duration': finish_time - start_time}))
+
+        if finish_time - start_time > 1:
+            logger.warning(
+                'request lasted long for {}'.format(finish_time - start_time))
+
+        return result
+
+    return wrapper
+
+
+# TIME FUNCS
 def Now():
     now = time.mktime(datetime.datetime.now().timetuple())
     return int(now)
 
 
+def a_week_ago():
+    now = time.mktime(datetime.datetime.now().timetuple())
+    former_week = time.mktime(
+        (datetime.datetime.now() - datetime.timedelta(days=7)).timetuple())
+    return {'now': now, 'week_ago': former_week}
+
+
+# HTTP RESPONSE HANDLERS
 def Http_error(code, message):
     if isinstance(message, str):
         message = {'msg': message}
@@ -257,13 +271,7 @@ def value(name, default):
     return environ.get(name) or default
 
 
-def validate_token(id, db_session):
-    result = db_session.query(APP_Token).filter(APP_Token.id == id).first()
-    if result is None or result.expiration_date < Now():
-        raise Http_error(401, Message.TOKEN_INVALID)
-    return result
-
-
+# MODEL DATA HANDLING FUNCS
 def check_schema(required_list, data_keys):
     required = set(required_list)
     keys = set(data_keys)
@@ -309,3 +317,42 @@ def model_basic_dict(model_instance):
         'tags': model_instance.tags
     }
     return result
+
+
+def model_to_dict(obj):
+    object_dict = dict((name, getattr(obj, name)) for name in dir(obj) if
+                       (not name.startswith('_')) and not name.startswith(
+                           'mongo') and not name.startswith(
+                           'create_query')) if not isinstance(obj,
+                                                              dict) else obj
+
+    if "metadata" in object_dict:
+        del object_dict['metadata']
+    return object_dict
+
+
+def multi_model_to_dict(obj_list):
+    result = []
+    for item in obj_list:
+        obj = model_to_dict(item)
+        result.append(obj)
+    return result
+
+
+def generate_RID():
+    try:
+        rid = request.get_header('X_JJP_RID')
+        if rid is not None:
+            request.JJP_RID = rid
+        else:
+            request.JJP_RID = 'JJP_{}'.format(uuid4())
+        logger.debug('JJP_RID:{}'.format(request.JJP_RID))
+
+    except:
+        logger.exception(LogMsg.RID_OPERATION_FAILED, exc_info=True)
+        raise Http_error(409, Message.RID_OPERATION_FAILED)
+
+
+wrappers = [check_auth, inject_db, jsonify, timeit]
+
+

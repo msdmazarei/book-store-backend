@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "code": {
+      "type": "string"
+    },
+    "cell_no": {
+      "type": "string",
+      "pattern": "[0-9]{11}"
+    },
+    "password": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "cell_no",
+    "code",
+    "password"
+  ],
+  "additionalProperties": false
+}

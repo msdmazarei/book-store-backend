@@ -1,0 +1,11 @@
+create or replace view book_of_year  as
+Select * from
+
+(SELECT       book_id,
+             COUNT(book_id) AS value_occurrence
+    FROM     order_items where creation_date > (extract(epoch from now())- 31536000)
+GROUP BY book_id
+    ORDER BY value_occurrence DESC
+    LIMIT    10 )as tb1
+INNER JOIN books on  ((tb1.book_id)::text = (books.id)::text )
+order by value_occurrence DESC

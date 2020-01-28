@@ -15,6 +15,8 @@ from repository.account_repo import edit_persons_main_account
 from repository.user_repo import check_user
 from payment.KipoKPG import KipoKPG
 from bottle import HTTPResponse
+from ..constants import KIPO_SCHEMA_PATH
+from infrastructure.schema_validator import schema_validate
 
 merchant_key = value('kipo_merchant_key', None)
 if merchant_key is None:
@@ -29,7 +31,7 @@ base_url = value('app_server_address', '')
 def pay_by_kipo(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    check_schema(['amount'], data.keys())
+    schema_validate(data,KIPO_SCHEMA_PATH)
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     person_id = data.get('person_id')

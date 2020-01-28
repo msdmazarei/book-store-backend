@@ -1,13 +1,13 @@
-from helper import check_auth, inject_db, jsonify, pass_data
+from helper import check_auth, inject_db, jsonify, pass_data,timeit
 from .controller import delete, get, get_all, add
 
 
 def call_router(app):
-    wrappers = [check_auth, inject_db, jsonify]
+    wrappers = [check_auth, inject_db, jsonify,timeit]
     data_plus_wrappers = (wrappers[:])
     data_plus_wrappers.append(pass_data)
 
     app.route('/transactions/<id>', 'GET', get, apply=wrappers)
     app.route('/transactions/_search', 'POST', get_all, apply=data_plus_wrappers)
-    app.route('/transactions/<id>', 'DELETE', delete,apply=[check_auth, inject_db])
+    app.route('/transactions/<id>', 'DELETE', delete,apply=[check_auth, inject_db,timeit])
     # app.route('/transactions', 'POST', add,apply=data_plus_wrappers)

@@ -1,5 +1,6 @@
 from book_library.controller import add_books_to_library
-from check_permission import get_user_permissions, has_permission
+from check_permission import get_user_permissions, has_permission, \
+    validate_permissions_and_access
 from enums import OrderStatus, Permissions
 from helper import Http_error, edit_basic_data
 from log import logger, LogMsg
@@ -9,10 +10,15 @@ from repository.item_repo import get_orders_items_internal
 from repository.order_repo import get as get_order
 from accounts.controller import get as get_account
 from financial_transactions.controller import add as add_transaction
+from infrastructure.schema_validator import schema_validate
+from ..constants import CHECKOUT_EDIT_SCHEMA_PATH
 
 
 def checkout(order_id, data, db_session, username):
     logger.info(LogMsg.START, username)
+
+    schema_validate(data,CHECKOUT_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     preferred_account = data.get('preferred_account', 'Main')
     person_id = data.get('person_id')
@@ -28,17 +34,10 @@ def checkout(order_id, data, db_session, username):
         raise Http_error(409,Message.ORDER_INVOICED)
 
     # CHECK PERMISSION
-    permissions, presses = get_user_permissions(username, db_session)
-    per_data = {}
-    if person_id is not None:
-        if order.person_id == person_id:
-            per_data.update({Permissions.IS_OWNER.value: True})
-    else:
-        if order.creator == username:
-            per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission(
-        [Permissions.ORDER_CHECKOUT_PREMIUM], permissions, None, per_data)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session,
+                                    'ORDER_CHECKOUT',model=order)
+    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
 
     logger.debug(LogMsg.GETTING_ACCOUNT_PERSON, {'person_id': order.person_id})
     account = get_account(order.person_id, preferred_account, db_session)

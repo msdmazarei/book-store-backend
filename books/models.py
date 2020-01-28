@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import ARRAY,UUID
 from sqlalchemy import String, JSON, Column, ForeignKey, Float, Enum, \
-    UniqueConstraint
+    UniqueConstraint, Boolean
 from sqlalchemy.orm import relationship
 from db_session import Base, PrimaryModel
 from enums import Roles, BookTypes, BookContentType
@@ -35,7 +35,7 @@ class BookRole(Base,PrimaryModel):
     person_id = Column(UUID,ForeignKey(Person.id),nullable=False)
     role = Column(Enum(Roles),nullable=False)
 
-    book_roles = relationship(Book, primaryjoin=book_id == Book.id )
+    book = relationship(Book, primaryjoin=book_id == Book.id )
     person = relationship(Person, primaryjoin=person_id == Person.id )
 
 
@@ -46,6 +46,9 @@ class BookContent(Base,PrimaryModel):
     type = Column(Enum(BookContentType),nullable=False)
     content = Column(JSON,nullable=False)
     book_press = Column(UUID,ForeignKey(Person.id),nullable=False)
+    celery_task_id = Column(String)
+    content_generated = Column(Boolean,default=False)
+
 
     UniqueConstraint(book_id,type)
     book = relationship(Book, primaryjoin=book_id == Book.id )

@@ -1,10 +1,10 @@
-from helper import check_auth, inject_db, jsonify, pass_data
+from helper import check_auth, inject_db, jsonify, pass_data,timeit
 from messaging.controllers.message import add, get, get_all, get_group_messages, \
     edit, delete,get_user_unread_messages,get_sender_messages
 
 
 def call_router(app):
-    wrappers = [check_auth, inject_db, jsonify]
+    wrappers = [check_auth, inject_db, jsonify,timeit]
     data_plus_wrappers = (wrappers[:])
     data_plus_wrappers.append(pass_data)
 

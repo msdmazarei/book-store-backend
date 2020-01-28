@@ -20,23 +20,26 @@ from repository.person_repo import person_cell_exists, person_mail_exists
 from books.controllers.book import get_current_book
 from configs import SIGNUP_USER, ADMINISTRATORS
 from constraint_handler.controllers.person_constraint import \
-    add as add_uniquecode
+    add as add_uniquecode, persons_code
 from constraint_handler.controllers.unique_entity_connector import \
     get_by_entity as get_connector, add as add_connector, \
     delete as delete_connector
 from constraint_handler.controllers.common_methods import \
     delete as delete_uniquecode
+from infrastructure.schema_validator import schema_validate
+from ..constants import PERSON_ADD_SCHEMA_PATH,PERSON_EDIT_SCHEMA_PATH
 
 save_path = os.environ.get('save_path')
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data,PERSON_ADD_SCHEMA_PATH)
 
-    if username is not None and username!=SIGNUP_USER:
+    if username is not None and username != SIGNUP_USER:
         permissions, presses = get_user_permissions(username, db_session)
         has_permission([Permissions.PERSON_ADD_PREMIUM],
-                                           permissions)
+                       permissions)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     cell_no = data.get('cell_no')
@@ -51,23 +54,24 @@ def add(db_session, data, username):
         raise Http_error(409, Message.ALREADY_EXISTS)
 
     logger.debug(LogMsg.CHECK_UNIQUE_EXISTANCE, data)
-    unique_code = add_uniquecode(data, db_session)
 
     model_instance = Person()
     populate_basic_data(model_instance, username, data.get('tags'))
     logger.debug(LogMsg.POPULATING_BASIC_DATA)
     model_instance.name = data.get('name')
     model_instance.last_name = data.get('last_name')
-    model_instance.full_name = '{} {}'.format(model_instance.last_name or '',model_instance.name or '')
+    model_instance.full_name = full_name(model_instance.name,model_instance.last_name)
     model_instance.address = data.get('address')
     model_instance.phone = data.get('phone')
     model_instance.email = data.get('email')
     model_instance.cell_no = data.get('cell_no')
     model_instance.bio = data.get('bio')
     model_instance.image = data.get('image')
-    model_instance.is_legal = data.get('is_legal',False)
+    model_instance.is_legal = data.get('is_legal', False)
 
+    unique_code = add_uniquecode(model_instance, db_session)
     db_session.add(model_instance)
+
     db_session.flush()
     logger.debug(LogMsg.DB_ADD)
     add_initial_account(model_instance.id, db_session, username)
@@ -94,15 +98,14 @@ def get(id, db_session, username=None):
         raise Http_error(404, Message.NOT_FOUND)
 
     if username is not None:
-        user = check_user(username,db_session)
+        user = check_user(username, db_session)
         per_data = {}
         permissions, presses = get_user_permissions(username, db_session)
         if user.person_id == id:
             per_data.update({Permissions.IS_OWNER.value: True})
         has_permission([Permissions.PERSON_GET_PREMIUM],
-                                           permissions, None, per_data)
+                       permissions, None, per_data)
         logger.debug(LogMsg.PERMISSION_VERIFIED)
-    logger.error(LogMsg.GET_FAILED, {"id": id})
     logger.info(LogMsg.END)
 
     return person_dict
@@ -111,19 +114,16 @@ def get(id, db_session, username=None):
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    # TODO: you never checked version of passed data, we have version field in our
-    #      records, to prevent conflict when we received two different edit request
-    #      concurrently. check KAVEH codes (edit functions) to better understanding
-    #      version field usage
+    schema_validate(data,PERSON_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     logger.debug(LogMsg.EDIT_REQUST, {'person_id': id, 'data': data})
 
-    if "id" in data.keys():
-        del data["id"]
-    user = check_user(username,db_session)
+
+    user = check_user(username, db_session)
     if user.person_id is None:
-        logger.error(LogMsg.USER_HAS_NO_PERSON,username)
-        raise Http_error(404,Message.INVALID_USER)
+        logger.error(LogMsg.USER_HAS_NO_PERSON, username)
+        raise Http_error(404, Message.INVALID_USER)
 
     model_instance = db_session.query(Person).filter(Person.id == id).first()
     if model_instance:
@@ -140,24 +140,25 @@ def edit(id, db_session, data, username):
                    permissions, None, per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-    if 'current_book' in data.keys():
-        if not is_book_in_library(model_instance.id, data.get('current_book'),
+    if 'current_book_id' in data.keys():
+        if not is_book_in_library(model_instance.id, data.get('current_book_id'),
                                   db_session):
             logger.error(LogMsg.COLLECTION_BOOK_IS_NOT_IN_LIBRARY,
-                         {'current_book_id': data.get('current_book')})
+                         {'current_book_id': data.get('current_book_id')})
             raise Http_error(404, Message.BOOK_NOT_IN_LIB)
     if 'cell_no' in data.keys():
-        cell_person  = person_cell_exists(db_session,data.get('cell_no'))
+        cell_person = person_cell_exists(db_session, data.get('cell_no'))
         if cell_person is not None:
-            if cell_person.id !=model_instance.id:
+            if cell_person.id != model_instance.id:
                 logger.error(LogMsg.ANOTHER_PERSON_BY_CELL)
-                raise Http_error(403,Message.CELL_EXISTS)
+                raise Http_error(403, Message.CELL_EXISTS)
 
     try:
         for key, value in data.items():
             # TODO  if key is valid attribute of class
             setattr(model_instance, key, value)
-        model_instance.full_name ='{} {}'.format(model_instance.last_name or '',model_instance.name or '')
+        model_instance.full_name = full_name(model_instance.name,model_instance.last_name)
+
         edit_basic_data(model_instance, username, data.get('tags'))
         db_session.flush()
 
@@ -167,16 +168,17 @@ def edit(id, db_session, data, username):
         logger.debug(LogMsg.UNIQUE_CONSTRAINT_IS_CHANGING)
         unique_connector = get_connector(id, db_session)
         if unique_connector:
-            logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)
-            delete_uniquecode(unique_connector.UniqueCode, db_session)
-            logger.debug(LogMsg.GENERATE_UNIQUE_CONSTRAINT, data)
-            db_session.flush()
-            code = add_uniquecode(data, db_session)
-            delete_connector(id, db_session)
-            add_connector(id, code.UniqueCode, db_session)
+            if persons_code(model_instance) != unique_connector.UniqueCode:
+                logger.debug(LogMsg.DELETE_UNIQUE_CONSTRAINT)
+                delete_uniquecode(unique_connector.UniqueCode, db_session)
+                db_session.flush()
+                logger.debug(LogMsg.GENERATE_UNIQUE_CONSTRAINT, data)
+                code = add_uniquecode(model_instance, db_session)
+                delete_connector(id, db_session)
+                add_connector(id, code.UniqueCode, db_session)
     except:
-        logger.exception(LogMsg.EDIT_FAILED,exc_info=True)
-        raise Http_error(403,Message.DELETE_FAILED)
+        logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
+        raise Http_error(500, Message.DELETE_FAILED)
 
     logger.info(LogMsg.END)
     return model_instance
@@ -191,7 +193,7 @@ def delete(id, db_session, username):
     if model_instance is None:
         logger.error(LogMsg.NOT_FOUND, {'person_id': id})
         raise Http_error(404, Message.NOT_FOUND)
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if user.person_id == id:
@@ -230,7 +232,7 @@ def delete(id, db_session, username):
 
     except:
         logger.exception(LogMsg.DELETE_FAILED, exc_info=True)
-        raise Http_error(500, LogMsg.DELETE_FAILED)
+        raise Http_error(500, Message.DELETE_FAILED)
 
     logger.info(LogMsg.END)
 
@@ -241,7 +243,7 @@ def get_all(db_session, username):
     logger.info(LogMsg.START, username)
 
     permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.PERSON_GET_PREMIUM],permissions)
+    has_permission([Permissions.PERSON_GET_PREMIUM], permissions)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
     try:
         result = db_session.query(Person).all()
@@ -258,11 +260,15 @@ def search_person(data, db_session, username):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-
     result = []
 
+    permissions, presses = get_user_permissions(username, db_session)
+    has_permission([Permissions.PERSON_GET_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
+
     try:
-        persons =  Person.mongoquery(
+        persons = Person.mongoquery(
             db_session.query(Person)).query(
             **data).end().all()
 
@@ -278,7 +284,7 @@ def search_person(data, db_session, username):
 
 def get_person_profile(id, db_session, username):
     logger.info(LogMsg.START, username)
-    user = check_user(username,db_session)
+    user = check_user(username, db_session)
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if user.person_id == id:
@@ -292,8 +298,8 @@ def get_person_profile(id, db_session, username):
         result = model_to_dict(model_instance)
         result['current_book'] = get_current_book(
             model_instance.current_book_id, db_session) or None
-        result['following_list'] = get_following_list_internal(id, db_session)
-        result['wish_list'] = internal_wish_list(db_session, Person.id)
+        result['following_list'] = list(get_following_list_internal(id, db_session))
+        result['wish_list'] = list(internal_wish_list(db_session, id))
 
         logger.debug(LogMsg.GET_SUCCESS, result)
     else:
@@ -304,7 +310,7 @@ def get_person_profile(id, db_session, username):
     return result
 
 
-def person_to_dict(person, db_session):
+def person_to_dict(person, db_session=None):
     result = model_basic_dict(person)
     model_attrs = {
         'address': person.address,
@@ -315,14 +321,24 @@ def person_to_dict(person, db_session):
         'image': person.image,
         'name': person.name,
         'last_name': person.last_name,
-        'full_name' : person.full_name,
+        'full_name': person.full_name,
         'phone': person.phone
         # 'library':library_to_dict(person.library,db_session)
 
     }
     if person.is_legal is None:
-       result['is_legal']= False
+        result['is_legal'] = False
     else:
-        result['is_legal'] =person.is_legal
+        result['is_legal'] = person.is_legal
     result.update(model_attrs)
     return result
+
+
+def full_name(name,last_name):
+    if name is None or (name==''):
+        full_name = last_name
+    elif last_name is None or(last_name==''):
+        full_name = name
+    else:
+        full_name = '{} {}'.format(name,last_name)
+    return full_name

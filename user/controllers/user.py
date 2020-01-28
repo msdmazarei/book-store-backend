@@ -1,29 +1,34 @@
+import hashlib
 import json
-from uuid import uuid4
+from bottle import response
+
 from app_redis import app_redis as redis
 from check_permission import get_user_permissions, has_permission, \
     has_permission_or_not
-from configs import ADMINISTRATORS
 from enums import Permissions
-
 from log import LogMsg, logger
-from helper import Now, model_to_dict, Http_error, edit_basic_data, \
-    populate_basic_data, Http_response
+from helper import model_to_dict, Http_error, edit_basic_data, \
+    populate_basic_data
 from messages import Message
 from repository.group_user_repo import delete_user_from_groups
 from repository.person_repo import validate_person
 from repository.user_repo import check_by_username, check_by_cell_no, \
-    check_by_id
+    check_by_id, check_user
 from user.models import User
 from .person import get as get_person, add as add_person, edit as edit_person, \
     get_person_profile
+from infrastructure.schema_validator import schema_validate
+from ..constants import USER_ADD_SCHEMA_PATH, RESET_PASS_SCHEMA_PATH, \
+    USER_EDIT_SCHEMA_PATH
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START)
-    cell_no = data.get('cell_no')
-    name = data.get('name')
+    schema_validate(data, USER_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
     new_username = data.get('username')
+
+    # adder = check_user(username,db_session)
 
     user = check_by_username(new_username, db_session)
     if user:
@@ -35,7 +40,6 @@ def add(db_session, data, username):
     model_instance = User()
     model_instance.username = new_username
     model_instance.password = data.get('password')
-    model_instance.name = name
     populate_basic_data(model_instance, username, data.get('tags'))
     logger.debug(LogMsg.POPULATING_BASIC_DATA)
     person_id = data.get('person_id')
@@ -43,6 +47,12 @@ def add(db_session, data, username):
         person_is_valid = validate_person(person_id, db_session)
         logger.debug(LogMsg.PERSON_EXISTS, {'person_id': person_id})
         if person_is_valid:
+            if person_is_valid.is_legal:
+                person_user = get_by_person(person_id, db_session)
+                if person_user is not None:
+                    logger.error(LogMsg.LEGAL_PERSON_USER_RESTRICTION)
+                    raise Http_error(409, Message.LEGAL_PERSON_USER_RESTRICTION)
+
             model_instance.person_id = person_id
 
         else:
@@ -52,13 +62,22 @@ def add(db_session, data, username):
     db_session.add(model_instance)
 
     logger.debug(LogMsg.DB_ADD, model_to_dict(model_instance))
-
     logger.info(LogMsg.END)
+
     return model_instance
+
+
+def get_by_person(person_id, db_session):
+    return db_session.query(User).filter(User.person_id == person_id).first()
 
 
 def get(id, db_session, username):
     logger.info(LogMsg.START, username)
+
+    permissions, presses = get_user_permissions(username, db_session)
+
+    has_permission([Permissions.USER_GET_PREMIUM, Permissions.USER_GET_PRESS],
+                   permissions)
 
     logger.debug(LogMsg.MODEL_GETTING, {'user_id': id})
     model_instance = db_session.query(User).filter(User.id == id).first()
@@ -69,7 +88,6 @@ def get(id, db_session, username):
         logger.debug(LogMsg.NOT_FOUND, {'user_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    logger.error(LogMsg.GET_FAILED, {'user_id': id})
     logger.info(LogMsg.END)
 
     return result
@@ -83,9 +101,9 @@ def get_profile(username, db_session):
         User.username == username).first()
 
     if model_instance:
-        profile = get_person_profile(model_instance.person_id, db_session,
-                                     username)
-        permissions,groups = get_user_permissions(username, db_session)
+        profile = dict(get_person_profile(model_instance.person_id, db_session,
+                                          username))
+        permissions, groups = get_user_permissions(username, db_session)
         logger.debug(LogMsg.GET_SUCCESS, profile)
 
     else:
@@ -94,8 +112,8 @@ def get_profile(username, db_session):
 
     result = model_to_dict(model_instance)
     result['person'] = profile
-    result['permissions'] = permissions
-    result['permission_groups'] = groups
+    result['permissions'] = list(permissions)
+    result['permission_groups'] = list(groups)
 
     del result['password']
     logger.debug(LogMsg.USER_PROFILE_IS, result)
@@ -108,8 +126,8 @@ def delete(id, db_session, username):
     logger.info(LogMsg.START, username)
     user = db_session.query(User).filter(User.id == id).first()
     if user is None:
-        logger.error(LogMsg.NOT_FOUND,{'user_id':id})
-        raise Http_error(404,Message.NOT_FOUND)
+        logger.error(LogMsg.NOT_FOUND, {'user_id': id})
+        raise Http_error(404, Message.NOT_FOUND)
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if user.username == username:
@@ -141,6 +159,11 @@ def get_all(db_session, username):
 
     permissions, presses = get_user_permissions(username, db_session)
 
+    user = check_user(username, db_session)
+    # per_data = {}
+    # if user.person_id in presses:
+    #     per_data.update({Permissions.IS_OWNER.value:True})
+
     has_permission([Permissions.USER_GET_PREMIUM],
                    permissions)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
@@ -167,9 +190,9 @@ def serach_user(data, db_session, username):
     if data.get('sort') is None:
         data['sort'] = ['creation_date-']
 
-    result =  User.mongoquery(
-            db_session.query(User)).query(
-            **data).end().all()
+    result = User.mongoquery(
+        db_session.query(User)).query(
+        **data).end().all()
     final_res = []
     for item in result:
         final_res.append(user_to_dict(item))
@@ -182,11 +205,15 @@ def serach_user(data, db_session, username):
 
 def edit(id, db_session, data, username):
     logger.info(LogMsg.START, username)
-    if "id" in data.keys():
-        del data["id"]
-    if 'username' in data.keys():
-        logger.error(LogMsg.NOT_EDITABLE, 'username')
-        raise Http_error(400, Message.NOT_EDITABLE)
+    schema_validate(data, USER_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
+
+    old_pass = data.get('old_password', None)
+    if old_pass is not None:
+        user = check_user(username, db_session)
+        if user.password != old_pass:
+            logger.error(LogMsg.INVALID_USER, {'old_password': 'not correct'})
+            raise Http_error(403, Message.INVALID_PASSWORD)
 
     logger.debug(LogMsg.EDIT_REQUST, {'user_id': id, 'data': data})
 
@@ -200,13 +227,18 @@ def edit(id, db_session, data, username):
     per_data = {}
     permissions, presses = get_user_permissions(username, db_session)
     if model_instance.username == username:
+        password = data.get('old_password')
+        if model_instance.password != password:
+            logger.error(LogMsg.INVALID_USER,
+                         {'password': 'incorrect password'})
+            raise Http_error(403, Message.INVALID_PASSWORD)
         per_data.update({Permissions.IS_OWNER.value: True})
     has_permission([Permissions.USER_EDIT_PREMIUM],
                    permissions, None, per_data)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     if not has_permission_or_not([Permissions.USER_EDIT_PREMIUM],
-                   permissions):
+                                 permissions):
         if "person_id" in data:
             del data["person_id"]
     # if "person_id" in data:
@@ -298,6 +330,8 @@ def edit_profile(id, db_session, data, username):
 
 def reset_pass(data, db_session):
     logger.info(LogMsg.START, data)
+    schema_validate(data, RESET_PASS_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     cell_no = data.get('cell_no')
     redis_key = 'PASS_{}'.format(cell_no)
@@ -323,3 +357,16 @@ def reset_pass(data, db_session):
 
     logger.error(LogMsg.NOT_FOUND, data)
     raise Http_error(404, Message.INVALID_USER)
+
+
+def head_profile(username, db_session):
+    logger.info(LogMsg.START, username)
+    profile = get_profile(username, db_session)
+    profile_str = json.dumps(dict(profile)).encode()
+    result_hash = hashlib.md5(profile_str).hexdigest()
+
+    response.add_header('content_type', 'application/json')
+    response.add_header('etag', result_hash)
+
+    logger.info(LogMsg.END)
+    return response

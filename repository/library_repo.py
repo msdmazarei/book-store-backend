@@ -1,3 +1,4 @@
+from book_library.models import Library
 from books.controllers.book import book_to_dict
 from helper import model_basic_dict
 
@@ -13,3 +14,5 @@ def library_to_dict(library,db_session):
         result.append(lib_item)
     return result
 
+def get(lib_id,db_session):
+    return db_session.query(Library).filter(Library.id==lib_id).first()

@@ -1,10 +1,12 @@
 from enums import Roles, check_enums
 from helper import Http_error, model_to_dict, populate_basic_data, \
     edit_basic_data, Http_response
+from infrastructure.schema_validator import schema_validate
 from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_persons
 from ..models import BookRole
+from ..constants import ROLE_ADD_SCHEMA_PATH
 from constraint_handler.controllers.unique_entity_connector import \
     get_by_entity as get_connector, add as add_connector, delete as delete_connector
 from constraint_handler.controllers.book_role_constraint import add as add_uniquecode
@@ -14,6 +16,7 @@ from constraint_handler.controllers.common_methods import \
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data,ROLE_ADD_SCHEMA_PATH)
 
     logger.debug(LogMsg.CHECK_UNIQUE_EXISTANCE,data)
     unique_code = add_uniquecode(data, db_session)
@@ -103,28 +106,25 @@ def get(id, db_session):
         raise Http_error(404, Message.NOT_FOUND)
 
     logger.info(LogMsg.END)
-    return model_instance
+    return book_role_to_dict(model_instance)
 
 
 def edit(id,db_session, data, username):
     logger.info(LogMsg.START, username)
 
-    if "id" in data.keys():
-        del data["id"]
     logger.debug(LogMsg.EDIT_REQUST, id)
 
     logger.debug(LogMsg.MODEL_GETTING, id)
 
     model_instance = db_session.query(BookRole).filter(
         BookRole.id == id).first()
-    if model_instance:
+    if model_instance is not None:
         logger.debug(LogMsg.GET_SUCCESS, book_role_to_dict(model_instance))
     else:
         logger.debug(LogMsg.GET_FAILED, id)
         raise Http_error(404, Message.NOT_FOUND)
 
     for key, value in data.items():
-        # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
 
     logger.debug(LogMsg.EDITING_BASIC_DATA, id)
@@ -147,7 +147,7 @@ def edit(id,db_session, data, username):
 
     logger.info(LogMsg.END)
 
-    return model_instance
+    return book_role_to_dict(model_instance)
 
 
 def delete(id, db_session, username):
@@ -180,7 +180,7 @@ def delete(id, db_session, username):
     return Http_response(204, True)
 
 
-def get_all(db_session,data):
+def get_all(db_session,data,**kwargs):
     logger.info(LogMsg.START)
 
     if data.get('sort') is None:
@@ -192,13 +192,16 @@ def get_all(db_session,data):
                 **data).end().all()
 
         logger.debug(LogMsg.GET_SUCCESS)
+        res = []
+        for item in result:
+            res.append(book_role_to_dict(item))
 
     except:
         logger.exception(LogMsg.GET_FAILED, exc_info=True)
         raise Http_error(500, Message.GET_FAILED)
 
     logger.debug(LogMsg.END)
-    return result
+    return res
 
 
 def get_book_roles(book_id, db_session):
@@ -267,7 +270,8 @@ def book_role_to_dict(obj):
         'modifier': obj.modifier,
         'person': model_to_dict(obj.person),
         'tags': obj.tags,
-        'version': obj.version
+        'version': obj.version,
+
     }
 
     if isinstance(obj.role, str):

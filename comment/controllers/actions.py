@@ -1,7 +1,8 @@
 from sqlalchemy import and_
 
 from check_permission import get_user_permissions, has_permission_or_not, \
-    has_permission
+    has_permission, validate_permissions_and_access
+from infrastructure.schema_validator import schema_validate
 from repository.comment_repo import get_comment
 from comment.models import CommentAction
 from enums import ReportComment, check_enum, Permissions
@@ -10,10 +11,13 @@ from log import LogMsg, logger
 from messages import Message
 from repository.person_repo import validate_person
 from repository.user_repo import check_user
+from ..constants import ACTION_ADD_SCHEMA_PATH
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data,ACTION_ADD_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     report = data.get('report', None)
     if report:
@@ -230,14 +234,11 @@ def delete(id, db_session, username):
     permission_data = {}
     if action.person_id == user.person_id:
         permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
 
-    has_permission(
-        [Permissions.COMMENT_ACTION_DELETE_PREMIUM,
-         Permissions.COMMENT_ACTION_DELETE_PRESS],
-        permissions, None, permission_data)
-
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'COMMENT_ACTION_DELETE',
+                                    permission_data)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     if action.person_id != user.person_id:
         logger.error(LogMsg.NOT_ACCESSED, username)

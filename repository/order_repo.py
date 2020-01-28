@@ -14,8 +14,12 @@ def get_order_dict(id, db_session, username=None):
     return order_to_dict(order,db_session)
 
 
+def order_count(db_session):
+    return db_session.query(Order).count()
 
 
+def invoice_count(db_session):
+    return db_session.query(Order).filter(Order.status=='Invoiced').count()
 
 def order_to_dict(order, db_session, username=None):
     if not isinstance(order,Order):

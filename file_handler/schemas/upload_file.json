@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {
+
+        "files": {
+            "type": "array"
+        }
+    },
+    "required": [
+        "files"
+    ],
+    "additionalProperties": false
+}

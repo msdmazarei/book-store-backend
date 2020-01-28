@@ -1,19 +1,21 @@
 from books.controllers.book import book_to_dict
 from books.models import BookContent
 from check_permission import get_user_permissions, has_permission_or_not, \
-    has_permission
+    has_permission, validate_permissions_and_access
 from enums import Permissions, BookContentType, check_enums, check_enum
 from helper import populate_basic_data, check_schema, Http_error, model_to_dict, \
     edit_basic_data, Http_response, model_basic_dict
+from infrastructure.schema_validator import schema_validate
 from log import logger, LogMsg
 from messages import Message
 from repository.book_repo import get as get_book
+from ..constants import CONTENT_ADD_SCHEMA_PATH,CONTENT_EDIT_SCHEMA_PATH
 
 
 def add(db_session, data, username):
     logger.info(LogMsg.START, username)
+    schema_validate(data, CONTENT_ADD_SCHEMA_PATH)
 
-    check_schema(['book_id', 'type', 'content'], data.keys())
     logger.debug(LogMsg.SCHEMA_CHECKED)
 
     book_id = data.get('book_id')
@@ -34,16 +36,8 @@ def add(db_session, data, username):
         raise Http_error(409, Message.ALREADY_EXISTS)
 
     logger.debug(LogMsg.PERMISSION_CHECK, username)
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_ADD_PREMIUM],
-                                       permissions)
-    if not has_permit:
-        if book.press in presses:
-            has_permission([Permissions.BOOK_ADD_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_ADD',model=book)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     model_instance = BookContent()
 
@@ -76,25 +70,22 @@ def get(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'book_id': content.book_id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    permission_data = {}
-    if content.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_CONTENT_GET_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if book.press in presses:
-            has_permission([Permissions.BOOK_CONTENT_GET_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_CONTENT_GET',model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
 
     return content_to_dict(content, db_session)
 
 
 def get_internal(id, db_session):
     return db_session.query(BookContent).filter(BookContent.id == id).first()
+
+
+
+def get_by_celery_task(id, db_session):
+    return db_session.query(BookContent).filter(BookContent.celery_task_id == id).first()
 
 
 def get_be_data(book_id, type, db_session):
@@ -104,6 +95,9 @@ def get_be_data(book_id, type, db_session):
 
 def edit(id, data, db_session, username):
     logger.info(LogMsg.START, username)
+
+    schema_validate(data, CONTENT_EDIT_SCHEMA_PATH)
+    logger.debug(LogMsg.SCHEMA_CHECKED)
 
     content = get_internal(id, db_session)
     if content is None:
@@ -117,24 +111,14 @@ def edit(id, data, db_session, username):
             logger.error(LogMsg.NOT_FOUND, {'book_id': data.get('book_id')})
             raise Http_error(404, Message.NOT_FOUND)
 
-    logger.debug(LogMsg.PERMISSION_CHECK, username)
 
-    permission_data = {}
-    if content.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_EDIT_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if book.get('press') in presses:
-            has_permission([Permissions.BOOK_EDIT_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_EDIT',model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
     try:
         for key, value in data.items():
-            # TODO  if key is valid attribute of class
             setattr(content, key, value)
 
         new_content = get_be_data(content.book_id, content.type, db_session)
@@ -145,6 +129,9 @@ def edit(id, data, db_session, username):
 
         edit_basic_data(content, username, data.get('tags'))
         content.book_press = book.press
+        if data.get('content') is not None:
+            content.celery_task_id = None
+            content.content_generated = False
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
         raise Http_error(409, Message.ALREADY_EXISTS)
@@ -161,23 +148,19 @@ def delete(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'content_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    book = get_book(content.book_id, db_session)
 
-    permission_data = {}
-    if content.creator == username:
-        permission_data = {Permissions.IS_OWNER.value: True}
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permit = has_permission_or_not([Permissions.BOOK_DELETE_PREMIUM],
-                                       permissions, None, permission_data)
-    if not has_permit:
-        if content.book_press in presses:
-            has_permission([Permissions.BOOK_DELETE_PRESS], permissions)
-        else:
-            logger.error(LogMsg.PERMISSION_DENIED)
-            raise Http_error(403, Message.ACCESS_DENIED)
-    logger.debug(LogMsg.PERMISSION_VERIFIED, username)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'BOOK_DELETE',
+                                    model=content)
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
+
     try:
         db_session.delete(content)
+        book.size=None
+
     except:
         logger.exception(LogMsg.EDIT_FAILED, exc_info=True)
         raise Http_error(409, Message.DELETE_FAILED)
@@ -230,3 +213,19 @@ def content_to_dict(content, db_session):
         attrs.update({'type': content.type.value})
     result.update(attrs)
     return result
+
+
+def book_has_content(book_id,type,db_session):
+    content =  db_session.query(BookContent).filter(BookContent.book_id == book_id,
+                                                BookContent.type == type).first()
+    if content is None:
+        logger.debug(LogMsg.NOT_FOUND,{'content_of_book':book_id,'type':type})
+        return False
+    return content.id
+
+def check_book_content(data,db_session,username):
+    book_id = data.get('book_id')
+    type = data.get('type')
+    return {'content':book_has_content(book_id,type,db_session)}
+
+
