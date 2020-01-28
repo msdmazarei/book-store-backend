@@ -50,6 +50,10 @@ def get(id, db_session, username):
                                     access_level=Access_level.Premium)
     logger.debug(LogMsg.PERMISSION_VERIFIED, username)
     logger.info(LogMsg.END)
+    if model_instance is None:
+        logger.error(LogMsg.NOT_FOUND,{'press_payment':id})
+        raise Http_error(404,Message.NOT_FOUND)
+
     return pay_model_to_dict(model_instance)
 
 

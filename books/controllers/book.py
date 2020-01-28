@@ -712,3 +712,15 @@ def book_bulk_index(db_session, username):
             logger.debug(LogMsg.BOOK_INDEXED, book)
     logger.info(LogMsg.END)
     return {'result': 'successful'}
+
+
+def book_list_change(data, db_session, username):
+    #TODO this function is incomplete
+    logger.info(LogMsg.START, username)
+    book_ids = data.keys()
+    result = db_session.query(Book).filter(Book.id.in_(book_ids)).all()
+    id_book_dict = {}
+    for item in result:
+        id_book_dict[item.id] = book_to_dict(db_session,item)
+
+
