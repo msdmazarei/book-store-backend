@@ -22,7 +22,7 @@ CELERY_DATABASE_URI = 'db+postgresql+psycopg2://{}:{}@{}:{}/{}'.format(CeleryCon
                                                                                 CeleryConfigs.db_host, CeleryConfigs.db_port,
                                                                                 CeleryConfigs.db_name)
 
-ADMINISTRATORS = ['admin','nsm','kk']
+ADMINISTRATORS = ['Admin','nsm','kk']
 SIGNUP_USER = 'signup_user'
 ONLINE_BOOK_TYPES = ['Epub', 'Audio', 'Pdf','Msd']
 
