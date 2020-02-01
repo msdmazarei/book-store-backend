@@ -1,6 +1,5 @@
 from check_permission import get_user_permissions, has_permission, \
     validate_permissions_and_access
-from configs import ADMINISTRATORS
 from enums import OrderStatus, Permissions, Access_level
 from order.controllers.order_items import add_orders_items, \
     delete_orders_items_internal

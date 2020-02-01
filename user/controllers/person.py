@@ -4,7 +4,7 @@ from sqlalchemy import or_
 from accounts.controller import add_initial_account
 from book_library.controller import is_book_in_library
 from check_permission import get_user_permissions, has_permission_or_not, \
-    has_permission
+    has_permission, validate_permissions_and_access
 from enums import Permissions
 from follow.controller import get_following_list_internal
 from helper import model_to_dict, Http_error, model_basic_dict, \
@@ -242,9 +242,10 @@ def delete(id, db_session, username):
 def get_all(db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.PERSON_GET_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'PERSON_GET')
     logger.debug(LogMsg.PERMISSION_VERIFIED)
+
     try:
         result = db_session.query(Person).all()
         logger.debug(LogMsg.GET_SUCCESS)
@@ -262,8 +263,8 @@ def search_person(data, db_session, username):
 
     result = []
 
-    permissions, presses = get_user_permissions(username, db_session)
-    has_permission([Permissions.PERSON_GET_PREMIUM], permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'PERSON_GET')
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
 

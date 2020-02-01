@@ -4,7 +4,7 @@ from bottle import response
 
 from app_redis import app_redis as redis
 from check_permission import get_user_permissions, has_permission, \
-    has_permission_or_not
+    has_permission_or_not, validate_permissions_and_access
 from enums import Permissions
 from log import LogMsg, logger
 from helper import model_to_dict, Http_error, edit_basic_data, \
@@ -74,10 +74,9 @@ def get_by_person(person_id, db_session):
 def get(id, db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    has_permission([Permissions.USER_GET_PREMIUM, Permissions.USER_GET_PRESS],
-                   permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'USER_GET')
+    logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     logger.debug(LogMsg.MODEL_GETTING, {'user_id': id})
     model_instance = db_session.query(User).filter(User.id == id).first()
@@ -128,12 +127,9 @@ def delete(id, db_session, username):
     if user is None:
         logger.error(LogMsg.NOT_FOUND, {'user_id': id})
         raise Http_error(404, Message.NOT_FOUND)
-    per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
-    if user.username == username:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.USER_DELETE_PREMIUM],
-                   permissions, None, per_data)
+
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'USER_DELETE')
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     try:
@@ -157,17 +153,9 @@ def get_all(db_session, username):
     logger.debug(LogMsg.GET_ALL_REQUEST, "Users...")
     result = db_session.query(User).order_by(User.creation_date.desc()).all()
 
-    permissions, presses = get_user_permissions(username, db_session)
-
-    user = check_user(username, db_session)
-    # per_data = {}
-    # if user.person_id in presses:
-    #     per_data.update({Permissions.IS_OWNER.value:True})
-
-    has_permission([Permissions.USER_GET_PREMIUM],
-                   permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'USER_GET')
     logger.debug(LogMsg.PERMISSION_VERIFIED)
-
     final_res = []
     for item in result:
         final_res.append(user_to_dict(item))
@@ -181,10 +169,9 @@ def get_all(db_session, username):
 def serach_user(data, db_session, username):
     logger.info(LogMsg.START, username)
 
-    permissions, presses = get_user_permissions(username, db_session)
 
-    has_permission([Permissions.USER_GET_PREMIUM],
-                   permissions)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'USER_GET')
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     if data.get('sort') is None:
