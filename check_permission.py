@@ -14,6 +14,7 @@ from repository.group_user_repo import get_user_group_list, \
     user_is_in_group_list
 from repository.user_repo import check_user
 from app_redis import app_redis
+from user.models import Person, User
 
 permission_list_expiration_time = value('permission_list_expiration_time', 30)
 
@@ -99,6 +100,14 @@ def validate_permissions_and_access(username, db_session, func_name,
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'
             if hasattr(model,'receiver_id')and model.receiver_id == user.person_id:
+                special_data.update({
+                    Permissions.IS_OWNER.value: True})
+                access_type = 'OWNER'
+            if model is not None and isinstance(model, Person) and model.id==user.person_id:
+                special_data.update({
+                    Permissions.IS_OWNER.value: True})
+                access_type = 'OWNER'
+            if model is not None and isinstance(model, User) and model.id==user.id:
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'

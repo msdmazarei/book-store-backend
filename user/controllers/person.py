@@ -37,9 +37,8 @@ def add(db_session, data, username):
     schema_validate(data,PERSON_ADD_SCHEMA_PATH)
 
     if username is not None and username != SIGNUP_USER:
-        permissions, presses = get_user_permissions(username, db_session)
-        has_permission([Permissions.PERSON_ADD_PREMIUM],
-                       permissions)
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'PERSON_ADD')
         logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     cell_no = data.get('cell_no')
@@ -90,6 +89,12 @@ def get(id, db_session, username=None):
     logger.debug(LogMsg.MODEL_GETTING)
     model_instance = db_session.query(Person).filter(Person.id == id).first()
     if model_instance:
+        if username is not None:
+            logger.debug(LogMsg.PERMISSION_CHECK, username)
+            validate_permissions_and_access(username, db_session, 'PERSON_GET',
+                                            model=model_instance)
+            logger.debug(LogMsg.PERMISSION_VERIFIED)
+
         person_dict = person_to_dict(model_instance, db_session)
         logger.debug(LogMsg.GET_SUCCESS +
                      json.dumps(person_dict))
@@ -132,14 +137,10 @@ def edit(id, db_session, data, username):
         logger.debug(LogMsg.MODEL_GETTING_FAILED, {'person_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
-    if user.person_id == id:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.PERSON_EDIT_PREMIUM],
-                   permissions, None, per_data)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'PERSON_EDIT',
+                                    model=model_instance)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
-
     if 'current_book_id' in data.keys():
         if not is_book_in_library(model_instance.id, data.get('current_book_id'),
                                   db_session):
@@ -194,12 +195,9 @@ def delete(id, db_session, username):
         logger.error(LogMsg.NOT_FOUND, {'person_id': id})
         raise Http_error(404, Message.NOT_FOUND)
     user = check_user(username, db_session)
-    per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
-    if user.person_id == id:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.PERSON_DELETE_PREMIUM],
-                   permissions, None, per_data)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'PERSON_DELETE',
+                                    model=model_instance)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
     if person_has_books(id, db_session):
         logger.error(LogMsg.PERSON_HAS_BOOKS, {'person_id': id})
@@ -245,7 +243,6 @@ def get_all(db_session, username):
     logger.debug(LogMsg.PERMISSION_CHECK, username)
     validate_permissions_and_access(username, db_session, 'PERSON_GET')
     logger.debug(LogMsg.PERMISSION_VERIFIED)
-
     try:
         result = db_session.query(Person).all()
         logger.debug(LogMsg.GET_SUCCESS)
@@ -285,17 +282,14 @@ def search_person(data, db_session, username):
 
 def get_person_profile(id, db_session, username):
     logger.info(LogMsg.START, username)
-    user = check_user(username, db_session)
-    per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
-    if user.person_id == id:
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.PERSON_GET_PREMIUM],
-                   permissions, None, per_data)
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
     logger.debug(LogMsg.MODEL_GETTING)
     model_instance = db_session.query(Person).filter(Person.id == id).first()
     if model_instance:
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'PERSON_GET', model=model_instance)
+        logger.debug(LogMsg.PERMISSION_VERIFIED)
+
         result = model_to_dict(model_instance)
         result['current_book'] = get_current_book(
             model_instance.current_book_id, db_session) or None
