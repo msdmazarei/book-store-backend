@@ -74,13 +74,15 @@ def get_by_person(person_id, db_session):
 def get(id, db_session, username):
     logger.info(LogMsg.START, username)
 
-    logger.debug(LogMsg.PERMISSION_CHECK, username)
-    validate_permissions_and_access(username, db_session, 'USER_GET')
-    logger.debug(LogMsg.PERMISSION_VERIFIED)
+
 
     logger.debug(LogMsg.MODEL_GETTING, {'user_id': id})
     model_instance = db_session.query(User).filter(User.id == id).first()
     if model_instance:
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'USER_GET',
+                                        model=model_instance)
+        logger.debug(LogMsg.PERMISSION_VERIFIED)
         result = user_to_dict(model_instance)
         logger.debug(LogMsg.GET_SUCCESS, result)
     else:
@@ -129,7 +131,7 @@ def delete(id, db_session, username):
         raise Http_error(404, Message.NOT_FOUND)
 
     logger.debug(LogMsg.PERMISSION_CHECK, username)
-    validate_permissions_and_access(username, db_session, 'USER_DELETE')
+    validate_permissions_and_access(username, db_session, 'USER_DELETE',model=user)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
     try:
@@ -211,28 +213,11 @@ def edit(id, db_session, data, username):
         logger.debug(LogMsg.NOT_FOUND, {'user_id': id})
         raise Http_error(404, Message.NOT_FOUND)
 
-    per_data = {}
-    permissions, presses = get_user_permissions(username, db_session)
-    if model_instance.username == username:
-        password = data.get('old_password')
-        if model_instance.password != password:
-            logger.error(LogMsg.INVALID_USER,
-                         {'password': 'incorrect password'})
-            raise Http_error(403, Message.INVALID_PASSWORD)
-        per_data.update({Permissions.IS_OWNER.value: True})
-    has_permission([Permissions.USER_EDIT_PREMIUM],
-                   permissions, None, per_data)
+    logger.debug(LogMsg.PERMISSION_CHECK, username)
+    validate_permissions_and_access(username, db_session, 'USER_EDIT',
+                                    model=model_instance)
     logger.debug(LogMsg.PERMISSION_VERIFIED)
 
-    if not has_permission_or_not([Permissions.USER_EDIT_PREMIUM],
-                                 permissions):
-        if "person_id" in data:
-            del data["person_id"]
-    # if "person_id" in data:
-    #     user_by_person = db_session.query(User).filter(
-    #         User.person_id == data.get('person_id')).first()
-    #     if user_by_person is not None and user_by_person.id != model_instance.id:
-    #         raise Http_error(409,Message.USER_ALREADY_EXISTS)
     for key, value in data.items():
         # TODO  if key is valid attribute of class
         setattr(model_instance, key, value)
@@ -279,6 +264,10 @@ def edit_profile(id, db_session, data, username):
 
     user = get(id, db_session, username)
     if user:
+        logger.debug(LogMsg.PERMISSION_CHECK, username)
+        validate_permissions_and_access(username, db_session, 'USER_EDIT',
+                                        model=user)
+        logger.debug(LogMsg.PERMISSION_VERIFIED)
         logger.debug(LogMsg.MODEL_GETTING, {'user_id': id})
         if user.person_id:
             person = get_person(user.person_id, db_session, username)
