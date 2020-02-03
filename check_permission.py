@@ -167,7 +167,9 @@ def validate_permissions_and_access(username, db_session, func_name,
                     press_permit = has_permission_or_not(press_requirements,
                                                      permissions)
                     access_type = 'Press'
-                    membership = special_data.get(Permissions.IS_MEMBER.value,None)
+                    membership = None
+                    if special_data is not None:
+                        membership = special_data.get(Permissions.IS_MEMBER.value,None)
                     if membership is not None :
                         if not(press_permit and membership):
                             logger.error(LogMsg.PERMISSION_DENIED,
