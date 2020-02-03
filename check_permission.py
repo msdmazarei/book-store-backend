@@ -81,11 +81,11 @@ def validate_permissions_and_access(username, db_session, func_name,
     premium_requirements = ['{}_PREMIUM'.format(func_name)]
     press_requirements = ['{}_PRESS'.format(func_name)]
 
-    user  = check_user(username,db_session)
+    user = check_user(username, db_session)
 
     if access_level is not None:
         if access_level == Access_level.Premium:
-            press_requirements = []
+            press_requirements = ['ADMINISTRATOR']
     if username not in ADMINISTRATORS:
         access_type = 'PREMIUM'
         permissions, presses = get_user_permissions(username, db_session)
@@ -95,33 +95,40 @@ def validate_permissions_and_access(username, db_session, func_name,
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'CREATOR'
-            if hasattr(model,'person_id') and model.person_id == user.person_id:
+            if hasattr(model, 'person_id') and model.person_id == user.person_id:
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'
-            if hasattr(model,'receiver_id')and model.receiver_id == user.person_id:
+            if hasattr(model, 'receiver_id') and model.receiver_id == user.person_id:
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'
-            if model is not None and isinstance(model, Person) and model.id==user.person_id:
+            if model is not None and isinstance(model,
+                                                Person) and model.id == user.person_id:
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'
-            if model is not None and isinstance(model, User) and model.id==user.id:
+            if model is not None and isinstance(model, User) and model.id == user.id:
                 special_data.update({
                     Permissions.IS_OWNER.value: True})
                 access_type = 'OWNER'
-
-
 
         permit = has_permission_or_not(premium_requirements, permissions,
                                        None, special_data)
-        if not permit :
-            if access_level!=Access_level.Premium:
+        if not permit:
+
+            if access_level is not None and access_level == Access_level.Premium:
 
                 logger.debug(LogMsg.PREMIUM_PERMISSION_NOT_FOUND,
                              {'permission': func_name, 'username': username})
+                logger.error(LogMsg.PERMISSION_DENIED,
+                             {'PERMISSION': {
+                                 'premium_requirements': premium_requirements,
+                                 'access_level': 'premium'},
+                                 'username': username})
+                raise Http_error(403, Message.ACCESS_DENIED)
 
+            elif access_level is None or access_level==Access_level.Press:
                 if model is not None and isinstance(model, BookContent):
                     if model.book_press in presses:
                         press_group_ids = groups_by_press(model.book_press,
@@ -174,18 +181,18 @@ def validate_permissions_and_access(username, db_session, func_name,
 
                 else:
                     press_permit = has_permission_or_not(press_requirements,
-                                                     permissions)
+                                                         permissions)
                     access_type = 'Press'
                     membership = None
                     if special_data is not None:
-                        membership = special_data.get(Permissions.IS_MEMBER.value,None)
-                    if membership is not None :
-                        if not(press_permit and membership):
+                        membership = special_data.get(Permissions.IS_MEMBER.value, None)
+                    if membership is not None:
+                        if not (press_permit and membership):
                             logger.error(LogMsg.PERMISSION_DENIED,
                                          {'PERMISSION': {
                                              'premium_requirements': premium_requirements,
                                              'press_requirement': press_requirements},
-                                             'membership':membership,
+                                             'membership': membership,
                                              'username': username})
                             raise Http_error(403, Message.ACCESS_DENIED)
 
@@ -203,5 +210,3 @@ def validate_permissions_and_access(username, db_session, func_name,
                                  'username': username})
                 raise Http_error(403, Message.ACCESS_DENIED)
     return {'access_type': access_type}
-
-
